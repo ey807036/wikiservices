@@ -2,13 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/button";
 import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
-import { money } from "@/lib/format";
+import { money, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from "@/lib/format";
 
 export const Route = createFileRoute("/cart")({ component: CartPage });
 
 function CartPage() {
   const { items, remove, setQty, subtotal } = useCart();
-  const shipping = subtotal > 50 || subtotal === 0 ? 0 : 9.99;
+  const shipping = subtotal > FREE_SHIPPING_THRESHOLD || subtotal === 0 ? 0 : SHIPPING_FEE;
   const total = subtotal + shipping;
 
   if (items.length === 0) {

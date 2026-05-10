@@ -23,7 +23,7 @@ export const Route = createFileRoute("/shop")({
 
 function Shop() {
   const { category, q } = Route.useSearch();
-  const [price, setPrice] = useState<[number, number]>([0, 500]);
+  const [price, setPrice] = useState<[number, number]>([0, PRICE_FILTER_MAX]);
   const [sort, setSort] = useState("newest");
   const [brands, setBrands] = useState<string[]>([]);
 

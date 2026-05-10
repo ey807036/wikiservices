@@ -9,7 +9,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Banknote } from "lucide-react";
-import { money } from "@/lib/format";
+import { money, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE, TAX_RATE } from "@/lib/format";
 
 export const Route = createFileRoute("/checkout")({ component: Checkout });
 
@@ -22,13 +22,13 @@ function Checkout() {
   const [couponLoading, setCouponLoading] = useState(false);
   const discount = coupon?.discount ?? 0;
   const discountedSubtotal = Math.max(0, subtotal - discount);
-  const shipping = discountedSubtotal > 50 || subtotal === 0 ? 0 : 9.99;
-  const tax = +(discountedSubtotal * 0.08).toFixed(2);
-  const total = +(discountedSubtotal + shipping + tax).toFixed(2);
+  const shipping = discountedSubtotal > FREE_SHIPPING_THRESHOLD || subtotal === 0 ? 0 : SHIPPING_FEE;
+  const tax = Math.round(discountedSubtotal * TAX_RATE);
+  const total = Math.round(discountedSubtotal + shipping + tax);
   const [submitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
-    name: "", email: user?.email ?? "", phone: "", address: "", city: "", postal: "", country: "US", notes: "",
+    name: "", email: user?.email ?? "", phone: "", address: "", city: "", postal: "", country: "Pakistan", notes: "",
   });
   const update = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
