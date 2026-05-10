@@ -20,7 +20,7 @@ type Coupon = {
   usage_limit: number | null; used_count: number;
 };
 
-const blank = { code: "", discount_type: "percent" as const, discount_value: 10, min_subtotal: 0, active: true, expires_at: "", usage_limit: "" };
+const blank = { code: "", discount_type: "percent" as "percent" | "fixed", discount_value: 10, min_subtotal: 0, active: true, expires_at: "", usage_limit: "" };
 
 function AdminCoupons() {
   const qc = useQueryClient();
