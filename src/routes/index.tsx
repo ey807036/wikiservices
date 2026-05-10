@@ -87,9 +87,6 @@ function Home() {
                     <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/15 px-2 py-0.5 text-[11px] font-bold text-emerald-400 ring-1 ring-emerald-500/40">
                       ✅ {sold} sold
                     </span>
-                    <span className="inline-flex items-center rounded-md bg-zinc-700/40 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-zinc-300 ring-1 ring-zinc-500/40">
-                      fake
-                    </span>
                   </div>
                   <Link to="/order" search={{ item: h.name }} className="mt-3 block">
                     <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
