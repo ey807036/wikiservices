@@ -14,7 +14,6 @@ import { ThemeIntensity } from "@/components/site/theme-intensity";
 import { WhatsAppButton } from "@/components/site/whatsapp-button";
 import { ThemeProvider } from "@/components/site/theme-provider";
 import { ClickSound } from "@/components/site/click-sound";
-import { ThemePullCord } from "@/components/site/theme-pull-cord";
 import { MobileHackerLogin } from "@/components/site/mobile-hacker-login";
 
 function NotFoundComponent() {
@@ -74,7 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="light" style={{ colorScheme: "light" }}>
       <head><HeadContent /></head>
       <body>{children}<Scripts /></body>
     </html>
@@ -104,7 +103,6 @@ function RootComponent() {
             <ThemeProvider />
             <ClickSound />
             <Layout><Outlet /></Layout>
-            <ThemePullCord />
             <ThemeIntensity />
             <WhatsAppButton />
             <MobileHackerLogin />
