@@ -78,7 +78,7 @@ function Home() {
                 </span>
                 <h3 className="mt-4 text-lg font-bold">{h.name}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{h.desc}</p>
-                <Link to="/shop" className="mt-4 inline-block">
+                <Link to="/order" search={{ item: h.name }} className="mt-4 inline-block">
                   <Button size="sm" variant="cool" className="btn-neon mt-2 rounded-full px-5">
                     Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                   </Button>
