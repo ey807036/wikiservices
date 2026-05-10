@@ -311,6 +311,45 @@
   @keyframes blink { to { visibility: hidden; } }
 }
 
+/* Cool CTA button — gradient + glow + animated shimmer sweep */
+@layer components {
+  .btn-cool {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 55%, var(--primary) 100%);
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    color: var(--primary-foreground);
+    box-shadow:
+      0 8px 24px -8px color-mix(in oklab, var(--primary) 55%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--primary) 35%, transparent) inset;
+    transition: transform .25s ease, box-shadow .25s ease, background-position .6s ease, filter .25s ease;
+  }
+  .btn-cool::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.45) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform .8s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .btn-cool > * { position: relative; z-index: 2; }
+  .btn-cool:hover {
+    background-position: 100% 50%;
+    transform: translateY(-2px);
+    filter: saturate(1.1);
+    box-shadow:
+      0 14px 32px -10px color-mix(in oklab, var(--primary) 65%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--accent) 50%, transparent) inset,
+      0 0 24px -4px color-mix(in oklab, var(--accent) 55%, transparent);
+  }
+  .btn-cool:hover::before { transform: translateX(120%); }
+  .btn-cool:active { transform: translateY(0); }
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-12px); }

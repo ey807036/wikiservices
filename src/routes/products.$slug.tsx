@@ -88,7 +88,8 @@ function ProductPage() {
             </div>
             <Button
               size="lg"
-              className="flex-1 h-12"
+              variant="cool"
+              className="flex-1 h-12 rounded-full"
               disabled={p.stock === 0}
               onClick={() => {
                 add({ id: p.id, name: p.name, slug: p.slug, price: Number(p.price), image: images[0], stock: p.stock }, qty);

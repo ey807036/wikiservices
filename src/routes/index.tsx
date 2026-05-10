@@ -53,7 +53,7 @@ function Home() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/shop">
-                <Button size="lg" className="bg-white text-primary hover:bg-white/90 h-12 px-6 text-base font-semibold">
+                <Button size="lg" variant="cool" className="h-12 px-7 text-base rounded-full">
                   Shop now <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
