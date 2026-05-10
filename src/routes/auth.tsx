@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { Terminal, Mail, Lock, User, ArrowRight } from "lucide-react";
 import logo from "@/assets/logo.png";
+import hacker from "@/assets/hacker-3d.png";
 
 type S = { mode?: string };
 
