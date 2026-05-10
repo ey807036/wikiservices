@@ -327,6 +327,7 @@ export type Database = {
           contact_phone: string | null
           id: number
           store_name: string
+          theme: string
           updated_at: string
           whatsapp_number: string | null
         }
@@ -337,6 +338,7 @@ export type Database = {
           contact_phone?: string | null
           id?: number
           store_name?: string
+          theme?: string
           updated_at?: string
           whatsapp_number?: string | null
         }
@@ -347,6 +349,7 @@ export type Database = {
           contact_phone?: string | null
           id?: number
           store_name?: string
+          theme?: string
           updated_at?: string
           whatsapp_number?: string | null
         }
