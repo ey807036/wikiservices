@@ -406,3 +406,9 @@
   .field-neon:focus-within { filter: saturate(1.15); }
   .field-neon:focus-within::after { opacity: .7; filter: blur(14px); }
 }
+
+@keyframes mascotFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+.mascot-float { animation: mascotFloat 3.2s ease-in-out infinite; }
