@@ -33,10 +33,10 @@ function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_oklch(1_0_0/0.15),_transparent_60%)]" />
         <div className="container relative mx-auto px-4 py-24 md:py-32 text-center text-primary-foreground">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold backdrop-blur">
-            <ShieldAlert className="h-3.5 w-3.5" /> Underground Tech Store 💀
+            <ShieldAlert className="h-3.5 w-3.5 text-red-500" /> Underground Tech Store 💀
           </span>
           <h1 className="mt-5 text-4xl font-bold leading-tight md:text-6xl">
-            𓆩 Wiki Services 𓆪<br />
+            <span className="text-yellow-400 drop-shadow-[0_0_18px_rgba(250,204,21,0.6)]">𓆩 Wiki Services 𓆪</span><br />
             <span className="text-gradient">Jammers & Hacking Devices</span>
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-base text-white/90 md:text-lg">
