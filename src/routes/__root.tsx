@@ -103,7 +103,6 @@ function RootComponent() {
             <ThemeProvider />
             <ClickSound />
             <Layout><Outlet /></Layout>
-            <ThemePullCord />
             <ThemeIntensity />
             <WhatsAppButton />
             <MobileHackerLogin />
