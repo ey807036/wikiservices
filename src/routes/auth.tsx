@@ -141,10 +141,22 @@ function Auth() {
         {/* RIGHT — form */}
         <div className="relative flex items-center justify-center px-4 py-10 sm:px-10">
           <div className="w-full max-w-md">
-            <Link to="/" className="mb-8 flex items-center gap-2 lg:hidden">
+            <Link to="/" className="mb-4 flex items-center gap-2 lg:hidden">
               <img src={logo} alt="Wikiservices" className="h-8 w-8 rounded-md" />
               <span className="font-mono font-bold">WIKISERVICES</span>
             </Link>
+
+            {/* Mobile hacker character */}
+            <div className="relative mb-6 flex items-center justify-center lg:hidden">
+              <div className="absolute h-44 w-44 rounded-full bg-primary/20 blur-3xl animate-pulse" />
+              <div className="absolute h-36 w-36 rounded-full border border-primary/30 animate-[spin_20s_linear_infinite]" />
+              <img
+                src={hacker}
+                alt="Wikiservices hacker mascot"
+                className="relative z-10 h-40 w-auto drop-shadow-[0_15px_30px_rgba(34,255,136,0.4)] animate-[float_4s_ease-in-out_infinite]"
+                loading="lazy"
+              />
+            </div>
 
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 font-mono text-xs text-primary">
               <Terminal className="h-3 w-3" /> secure_login.exe
