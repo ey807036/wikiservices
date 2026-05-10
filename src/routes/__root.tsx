@@ -110,6 +110,7 @@ function RootComponent() {
             <ClickSound />
             <Layout><Outlet /></Layout>
             <WhatsAppButton />
+            <FloatingMascots />
             <Toaster richColors position="top-right" />
           </CartProvider>
         </WishlistProvider>
