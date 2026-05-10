@@ -21,7 +21,7 @@ type CartCtx = {
 };
 
 const Ctx = createContext<CartCtx>({} as CartCtx);
-const KEY = "wifihub_cart";
+const KEY = "wikiservices_cart";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);

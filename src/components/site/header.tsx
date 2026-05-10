@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ShoppingCart, User, Menu, Search, Wifi, LogOut, LayoutDashboard, Package, Heart } from "lucide-react";
+import { ShoppingCart, User, Menu, Search, LogOut, LayoutDashboard, Package, Heart } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-store";
 import { useWishlist } from "@/lib/wishlist-store";
@@ -52,10 +53,8 @@ export function Header() {
         </Sheet>
 
         <Link to="/" className="flex items-center gap-2 font-bold text-xl">
-          <span className="grid h-9 w-9 place-items-center rounded-lg gradient-hero text-primary-foreground">
-            <Wifi className="h-5 w-5" />
-          </span>
-          <span className="hidden sm:inline">WifiHub</span>
+          <img src={logo} alt="Wikiservices" className="h-9 w-9 drop-shadow-[0_0_12px_oklch(0.85_0.27_145/0.5)]" width={36} height={36} />
+          <span className="hidden sm:inline text-glow">Wikiservices</span>
         </Link>
 
         <nav className="ml-6 hidden items-center gap-6 md:flex">

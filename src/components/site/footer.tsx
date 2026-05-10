@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Wifi } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 export function Footer() {
   return (
@@ -7,10 +7,8 @@ export function Footer() {
       <div className="container mx-auto grid gap-10 px-4 py-14 md:grid-cols-4">
         <div>
           <Link to="/" className="flex items-center gap-2 font-bold text-xl">
-            <span className="grid h-9 w-9 place-items-center rounded-lg gradient-hero text-primary-foreground">
-              <Wifi className="h-5 w-5" />
-            </span>
-            WifiHub
+            <img src={logo} alt="Wikiservices" className="h-9 w-9 drop-shadow-[0_0_12px_oklch(0.85_0.27_145/0.5)]" width={36} height={36} loading="lazy" />
+            Wikiservices
           </Link>
           <p className="mt-3 text-sm text-muted-foreground max-w-xs">
             Premium WiFi gear, mesh systems & networking accessories for fast, reliable connections everywhere.
@@ -43,7 +41,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t py-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} WifiHub. All rights reserved.
+        © {new Date().getFullYear()} Wikiservices. All rights reserved.
       </div>
     </footer>
   );

@@ -53,9 +53,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "WifiHub — Premium WiFi Routers, Mesh Systems & Networking Gear" },
+      { title: "Wikiservices — Premium WiFi Routers, Mesh Systems & Networking Gear" },
       { name: "description", content: "Shop top WiFi 6 routers, mesh systems, repeaters & networking accessories. Fast shipping, expert support, cash on delivery available." },
-      { property: "og:title", content: "WifiHub — Premium Networking Store" },
+      { property: "og:title", content: "Wikiservices — Premium Networking Store" },
       { property: "og:description", content: "WiFi routers, mesh & accessories from top brands." },
       { property: "og:type", content: "website" },
     ],

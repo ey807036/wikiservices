@@ -1,7 +1,8 @@
 import { createFileRoute, Outlet, Link, useNavigate, useRouterState, redirect } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { useEffect } from "react";
-import { LayoutDashboard, Package, ShoppingBag, Tags, Users, Wifi, ArrowLeft, Ticket } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Tags, Users, ArrowLeft, Ticket } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/admin")({ component: AdminLayout });
 
@@ -33,8 +34,8 @@ function AdminLayout() {
     <div className="flex min-h-screen bg-secondary/30">
       <aside className="hidden w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground md:flex">
         <Link to="/" className="flex h-16 items-center gap-2 border-b border-sidebar-border px-6 font-bold">
-          <span className="grid h-8 w-8 place-items-center rounded-lg gradient-hero"><Wifi className="h-4 w-4 text-primary-foreground" /></span>
-          WifiHub Admin
+          <img src={logo} alt="" className="h-8 w-8" width={32} height={32} />
+          Wikiservices Admin
         </Link>
         <nav className="flex-1 space-y-1 p-3">
           {NAV.map((n) => {

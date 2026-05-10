@@ -54,7 +54,7 @@ function Auth() {
           <span className="mx-auto grid h-12 w-12 place-items-center rounded-xl gradient-hero text-primary-foreground">
             <Wifi className="h-6 w-6" />
           </span>
-          <h1 className="mt-4 text-2xl font-bold">Welcome to WifiHub</h1>
+          <h1 className="mt-4 text-2xl font-bold">Welcome to Wikiservices</h1>
           <p className="text-sm text-muted-foreground">Sign in to manage orders & checkout faster</p>
         </div>
         <Tabs value={tab} onValueChange={setTab}>

@@ -5,7 +5,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 
 type Fx = { scanlines: number; glow: number; grid: number };
-const KEY = "wifihub_fx";
+const KEY = "wikiservices_fx";
 const DEFAULTS: Fx = { scanlines: 0.6, glow: 0.6, grid: 0.6 };
 
 function apply(fx: Fx) {
