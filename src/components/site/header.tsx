@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ShoppingCart, User, Menu, Search, Wifi, LogOut, LayoutDashboard, Package } from "lucide-react";
+import { ShoppingCart, User, Menu, Search, Wifi, LogOut, LayoutDashboard, Package, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-store";
+import { useWishlist } from "@/lib/wishlist-store";
 import { useAuth } from "@/lib/auth-context";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
@@ -19,6 +20,7 @@ const NAV = [
 
 export function Header() {
   const { count } = useCart();
+  const { count: wishCount } = useWishlist();
   const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
   const [q, setQ] = useState("");
@@ -81,6 +83,16 @@ export function Header() {
         </form>
 
         <div className="ml-auto flex items-center gap-1 md:ml-0">
+          <Link to="/wishlist">
+            <Button variant="ghost" size="icon" className="relative">
+              <Heart className="h-5 w-5" />
+              {wishCount > 0 && (
+                <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">
+                  {wishCount}
+                </span>
+              )}
+            </Button>
+          </Link>
           <Link to="/cart">
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingCart className="h-5 w-5" />

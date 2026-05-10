@@ -6,6 +6,7 @@ import {
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/lib/auth-context";
 import { CartProvider } from "@/lib/cart-store";
+import { WishlistProvider } from "@/lib/wishlist-store";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { Toaster } from "@/components/ui/sonner";
@@ -92,10 +93,12 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <CartProvider>
-          <Layout><Outlet /></Layout>
-          <Toaster richColors position="top-right" />
-        </CartProvider>
+        <WishlistProvider>
+          <CartProvider>
+            <Layout><Outlet /></Layout>
+            <Toaster richColors position="top-right" />
+          </CartProvider>
+        </WishlistProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
