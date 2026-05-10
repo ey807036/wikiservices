@@ -54,7 +54,7 @@ function AdminOrders() {
                   <div className="text-xs text-muted-foreground">{o.customer_email}</div>
                 </td>
                 <td className="p-3 text-muted-foreground">{new Date(o.created_at).toLocaleDateString()}</td>
-                <td className="p-3 font-semibold">${Number(o.total).toFixed(2)}</td>
+                <td className="p-3 font-semibold">${money(o.total)}</td>
                 <td className="p-3">
                   <Select value={o.status} onValueChange={(v) => updateStatus(o.id, v)}>
                     <SelectTrigger className="w-36 capitalize"><SelectValue /></SelectTrigger>
@@ -88,15 +88,15 @@ function AdminOrders() {
                 <div className="font-semibold mb-2">Items</div>
                 <ul className="space-y-2">
                   {view.order_items?.map((i: any) => (
-                    <li key={i.id} className="flex justify-between"><span>{i.product_name} ×{i.quantity}</span><span>${Number(i.subtotal).toFixed(2)}</span></li>
+                    <li key={i.id} className="flex justify-between"><span>{i.product_name} ×{i.quantity}</span><span>${money(i.subtotal)}</span></li>
                   ))}
                 </ul>
               </div>
               <div className="border-t pt-3">
-                <div className="flex justify-between"><span>Subtotal</span><span>${Number(view.subtotal).toFixed(2)}</span></div>
-                <div className="flex justify-between"><span>Shipping</span><span>${Number(view.shipping).toFixed(2)}</span></div>
-                <div className="flex justify-between"><span>Tax</span><span>${Number(view.tax).toFixed(2)}</span></div>
-                <div className="flex justify-between font-bold"><span>Total</span><span>${Number(view.total).toFixed(2)}</span></div>
+                <div className="flex justify-between"><span>Subtotal</span><span>${money(view.subtotal)}</span></div>
+                <div className="flex justify-between"><span>Shipping</span><span>${money(view.shipping)}</span></div>
+                <div className="flex justify-between"><span>Tax</span><span>${money(view.tax)}</span></div>
+                <div className="flex justify-between font-bold"><span>Total</span><span>${money(view.total)}</span></div>
               </div>
               <div className="text-xs text-muted-foreground">Payment: Cash on Delivery</div>
             </div>

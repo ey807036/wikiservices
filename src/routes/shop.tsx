@@ -72,7 +72,7 @@ function Shop() {
         <h4 className="mb-3 text-sm font-bold uppercase tracking-wider">Price</h4>
         <Slider value={price} min={0} max={500} step={10} onValueChange={(v) => setPrice([v[0], v[1]])} />
         <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-          <span>${price[0]}</span><span>${price[1]}</span>
+          <span>${money(price[0])}</span><span>${money(price[1])}</span>
         </div>
       </div>
       {allBrands.length > 0 && (

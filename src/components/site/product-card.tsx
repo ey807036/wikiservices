@@ -68,9 +68,9 @@ export function ProductCard({ p }: { p: ProductCardData }) {
         </div>
         <div className="mt-3 flex items-end justify-between gap-2">
           <div>
-            <div className="text-lg font-bold">${Number(p.price).toFixed(2)}</div>
+            <div className="text-lg font-bold">${money(p.price)}</div>
             {p.compare_price && (
-              <div className="text-xs text-muted-foreground line-through">${Number(p.compare_price).toFixed(2)}</div>
+              <div className="text-xs text-muted-foreground line-through">${money(p.compare_price)}</div>
             )}
           </div>
           <Button

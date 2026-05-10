@@ -91,7 +91,7 @@ function Dashboard() {
                   <div className="text-sm font-medium">{o.order_number}</div>
                   <div className="text-xs text-muted-foreground">{o.customer_name}</div>
                 </div>
-                <div className="text-sm font-semibold">${Number(o.total).toFixed(2)}</div>
+                <div className="text-sm font-semibold">${money(o.total)}</div>
               </div>
             ))}
           </div>

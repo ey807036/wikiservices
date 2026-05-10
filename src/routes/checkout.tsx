@@ -146,13 +146,13 @@ function Checkout() {
             ))}
           </ul>
           <dl className="mt-5 space-y-2 border-t pt-4 text-sm">
-            <div className="flex justify-between"><dt>Subtotal</dt><dd>${subtotal.toFixed(2)}</dd></div>
+            <div className="flex justify-between"><dt>Subtotal</dt><dd>${money(subtotal)}</dd></div>
             {coupon && (
-              <div className="flex justify-between text-accent"><dt>Coupon ({coupon.code})</dt><dd>-${discount.toFixed(2)}</dd></div>
+              <div className="flex justify-between text-accent"><dt>Coupon ({coupon.code})</dt><dd>-${money(discount)}</dd></div>
             )}
-            <div className="flex justify-between"><dt>Shipping</dt><dd>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</dd></div>
-            <div className="flex justify-between"><dt>Tax</dt><dd>${tax.toFixed(2)}</dd></div>
-            <div className="flex justify-between border-t pt-3 text-base font-bold"><dt>Total</dt><dd>${total.toFixed(2)}</dd></div>
+            <div className="flex justify-between"><dt>Shipping</dt><dd>{shipping === 0 ? "Free" : `${money(shipping)}`}</dd></div>
+            <div className="flex justify-between"><dt>Tax</dt><dd>${money(tax)}</dd></div>
+            <div className="flex justify-between border-t pt-3 text-base font-bold"><dt>Total</dt><dd>${money(total)}</dd></div>
           </dl>
           <div className="mt-5 flex gap-2">
             <Input placeholder="Coupon code" value={couponInput} onChange={(e) => setCouponInput(e.target.value)} />

@@ -59,7 +59,7 @@ function Account() {
                   <div className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleDateString()}</div>
                 </div>
                 <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${STATUS_COLORS[o.status] ?? ""}`}>{o.status}</span>
-                <div className="font-bold">${Number(o.total).toFixed(2)}</div>
+                <div className="font-bold">${money(o.total)}</div>
               </div>
               <div className="mt-4 flex gap-2 overflow-x-auto">
                 {o.order_items?.map((i: any) => (

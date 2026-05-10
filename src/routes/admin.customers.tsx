@@ -34,7 +34,7 @@ function AdminCustomers() {
                 <td className="p-3 font-medium">{c.full_name ?? "—"}</td>
                 <td className="p-3 text-muted-foreground">{c.email}</td>
                 <td className="p-3">{c.c}</td>
-                <td className="p-3 font-semibold">${c.t.toFixed(2)}</td>
+                <td className="p-3 font-semibold">${money(c.t)}</td>
                 <td className="p-3 text-muted-foreground">{new Date(c.created_at).toLocaleDateString()}</td>
               </tr>
             ))}
