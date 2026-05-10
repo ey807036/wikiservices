@@ -10,24 +10,17 @@ import { X, ArrowRight, Briefcase } from "lucide-react";
 import { toast } from "sonner";
 
 /**
- * Mobile auto-animation that mimics the reference video:
- *   1. Character walks in from the RIGHT carrying a briefcase
- *   2. Stops near the center, sets the briefcase down on the ground
- *   3. Reaches up — the login form drops down from the top
- *   4. Stays STANDING on the ground beside the form (never floats away)
- *      The briefcase stays put on the floor next to him.
- *   5. Closing the form just hides it; the character keeps standing there
- *      so the user can re-open by tapping him.
+ * Mobile auto-animation like the reference:
+ * character enters by itself, grabs the hanging rope/handle with his hand,
+ * pulls it down, then the login sheet drops from the top.
  */
 type Phase =
-  | "off"        // off-screen right
-  | "walking"    // walking left
-  | "stopping"   // putting briefcase down
-  | "reaching"   // arm up, sheet starts dropping
-  | "open"       // sheet fully visible, character stands beside it
-  | "standing";  // sheet closed, character stays standing on ground
-
-const SESSION_KEY = "wikiservices_hacker_played_v2";
+  | "off"
+  | "walking"
+  | "grabbing"
+  | "pulling"
+  | "open"
+  | "standing";
 
 export function MobileHackerLogin() {
   const isMobile = useIsMobile();
@@ -37,25 +30,36 @@ export function MobileHackerLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const startedRef = useRef(false);
+  const pullTimersRef = useRef<number[]>([]);
 
-  // Auto-play sequence on first mobile visit (signed-out only)
+  const clearPullTimers = () => {
+    pullTimersRef.current.forEach(clearTimeout);
+    pullTimersRef.current = [];
+  };
+
+  const playPullSequence = () => {
+    clearPullTimers();
+    setPhase("grabbing");
+    pullTimersRef.current = [
+      window.setTimeout(() => setPhase("pulling"), 420),
+      window.setTimeout(() => setPhase("open"), 1550),
+    ];
+  };
+
+  // Auto-play sequence on mobile visit (signed-out only)
   useEffect(() => {
     if (!isMobile || user) return;
     if (startedRef.current) return;
-    if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_KEY)) {
-      setPhase("standing");
-      return;
-    }
     startedRef.current = true;
     const timers: number[] = [];
-    timers.push(window.setTimeout(() => setPhase("walking"),  500));
-    timers.push(window.setTimeout(() => setPhase("stopping"), 2200));
-    timers.push(window.setTimeout(() => setPhase("reaching"), 2900));
-    timers.push(window.setTimeout(() => {
-      setPhase("open");
-      sessionStorage.setItem(SESSION_KEY, "1");
-    }, 3800));
-    return () => { timers.forEach(clearTimeout); };
+    timers.push(window.setTimeout(() => setPhase("walking"), 450));
+    timers.push(window.setTimeout(() => setPhase("grabbing"), 2150));
+    timers.push(window.setTimeout(() => setPhase("pulling"), 2700));
+    timers.push(window.setTimeout(() => setPhase("open"), 3850));
+    return () => {
+      timers.forEach(clearTimeout);
+      clearPullTimers();
+    };
   }, [isMobile, user]);
 
   // Lock body scroll while sheet open
@@ -70,7 +74,10 @@ export function MobileHackerLogin() {
   if (!isMobile || user) return null;
 
   const close = () => setPhase("standing");
-  const reopen = () => { if (phase !== "open") setPhase("open"); };
+  const reopen = () => {
+    if (phase === "open" || phase === "walking" || phase === "pulling") return;
+    playPullSequence();
+  };
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,25 +90,25 @@ export function MobileHackerLogin() {
   };
 
   // ----- positions -----
-  // Sheet: -100% (hidden) → -25% (peeking while reaching) → 0 (open)
+  // Sheet: hidden → tugged down by the rope → open
   const sheetY =
-    phase === "open"     ? 0   :
-    phase === "reaching" ? -55 :
+    phase === "open"    ? 0   :
+    phase === "pulling" ? -18 :
+    phase === "grabbing" ? -96 :
     -100;
 
   // Character horizontal position (right offset in px from right edge)
-  // Walks from off-screen right toward a spot left of center.
   const charRight =
-    phase === "off"      ? -120 :
-    phase === "walking"  ? 180  :
-    /* stopping/reaching/open/standing */ 180;
+    phase === "off"     ? -128 :
+    phase === "walking" ? 150  :
+    150;
 
   const flipped = phase === "walking"; // facing left while walking
-  const isStanding = phase === "open" || phase === "standing" || phase === "reaching" || phase === "stopping";
-  const armUp = phase === "reaching" || phase === "open";
+  const isStanding = phase === "open" || phase === "standing" || phase === "grabbing" || phase === "pulling";
+  const armUp = phase === "grabbing" || phase === "pulling" || phase === "open";
 
-  // Briefcase appears once he stops; stays on the ground after that
-  const showBriefcase = phase === "stopping" || phase === "reaching" || phase === "open" || phase === "standing";
+  const showBriefcase = phase === "grabbing" || phase === "pulling" || phase === "open" || phase === "standing";
+  const showRope = phase === "grabbing" || phase === "pulling" || phase === "open";
 
   return (
     <>
