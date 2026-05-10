@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, Link, useNavigate, useRouterState, redirect } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { useEffect } from "react";
-import { LayoutDashboard, Package, ShoppingBag, Tags, Users, Wifi, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Tags, Users, Wifi, ArrowLeft, Ticket } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({ component: AdminLayout });
 
@@ -10,6 +10,7 @@ const NAV = [
   { to: "/admin/products", label: "Products", icon: Package },
   { to: "/admin/orders", label: "Orders", icon: ShoppingBag },
   { to: "/admin/categories", label: "Categories", icon: Tags },
+  { to: "/admin/coupons", label: "Coupons", icon: Ticket },
   { to: "/admin/customers", label: "Customers", icon: Users },
 ];
 
