@@ -9,6 +9,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Banknote } from "lucide-react";
+import { money, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE, TAX_RATE } from "@/lib/format";
 
 export const Route = createFileRoute("/checkout")({ component: Checkout });
 
@@ -21,13 +22,13 @@ function Checkout() {
   const [couponLoading, setCouponLoading] = useState(false);
   const discount = coupon?.discount ?? 0;
   const discountedSubtotal = Math.max(0, subtotal - discount);
-  const shipping = discountedSubtotal > 50 || subtotal === 0 ? 0 : 9.99;
-  const tax = +(discountedSubtotal * 0.08).toFixed(2);
-  const total = +(discountedSubtotal + shipping + tax).toFixed(2);
+  const shipping = discountedSubtotal > FREE_SHIPPING_THRESHOLD || subtotal === 0 ? 0 : SHIPPING_FEE;
+  const tax = Math.round(discountedSubtotal * TAX_RATE);
+  const total = Math.round(discountedSubtotal + shipping + tax);
   const [submitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
-    name: "", email: user?.email ?? "", phone: "", address: "", city: "", postal: "", country: "US", notes: "",
+    name: "", email: user?.email ?? "", phone: "", address: "", city: "", postal: "", country: "Pakistan", notes: "",
   });
   const update = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -39,7 +40,7 @@ function Checkout() {
     setCouponLoading(false);
     if (!data) { toast.error("Invalid coupon"); return; }
     if (data.expires_at && new Date(data.expires_at) < new Date()) { toast.error("Coupon expired"); return; }
-    if (Number(subtotal) < Number(data.min_subtotal)) { toast.error(`Min subtotal $${data.min_subtotal}`); return; }
+    if (Number(subtotal) < Number(data.min_subtotal)) { toast.error(`Min subtotal ${money(data.min_subtotal)}`); return; }
     const value = Number(data.discount_value);
     const d = data.discount_type === "percent" ? +(subtotal * value / 100).toFixed(2) : value;
     setCoupon({ code: data.code, discount: d });
@@ -146,13 +147,13 @@ function Checkout() {
             ))}
           </ul>
           <dl className="mt-5 space-y-2 border-t pt-4 text-sm">
-            <div className="flex justify-between"><dt>Subtotal</dt><dd>${subtotal.toFixed(2)}</dd></div>
+            <div className="flex justify-between"><dt>Subtotal</dt><dd>{money(subtotal)}</dd></div>
             {coupon && (
-              <div className="flex justify-between text-accent"><dt>Coupon ({coupon.code})</dt><dd>-${discount.toFixed(2)}</dd></div>
+              <div className="flex justify-between text-accent"><dt>Coupon ({coupon.code})</dt><dd>-${money(discount)}</dd></div>
             )}
-            <div className="flex justify-between"><dt>Shipping</dt><dd>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</dd></div>
-            <div className="flex justify-between"><dt>Tax</dt><dd>${tax.toFixed(2)}</dd></div>
-            <div className="flex justify-between border-t pt-3 text-base font-bold"><dt>Total</dt><dd>${total.toFixed(2)}</dd></div>
+            <div className="flex justify-between"><dt>Shipping</dt><dd>{shipping === 0 ? "Free" : `${money(shipping)}`}</dd></div>
+            <div className="flex justify-between"><dt>Tax</dt><dd>{money(tax)}</dd></div>
+            <div className="flex justify-between border-t pt-3 text-base font-bold"><dt>Total</dt><dd>{money(total)}</dd></div>
           </dl>
           <div className="mt-5 flex gap-2">
             <Input placeholder="Coupon code" value={couponInput} onChange={(e) => setCouponInput(e.target.value)} />

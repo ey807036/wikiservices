@@ -2,12 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/button";
 import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
+import { money, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from "@/lib/format";
 
 export const Route = createFileRoute("/cart")({ component: CartPage });
 
 function CartPage() {
   const { items, remove, setQty, subtotal } = useCart();
-  const shipping = subtotal > 50 || subtotal === 0 ? 0 : 9.99;
+  const shipping = subtotal > FREE_SHIPPING_THRESHOLD || subtotal === 0 ? 0 : SHIPPING_FEE;
   const total = subtotal + shipping;
 
   if (items.length === 0) {
@@ -33,7 +34,7 @@ function CartPage() {
               </Link>
               <div className="flex-1">
                 <Link to="/products/$slug" params={{ slug: i.slug }} className="font-semibold hover:text-primary">{i.name}</Link>
-                <div className="mt-1 text-sm text-muted-foreground">${i.price.toFixed(2)}</div>
+                <div className="mt-1 text-sm text-muted-foreground">{money(i.price)}</div>
                 <div className="mt-3 flex items-center gap-3">
                   <div className="flex items-center rounded-lg border">
                     <button onClick={() => setQty(i.id, i.quantity - 1)} className="p-2"><Minus className="h-3.5 w-3.5" /></button>
@@ -53,9 +54,9 @@ function CartPage() {
         <aside className="rounded-2xl border bg-card p-6 h-fit shadow-card">
           <h2 className="text-lg font-bold">Order summary</h2>
           <dl className="mt-4 space-y-2 text-sm">
-            <div className="flex justify-between"><dt>Subtotal</dt><dd>${subtotal.toFixed(2)}</dd></div>
-            <div className="flex justify-between"><dt>Shipping</dt><dd>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</dd></div>
-            <div className="flex justify-between border-t pt-3 text-base font-bold"><dt>Total</dt><dd>${total.toFixed(2)}</dd></div>
+            <div className="flex justify-between"><dt>Subtotal</dt><dd>{money(subtotal)}</dd></div>
+            <div className="flex justify-between"><dt>Shipping</dt><dd>{shipping === 0 ? "Free" : `${money(shipping)}`}</dd></div>
+            <div className="flex justify-between border-t pt-3 text-base font-bold"><dt>Total</dt><dd>{money(total)}</dd></div>
           </dl>
           <Link to="/checkout"><Button className="mt-6 w-full h-11">Proceed to checkout</Button></Link>
           <Link to="/shop" className="mt-3 block text-center text-sm text-muted-foreground hover:text-foreground">Continue shopping</Link>

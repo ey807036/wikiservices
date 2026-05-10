@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { DollarSign, ShoppingBag, Package, Users } from "lucide-react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/admin/")({ component: Dashboard });
 
@@ -43,7 +44,7 @@ function Dashboard() {
   });
 
   const cards = [
-    { label: "Revenue", value: `$${(stats?.revenue ?? 0).toFixed(2)}`, icon: DollarSign, c: "text-success" },
+    { label: "Revenue", value: money(stats?.revenue ?? 0), icon: DollarSign, c: "text-success" },
     { label: "Orders", value: stats?.orders ?? 0, icon: ShoppingBag, c: "text-primary" },
     { label: "Products", value: stats?.products ?? 0, icon: Package, c: "text-accent" },
     { label: "Customers", value: stats?.customers ?? 0, icon: Users, c: "text-chart-4" },
@@ -91,7 +92,7 @@ function Dashboard() {
                   <div className="text-sm font-medium">{o.order_number}</div>
                   <div className="text-xs text-muted-foreground">{o.customer_name}</div>
                 </div>
-                <div className="text-sm font-semibold">${Number(o.total).toFixed(2)}</div>
+                <div className="text-sm font-semibold">{money(o.total)}</div>
               </div>
             ))}
           </div>

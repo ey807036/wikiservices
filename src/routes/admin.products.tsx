@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useState } from "react";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2 } from "lucide-react";
+import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/admin/products")({ component: AdminProducts });
 
@@ -148,7 +149,7 @@ function AdminProducts() {
                   </div>
                 </td>
                 <td className="p-3 text-muted-foreground">{p.categories?.name ?? "—"}</td>
-                <td className="p-3 font-semibold">${Number(p.price).toFixed(2)}</td>
+                <td className="p-3 font-semibold">{money(p.price)}</td>
                 <td className="p-3">{p.stock}</td>
                 <td className="p-3">
                   <span className={`rounded-full px-2 py-0.5 text-xs ${p.active ? "bg-success/15 text-success" : "bg-muted text-muted-foreground"}`}>

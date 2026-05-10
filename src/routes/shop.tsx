@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { SlidersHorizontal } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { money, PRICE_FILTER_MAX } from "@/lib/format";
 
 type Search = { category?: string; q?: string };
 
@@ -22,7 +23,7 @@ export const Route = createFileRoute("/shop")({
 
 function Shop() {
   const { category, q } = Route.useSearch();
-  const [price, setPrice] = useState<[number, number]>([0, 500]);
+  const [price, setPrice] = useState<[number, number]>([0, PRICE_FILTER_MAX]);
   const [sort, setSort] = useState("newest");
   const [brands, setBrands] = useState<string[]>([]);
 
@@ -70,9 +71,9 @@ function Shop() {
       </div>
       <div>
         <h4 className="mb-3 text-sm font-bold uppercase tracking-wider">Price</h4>
-        <Slider value={price} min={0} max={500} step={10} onValueChange={(v) => setPrice([v[0], v[1]])} />
+        <Slider value={price} min={0} max={PRICE_FILTER_MAX} step={500} onValueChange={(v) => setPrice([v[0], v[1]])} />
         <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-          <span>${price[0]}</span><span>${price[1]}</span>
+          <span>{money(price[0])}</span><span>{money(price[1])}</span>
         </div>
       </div>
       {allBrands.length > 0 && (

@@ -6,6 +6,7 @@ import { useCart } from "@/lib/cart-store";
 import { Star, ShoppingCart, Truck, ShieldCheck, RotateCcw, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/products/$slug")({ component: ProductPage });
 
@@ -62,10 +63,10 @@ function ProductPage() {
           </div>
 
           <div className="mt-6 flex items-baseline gap-3">
-            <span className="text-4xl font-bold">${Number(p.price).toFixed(2)}</span>
+            <span className="text-4xl font-bold">{money(p.price)}</span>
             {p.compare_price && (
               <>
-                <span className="text-lg text-muted-foreground line-through">${Number(p.compare_price).toFixed(2)}</span>
+                <span className="text-lg text-muted-foreground line-through">{money(p.compare_price)}</span>
                 <span className="rounded-full bg-accent px-2.5 py-1 text-xs font-bold text-accent-foreground">-{discount}%</span>
               </>
             )}
@@ -100,7 +101,7 @@ function ProductPage() {
 
           <div className="mt-8 grid grid-cols-3 gap-3 rounded-2xl border bg-secondary/30 p-4">
             {[
-              { i: Truck, t: "Free shipping", s: "Over $50" },
+              { i: Truck, t: "Free shipping", s: "Over Rs. 5,000" },
               { i: ShieldCheck, t: "2-yr warranty", s: "Included" },
               { i: RotateCcw, t: "30-day returns", s: "Hassle-free" },
             ].map((f) => (
