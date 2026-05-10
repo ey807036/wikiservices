@@ -177,10 +177,10 @@ function Auth() {
               <TabsContent value="signin">
                 <form onSubmit={signIn} className="mt-6 space-y-4 rounded-2xl border border-primary/30 bg-card/60 p-6 shadow-[0_0_30px_rgba(34,255,136,0.08)] backdrop-blur">
                   <Field icon={<Mail className="h-4 w-4" />} label="Email">
-                    <Input type="email" placeholder="you@example.com" required value={email} onChange={e => setEmail(e.target.value)} className="pl-10" />
+                    <Input type="email" placeholder="you@example.com" required value={email} onChange={e => setEmail(e.target.value)} className="input-neon pl-10 h-11" />
                   </Field>
                   <Field icon={<Lock className="h-4 w-4" />} label="Password">
-                    <Input type="password" placeholder="••••••••" required value={password} onChange={e => setPassword(e.target.value)} className="pl-10" />
+                    <Input type="password" placeholder="••••••••" required value={password} onChange={e => setPassword(e.target.value)} className="input-neon pl-10 h-11" />
                   </Field>
                   <Button type="submit" className="group w-full gap-2" disabled={loading}>
                     {loading ? "Authenticating..." : <>Sign in <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></>}
@@ -191,13 +191,13 @@ function Auth() {
               <TabsContent value="signup">
                 <form onSubmit={signUp} className="mt-6 space-y-4 rounded-2xl border border-primary/30 bg-card/60 p-6 shadow-[0_0_30px_rgba(34,255,136,0.08)] backdrop-blur">
                   <Field icon={<User className="h-4 w-4" />} label="Full name">
-                    <Input required placeholder="Ali Ahmed" value={name} onChange={e => setName(e.target.value)} className="pl-10" />
+                    <Input required placeholder="Ali Ahmed" value={name} onChange={e => setName(e.target.value)} className="input-neon pl-10 h-11" />
                   </Field>
                   <Field icon={<Mail className="h-4 w-4" />} label="Email">
-                    <Input type="email" placeholder="you@example.com" required value={email} onChange={e => setEmail(e.target.value)} className="pl-10" />
+                    <Input type="email" placeholder="you@example.com" required value={email} onChange={e => setEmail(e.target.value)} className="input-neon pl-10 h-11" />
                   </Field>
                   <Field icon={<Lock className="h-4 w-4" />} label="Password">
-                    <Input type="password" placeholder="At least 6 characters" minLength={6} required value={password} onChange={e => setPassword(e.target.value)} className="pl-10" />
+                    <Input type="password" placeholder="At least 6 characters" minLength={6} required value={password} onChange={e => setPassword(e.target.value)} className="input-neon pl-10 h-11" />
                   </Field>
                   <Button type="submit" className="group w-full gap-2" disabled={loading}>
                     {loading ? "Creating..." : <>Create account <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></>}
