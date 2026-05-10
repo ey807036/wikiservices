@@ -87,12 +87,57 @@ function Settings() {
           <Input value={form.announcement ?? ""} onChange={e => setForm({ ...form, announcement: e.target.value })} placeholder="🎉 Free shipping on orders above Rs. 5,000" />
         </Field>
 
+        <Field label="Site theme" hint="Pick the color theme for the whole storefront">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {THEMES.map(t => {
+              const active = (form.theme ?? "matrix") === t.id;
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setForm({ ...form, theme: t.id })}
+                  data-theme-preview={t.id}
+                  className={`relative rounded-xl border-2 p-3 text-left transition ${active ? "border-primary ring-2 ring-primary/40" : "border-border hover:border-primary/50"}`}
+                >
+                  <div className="flex gap-1.5">
+                    <ThemeSwatch theme={t.id} role="bg" />
+                    <ThemeSwatch theme={t.id} role="primary" />
+                    <ThemeSwatch theme={t.id} role="accent" />
+                  </div>
+                  <div className="mt-2 text-xs font-semibold">{t.label}</div>
+                  {active && <Check className="absolute right-2 top-2 h-4 w-4 text-primary" />}
+                </button>
+              );
+            })}
+          </div>
+        </Field>
+
+        <Field label="Mouse click sound">
+          <Button type="button" variant="outline" onClick={toggleSound} className="gap-2">
+            {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+            {soundOn ? "On" : "Muted"}
+          </Button>
+        </Field>
+
         <Button onClick={save} disabled={saving} className="gap-2">
           <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save changes"}
         </Button>
       </div>
     </div>
   );
+}
+
+function ThemeSwatch({ theme, role }: { theme: string; role: "bg" | "primary" | "accent" }) {
+  const map: Record<string, { bg: string; primary: string; accent: string }> = {
+    matrix: { bg: "#0a1a0f", primary: "#5fff8f", accent: "#5fe6d6" },
+    light: { bg: "#ffffff", primary: "#1f9d55", accent: "#0ea5a4" },
+    cyber: { bg: "#0a1226", primary: "#4cc9f0", accent: "#b388ff" },
+    amber: { bg: "#1a1206", primary: "#ffb74d", accent: "#ff7043" },
+    purple: { bg: "#140a1f", primary: "#c084fc", accent: "#f472b6" },
+    mono: { bg: "#0a0a0a", primary: "#fafafa", accent: "#5fff8f" },
+  };
+  const c = map[theme] ?? map.matrix;
+  return <div className="h-6 w-6 rounded-md border border-border/60" style={{ background: c[role] }} />;
 }
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
