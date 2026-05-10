@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Star, ShoppingCart } from "lucide-react";
+import { Star, ShoppingCart, Heart } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
+import { useWishlist } from "@/lib/wishlist-store";
+import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -20,6 +22,9 @@ export type ProductCardData = {
 
 export function ProductCard({ p }: { p: ProductCardData }) {
   const { add } = useCart();
+  const { user } = useAuth();
+  const { has, toggle } = useWishlist();
+  const wished = has(p.id);
   const img = p.images?.[0] || "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=800";
   const discount = p.compare_price ? Math.round(((p.compare_price - p.price) / p.compare_price) * 100) : 0;
 
@@ -37,6 +42,19 @@ export function ProductCard({ p }: { p: ProductCardData }) {
             Sold out
           </span>
         )}
+        <button
+          type="button"
+          aria-label="Toggle wishlist"
+          onClick={(e) => {
+            e.preventDefault();
+            if (!user) { toast.error("Sign in to save favorites"); return; }
+            toggle(p.id);
+            toast.success(wished ? "Removed from wishlist" : "Added to wishlist");
+          }}
+          className="absolute right-3 bottom-3 grid h-9 w-9 place-items-center rounded-full bg-background/90 backdrop-blur border shadow-sm hover:scale-110 transition-transform"
+        >
+          <Heart className={`h-4 w-4 ${wished ? "fill-accent text-accent" : "text-muted-foreground"}`} />
+        </button>
       </Link>
       <div className="flex flex-1 flex-col p-4">
         {p.brand && <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{p.brand}</div>}
