@@ -11,17 +11,7 @@ const hacks = [
   { icon: Wifi,       name: "WiFi Jammer",        desc: "Block any WiFi signal in range" },
   { icon: Bluetooth,  name: "Bluetooth Jammer",   desc: "Kill nearby Bluetooth devices" },
   { icon: Radio,      name: "Signal Jammer",      desc: "Disrupt all wireless signals" },
-  { icon: Car,        name: "Car Hack",           desc: "Unlock & control vehicles" },
-  { icon: Tv,         name: "TV Hack",            desc: "Take over any smart TV" },
-  { icon: Snowflake,  name: "AC Hack",            desc: "Control air conditioners" },
-  { icon: Projector,  name: "Projector Hack",     desc: "Hijack projectors instantly" },
-  { icon: Laptop,     name: "Laptop Hack",        desc: "Remote access any laptop" },
-  { icon: Monitor,    name: "PC Hack",            desc: "Full PC takeover toolkit" },
-  { icon: Smartphone, name: "Mobile Hack",        desc: "Android & iOS exploits" },
-  { icon: Music,      name: "MP3 / Sound Hack",   desc: "Hijack speakers & audio" },
-  { icon: Camera,     name: "Camera Hack",        desc: "CCTV & webcam access" },
-  { icon: Lightbulb,  name: "Electric Bulb Hack", desc: "Smart bulb takeover" },
-  { icon: Skull,      name: "& Much More 💀",     desc: "Custom hacks on request" },
+  { icon: Skull,      name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Electric Bulb & much more — all in one box" },
 ];
 
 function Home() {
