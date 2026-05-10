@@ -11,7 +11,7 @@ const hacks = [
   { icon: Wifi,       name: "WiFi Jammer",        desc: "Block any WiFi signal in range", sold: 87 },
   { icon: Bluetooth,  name: "Bluetooth Jammer",   desc: "Kill nearby Bluetooth devices", sold: 64 },
   { icon: Smartphone, name: "SIM Signal Jammer",  desc: "Block all SIM / mobile network signals in range", price: "Rs. 50,000", sold: 1 },
-  { icon: Plane,      name: "Drone Jammer & Controller", desc: "Jam, hijack & take control of nearby drones", price: "Rs. 50,000", sold: 3 },
+  { icon: Camera,     name: "Drone Jammer & Controller", desc: "Jam, hijack & take control of nearby camera drones", price: "Rs. 50,000", sold: 3 },
   { icon: Skull,      name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Electric Bulb & much more — all in one box", sold: 42 },
 ];
 
