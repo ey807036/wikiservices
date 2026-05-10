@@ -100,7 +100,8 @@ export function ProductCard({ p }: { p: ProductCardData }) {
         </div>
         <Button
           size="sm"
-          className="mt-3 w-full rounded-full font-semibold"
+          variant="cool"
+          className="mt-3 w-full rounded-full"
           disabled={p.stock === 0}
           onClick={(e) => {
             e.preventDefault();
