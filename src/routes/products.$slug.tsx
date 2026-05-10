@@ -6,6 +6,7 @@ import { useCart } from "@/lib/cart-store";
 import { Star, ShoppingCart, Truck, ShieldCheck, RotateCcw, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/products/$slug")({ component: ProductPage });
 

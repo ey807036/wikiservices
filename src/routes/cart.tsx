@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/button";
 import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
+import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/cart")({ component: CartPage });
 

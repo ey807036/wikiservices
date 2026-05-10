@@ -9,6 +9,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Banknote } from "lucide-react";
+import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/checkout")({ component: Checkout });
 

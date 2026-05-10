@@ -7,6 +7,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/admin/orders")({ component: AdminOrders });
 

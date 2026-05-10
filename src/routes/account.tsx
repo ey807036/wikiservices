@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Package } from "lucide-react";
+import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/account")({ component: Account });
 

@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useState } from "react";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2 } from "lucide-react";
+import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/admin/products")({ component: AdminProducts });
 

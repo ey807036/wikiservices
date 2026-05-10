@@ -5,6 +5,7 @@ import { useWishlist } from "@/lib/wishlist-store";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { money } from "@/lib/format";
 
 export type ProductCardData = {
   id: string;

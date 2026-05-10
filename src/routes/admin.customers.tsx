@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/admin/customers")({ component: AdminCustomers });
 
