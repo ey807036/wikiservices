@@ -11,6 +11,7 @@ const hacks = [
   { icon: Wifi,       name: "WiFi Jammer",        desc: "Block any WiFi signal in range" },
   { icon: Bluetooth,  name: "Bluetooth Jammer",   desc: "Kill nearby Bluetooth devices" },
   { icon: Radio,      name: "Signal Jammer",      desc: "Disrupt all wireless signals" },
+  { icon: Smartphone, name: "SIM Signal Jammer",  desc: "Block all SIM / mobile network signals in range", price: "Rs. 50,000" },
   { icon: Skull,      name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Electric Bulb & much more — all in one box" },
 ];
 
@@ -57,15 +58,21 @@ function Home() {
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {hacks.map((h) => {
             const isWifi = h.name === "WiFi Jammer";
+            const price = (h as any).price ?? "Rs. 5,000";
             return (
               <div
                 key={h.name}
                 className={`card-hack group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card ${isWifi ? "ring-2 ring-red-500/70" : ""}`}
               >
                 {isWifi && (
-                  <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)] animate-pulse">
-                    <Flame className="h-3 w-3" /> Hot Selling
-                  </span>
+                  <>
+                    <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)] animate-pulse">
+                      <Flame className="h-3 w-3" /> Hot Selling
+                    </span>
+                    <span className="absolute right-3 top-3 z-10 rotate-6 rounded-lg bg-gradient-to-br from-fuchsia-500 via-pink-500 to-red-500 px-2.5 py-1 text-[11px] font-black uppercase tracking-wider text-white shadow-[0_0_18px_oklch(0.7_0.27_350/0.7)] ring-2 ring-white/30">
+                      50% OFF 🔥
+                    </span>
+                  </>
                 )}
                 <div className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition ${isWifi ? "bg-red-500/30 group-hover:bg-red-500/50" : "bg-primary/10 group-hover:bg-primary/30"}`} />
                 <div className="relative">
@@ -75,7 +82,7 @@ function Home() {
                   <h3 className={`mt-4 text-lg font-bold ${isWifi ? "text-red-500" : ""}`}>{h.name}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{h.desc}</p>
                   <div className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-3 py-1 text-sm font-black text-black shadow-[0_0_14px_oklch(0.85_0.18_85/0.55)]">
-                    Rs. 5,000
+                    {price}
                   </div>
                   <Link to="/order" search={{ item: h.name }} className="mt-3 block">
                     <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
@@ -103,6 +110,22 @@ function Home() {
                 Order Custom <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* COMING SOON */}
+      <section className="container mx-auto px-4 pb-20">
+        <div className="relative overflow-hidden rounded-3xl border border-dashed border-primary/40 bg-card/40 p-10 md:p-14 text-center backdrop-blur">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_color-mix(in_oklab,_var(--primary)_15%,_transparent),_transparent_70%)]" />
+          <div className="relative">
+            <span className="inline-flex items-center gap-2 rounded-full bg-primary/15 px-3 py-1 text-xs font-black uppercase tracking-widest text-primary animate-pulse">
+              <Zap className="h-3.5 w-3.5" /> Coming Soon
+            </span>
+            <h3 className="mt-3 text-3xl font-black md:text-5xl text-gradient">More Hacks Loading…</h3>
+            <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
+              New underground gadgets dropping soon — spy cams, GPS trackers, RFID cloners & more 💀 Stay tuned.
+            </p>
           </div>
         </div>
       </section>
