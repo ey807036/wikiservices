@@ -63,10 +63,10 @@ function ProductPage() {
           </div>
 
           <div className="mt-6 flex items-baseline gap-3">
-            <span className="text-4xl font-bold">${money(p.price)}</span>
+            <span className="text-4xl font-bold">{money(p.price)}</span>
             {p.compare_price && (
               <>
-                <span className="text-lg text-muted-foreground line-through">${money(p.compare_price)}</span>
+                <span className="text-lg text-muted-foreground line-through">{money(p.compare_price)}</span>
                 <span className="rounded-full bg-accent px-2.5 py-1 text-xs font-bold text-accent-foreground">-{discount}%</span>
               </>
             )}
