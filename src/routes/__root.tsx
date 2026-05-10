@@ -15,6 +15,7 @@ import { WhatsAppButton } from "@/components/site/whatsapp-button";
 import { ThemeProvider } from "@/components/site/theme-provider";
 import { ClickSound } from "@/components/site/click-sound";
 import { ThemePullCord } from "@/components/site/theme-pull-cord";
+import { MobileHackerLogin } from "@/components/site/mobile-hacker-login";
 
 function NotFoundComponent() {
   return (
@@ -106,6 +107,7 @@ function RootComponent() {
             <ThemePullCord />
             <ThemeIntensity />
             <WhatsAppButton />
+            <MobileHackerLogin />
             <Toaster richColors position="top-right" />
           </CartProvider>
         </WishlistProvider>
