@@ -412,3 +412,18 @@
   50% { transform: translateY(-8px) rotate(2deg); }
 }
 .mascot-float { animation: mascotFloat 3.2s ease-in-out infinite; }
+
+@keyframes neonPulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 60%, transparent), 0 0 18px -4px var(--primary); }
+  50% { box-shadow: 0 0 0 6px color-mix(in oklab, var(--primary) 0%, transparent), 0 0 32px 0 var(--primary); }
+}
+.btn-neon { position: relative; animation: neonPulse 1.8s ease-in-out infinite; transition: transform .25s ease; }
+.btn-neon:hover { transform: translateY(-2px) scale(1.04); }
+
+@keyframes glitchHue {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(25deg); }
+}
+.card-hack { animation: glitchHue 6s ease-in-out infinite; transition: transform .3s ease, box-shadow .3s ease; }
+.card-hack:hover { transform: translateY(-6px); box-shadow: 0 18px 40px -12px var(--primary); }
+
