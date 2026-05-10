@@ -15,6 +15,7 @@ import { WhatsAppButton } from "@/components/site/whatsapp-button";
 import { ThemeProvider } from "@/components/site/theme-provider";
 import { ClickSound } from "@/components/site/click-sound";
 import { MobileHackerLogin } from "@/components/site/mobile-hacker-login";
+import { FloatingMascots } from "@/components/site/floating-mascots";
 
 function NotFoundComponent() {
   return (
@@ -109,6 +110,7 @@ function RootComponent() {
             <ClickSound />
             <Layout><Outlet /></Layout>
             <WhatsAppButton />
+            <FloatingMascots />
             <Toaster richColors position="top-right" />
           </CartProvider>
         </WishlistProvider>
