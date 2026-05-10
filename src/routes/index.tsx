@@ -113,6 +113,22 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* COMING SOON */}
+      <section className="container mx-auto px-4 pb-20">
+        <div className="relative overflow-hidden rounded-3xl border border-dashed border-primary/40 bg-card/40 p-10 md:p-14 text-center backdrop-blur">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_color-mix(in_oklab,_var(--primary)_15%,_transparent),_transparent_70%)]" />
+          <div className="relative">
+            <span className="inline-flex items-center gap-2 rounded-full bg-primary/15 px-3 py-1 text-xs font-black uppercase tracking-widest text-primary animate-pulse">
+              <Zap className="h-3.5 w-3.5" /> Coming Soon
+            </span>
+            <h3 className="mt-3 text-3xl font-black md:text-5xl text-gradient">More Hacks Loading…</h3>
+            <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
+              New underground gadgets dropping soon — spy cams, GPS trackers, RFID cloners & more 💀 Stay tuned.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
