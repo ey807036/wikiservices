@@ -6,48 +6,59 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { X, ArrowRight } from "lucide-react";
+import { X, ArrowRight, Briefcase } from "lucide-react";
 import { toast } from "sonner";
 
 /**
- * Auto-playing mobile hacker mascot:
- * 1. Walks in from off-screen left
- * 2. Reaches up and "pulls" the login sheet down from the top with a rope
- * 3. After user closes (or signs in), floats off to the bottom-left corner
- *    holding his laptop and idles there. Tap him anytime to re-open the sheet.
+ * Mobile auto-animation that mimics the reference video:
+ *   1. Character walks in from the RIGHT carrying a briefcase
+ *   2. Stops near the center, sets the briefcase down on the ground
+ *   3. Reaches up — the login form drops down from the top
+ *   4. Stays STANDING on the ground beside the form (never floats away)
+ *      The briefcase stays put on the floor next to him.
+ *   5. Closing the form just hides it; the character keeps standing there
+ *      so the user can re-open by tapping him.
  */
-type Phase = "idle" | "walk" | "pulling" | "open" | "parked";
+type Phase =
+  | "off"        // off-screen right
+  | "walking"    // walking left
+  | "stopping"   // putting briefcase down
+  | "reaching"   // arm up, sheet starts dropping
+  | "open"       // sheet fully visible, character stands beside it
+  | "standing";  // sheet closed, character stays standing on ground
 
-const SESSION_KEY = "wikiservices_hacker_played";
+const SESSION_KEY = "wikiservices_hacker_played_v2";
 
 export function MobileHackerLogin() {
   const isMobile = useIsMobile();
   const { user } = useAuth();
-  const [phase, setPhase] = useState<Phase>("idle");
+  const [phase, setPhase] = useState<Phase>("off");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const startedRef = useRef(false);
 
-  // Kick off auto-animation once per session when mobile + signed-out
+  // Auto-play sequence on first mobile visit (signed-out only)
   useEffect(() => {
     if (!isMobile || user) return;
     if (startedRef.current) return;
     if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_KEY)) {
-      setPhase("parked");
+      setPhase("standing");
       return;
     }
     startedRef.current = true;
-    const t1 = setTimeout(() => setPhase("walk"), 600);
-    const t2 = setTimeout(() => setPhase("pulling"), 2000);
-    const t3 = setTimeout(() => {
+    const timers: number[] = [];
+    timers.push(window.setTimeout(() => setPhase("walking"),  500));
+    timers.push(window.setTimeout(() => setPhase("stopping"), 2200));
+    timers.push(window.setTimeout(() => setPhase("reaching"), 2900));
+    timers.push(window.setTimeout(() => {
       setPhase("open");
       sessionStorage.setItem(SESSION_KEY, "1");
-    }, 3200);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    }, 3800));
+    return () => { timers.forEach(clearTimeout); };
   }, [isMobile, user]);
 
-  // Lock body scroll when sheet open
+  // Lock body scroll while sheet open
   useEffect(() => {
     if (phase === "open") {
       const prev = document.body.style.overflow;
@@ -58,7 +69,8 @@ export function MobileHackerLogin() {
 
   if (!isMobile || user) return null;
 
-  const close = () => setPhase("parked");
+  const close = () => setPhase("standing");
+  const reopen = () => { if (phase !== "open") setPhase("open"); };
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,24 +82,35 @@ export function MobileHackerLogin() {
     close();
   };
 
-  // Sheet vertical position (% of own height): -100 hidden, 0 fully visible
+  // ----- positions -----
+  // Sheet: -100% (hidden) → -25% (peeking while reaching) → 0 (open)
   const sheetY =
-    phase === "open" ? 0 :
-    phase === "pulling" ? -25 :
+    phase === "open"     ? 0   :
+    phase === "reaching" ? -55 :
     -100;
 
-  // Hacker on-screen position
-  const isWalkingPhase = phase === "walk" || phase === "pulling";
-  const isParked = phase === "parked" || phase === "open";
+  // Character horizontal position (right offset in px from right edge)
+  // Walks from off-screen right toward a spot left of center.
+  const charRight =
+    phase === "off"      ? -120 :
+    phase === "walking"  ? 180  :
+    /* stopping/reaching/open/standing */ 180;
+
+  const flipped = phase === "walking"; // facing left while walking
+  const isStanding = phase === "open" || phase === "standing" || phase === "reaching" || phase === "stopping";
+  const armUp = phase === "reaching" || phase === "open";
+
+  // Briefcase appears once he stops; stays on the ground after that
+  const showBriefcase = phase === "stopping" || phase === "reaching" || phase === "open" || phase === "standing";
 
   return (
     <>
       {/* ===== Pull-down login sheet ===== */}
       <div
-        className="fixed inset-x-0 top-0 z-[60] pointer-events-none"
+        className="fixed inset-x-0 top-0 z-[60] pointer-events-none md:hidden"
         style={{
           transform: `translateY(${sheetY}%)`,
-          transition: "transform 700ms cubic-bezier(0.22,1,0.36,1)",
+          transition: "transform 900ms cubic-bezier(0.22,1,0.36,1)",
         }}
       >
         <div className="pointer-events-auto mx-auto w-full max-w-sm rounded-b-3xl border border-t-0 border-primary/40 bg-card/95 p-5 pb-7 shadow-[0_20px_60px_-10px_rgba(34,255,136,0.4)] backdrop-blur-xl">
@@ -118,75 +141,72 @@ export function MobileHackerLogin() {
         </div>
       </div>
 
-      {/* ===== Rope from sheet to hacker's hand (visible during pulling) ===== */}
-      {phase === "pulling" && (
+      {/* ===== Ground line shadow under character/briefcase ===== */}
+      <div
+        className="fixed bottom-[72px] right-0 z-[57] h-[2px] w-full bg-gradient-to-r from-transparent via-primary/20 to-transparent md:hidden pointer-events-none"
+      />
+
+      {/* ===== Briefcase on the ground ===== */}
+      {showBriefcase && (
         <div
-          className="fixed left-1/2 top-0 z-[55] -ml-px w-0.5 origin-top bg-gradient-to-b from-primary/80 to-primary/30"
-          style={{ height: "55vh", animation: "pulse 0.6s ease-in-out infinite" }}
-        />
+          className="fixed bottom-[78px] z-[58] grid h-9 w-9 place-items-center rounded-md border border-primary/40 bg-primary/10 backdrop-blur-md md:hidden pointer-events-none"
+          style={{
+            right: `${charRight - 44}px`,
+            animation: "fadeInUp 0.4s ease-out",
+          }}
+        >
+          <Briefcase className="h-4 w-4 text-primary" />
+        </div>
       )}
 
-      {/* ===== Hacker mascot ===== */}
+      {/* ===== Character ===== */}
       <button
         type="button"
         aria-label="Open quick login"
-        onClick={() => { if (phase !== "open") setPhase("open"); }}
-        className="fixed z-[58] grid touch-none place-items-center md:hidden"
+        onClick={reopen}
+        className="fixed bottom-[78px] z-[59] grid h-[120px] w-[80px] touch-none place-items-end md:hidden"
         style={{
-          // Walking / pulling: roughly center-bottom area
-          // Parked: bottom-left corner
-          left: isParked ? "12px" : isWalkingPhase ? "calc(50% - 40px)" : "-90px",
-          bottom: isParked ? "84px" : "30vh",
-          width: isParked ? "64px" : "80px",
-          height: isParked ? "64px" : "80px",
-          transition: "left 1.2s cubic-bezier(0.22,1,0.36,1), bottom 1.2s cubic-bezier(0.22,1,0.36,1), width 0.6s, height 0.6s",
+          right: `${charRight}px`,
+          transition: "right 1.6s cubic-bezier(0.32,0,0.32,1)",
         }}
       >
-        {/* Glow halo (only when parked, to mark it as a button) */}
-        {isParked && (
-          <>
-            <span className="absolute inset-0 -z-10 rounded-full border border-primary/40 bg-primary/10 backdrop-blur-md shadow-[0_0_25px_rgba(34,255,136,0.35)]" />
-            <span className="absolute inset-0 -z-20 rounded-full bg-primary/20 blur-xl animate-pulse" />
-          </>
-        )}
-
         <img
           src={hacker}
           alt="Login helper"
-          className="h-full w-full object-contain drop-shadow-[0_6px_14px_rgba(34,255,136,0.55)]"
+          className="h-full w-full object-contain drop-shadow-[0_8px_14px_rgba(34,255,136,0.45)]"
           style={{
-            // Reach-up arm illusion via slight stretch + tilt during pulling
-            transform:
-              phase === "pulling" ? "translateY(-6px) scale(1.05)" :
-              phase === "walk" ? "translateY(0)" :
-              "translateY(0)",
-            animation: isParked
-              ? "float 3.5s ease-in-out infinite"
-              : phase === "walk"
-                ? "hackerBob 0.35s ease-in-out infinite"
-                : phase === "pulling"
-                  ? "hackerPull 0.5s ease-in-out infinite"
-                  : undefined,
-            transition: "transform 400ms ease",
+            transform: `scaleX(${flipped ? -1 : 1}) ${armUp ? "translateY(-4px)" : "translateY(0)"}`,
+            animation:
+              phase === "walking"  ? "hackerWalk 0.4s ease-in-out infinite" :
+              phase === "reaching" ? "hackerReach 0.6s ease-in-out infinite" :
+              isStanding           ? "hackerIdle 3.2s ease-in-out infinite" :
+              undefined,
+            transition: "transform 350ms ease",
           }}
         />
-
-        {isParked && (
+        {phase === "standing" && (
           <span className="pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-primary/40 bg-background/90 px-2 py-0.5 font-mono text-[9px] text-primary">
             tap me
           </span>
         )}
       </button>
 
-      {/* Local keyframes for walk bob & pull tug */}
       <style>{`
-        @keyframes hackerBob {
-          0%,100% { transform: translateY(0) }
-          50% { transform: translateY(-3px) }
+        @keyframes hackerWalk {
+          0%,100% { transform: scaleX(-1) translateY(0) }
+          50%     { transform: scaleX(-1) translateY(-3px) }
         }
-        @keyframes hackerPull {
-          0%,100% { transform: translateY(-6px) scale(1.05) }
-          50% { transform: translateY(-2px) scale(1.02) }
+        @keyframes hackerReach {
+          0%,100% { transform: translateY(-4px) scale(1.02) }
+          50%     { transform: translateY(-7px) scale(1.04) }
+        }
+        @keyframes hackerIdle {
+          0%,100% { transform: translateY(0) }
+          50%     { transform: translateY(-2px) }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(8px) }
+          to   { opacity: 1; transform: translateY(0) }
         }
       `}</style>
     </>
