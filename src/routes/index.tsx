@@ -29,8 +29,46 @@ function Home() {
             <span className="block text-gradient text-3xl md:text-5xl">Jammers & Hacking Devices</span>
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground md:text-lg">
-            WiFi jamming, Bluetooth jammer, signal jammer & full device hack kits — cars, TV, AC, projector, laptop, PC, mobile, MP3/sound, camera, electric bulb and much more 💀
+            Underground hack arsenal — jam, hijack & control anything 💀
           </p>
+          <div className="mx-auto mt-5 flex max-w-2xl flex-wrap items-center justify-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Wifi className="h-3 w-3" /> WiFi
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Bluetooth className="h-3 w-3" /> Bluetooth
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Smartphone className="h-3 w-3" /> SIM
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Camera className="h-3 w-3" /> Drone Cam
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Car className="h-3 w-3" /> Car
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Tv className="h-3 w-3" /> TV
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Snowflake className="h-3 w-3" /> AC
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Laptop className="h-3 w-3" /> Laptop
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Monitor className="h-3 w-3" /> PC
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Music className="h-3 w-3" /> Sound
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Lightbulb className="h-3 w-3" /> Bulb
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-red-500/30">
+              <Skull className="h-3 w-3" /> & More
+            </span>
+          </div>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a href="#arsenal">
               <Button size="lg" variant="cool" className="btn-neon h-12 px-7 text-base rounded-full">
