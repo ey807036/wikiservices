@@ -26,7 +26,7 @@ function Dashboard() {
       const todayRevenue = o.filter(x => new Date(x.created_at) >= today && x.status !== "cancelled").reduce((s, x) => s + Number(x.total), 0);
       const weekRevenue = o.filter(x => new Date(x.created_at) >= weekAgo && x.status !== "cancelled").reduce((s, x) => s + Number(x.total), 0);
       const pending = o.filter(x => x.status === "pending").length;
-      const completed = o.filter(x => x.status === "completed" || x.status === "delivered").length;
+      const completed = o.filter(x => x.status === "delivered").length;
       const lowStock = p.filter(x => x.stock > 0 && x.stock <= 5);
       const outOfStock = p.filter(x => x.stock === 0).length;
       const aov = o.length ? revenue / o.length : 0;
