@@ -1,179 +1,112 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { ProductCard, type ProductCardData } from "@/components/site/product-card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Truck, ShieldCheck, Headphones, Zap, Star } from "lucide-react";
+import {
+  ArrowRight, Wifi, Bluetooth, Radio, Car, Tv, Snowflake, Projector,
+  Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star,
+} from "lucide-react";
 
 export const Route = createFileRoute("/")({ component: Home });
 
-function Home() {
-  const { data: featured = [] } = useQuery({
-    queryKey: ["featured"],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("products").select("*")
-        .eq("active", true).eq("featured", true).limit(8);
-      return (data ?? []) as ProductCardData[];
-    },
-  });
-  const { data: trending = [] } = useQuery({
-    queryKey: ["trending"],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("products").select("*")
-        .eq("active", true).eq("trending", true).limit(8);
-      return (data ?? []) as ProductCardData[];
-    },
-  });
-  const { data: categories = [] } = useQuery({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      const { data } = await supabase.from("categories").select("*").order("sort_order");
-      return data ?? [];
-    },
-  });
+const hacks = [
+  { icon: Wifi,       name: "WiFi Jammer",        desc: "Block any WiFi signal in range" },
+  { icon: Bluetooth,  name: "Bluetooth Jammer",   desc: "Kill nearby Bluetooth devices" },
+  { icon: Radio,      name: "Signal Jammer",      desc: "Disrupt all wireless signals" },
+  { icon: Car,        name: "Car Hack",           desc: "Unlock & control vehicles" },
+  { icon: Tv,         name: "TV Hack",            desc: "Take over any smart TV" },
+  { icon: Snowflake,  name: "AC Hack",            desc: "Control air conditioners" },
+  { icon: Projector,  name: "Projector Hack",     desc: "Hijack projectors instantly" },
+  { icon: Laptop,     name: "Laptop Hack",        desc: "Remote access any laptop" },
+  { icon: Monitor,    name: "PC Hack",            desc: "Full PC takeover toolkit" },
+  { icon: Smartphone, name: "Mobile Hack",        desc: "Android & iOS exploits" },
+  { icon: Music,      name: "MP3 / Sound Hack",   desc: "Hijack speakers & audio" },
+  { icon: Camera,     name: "Camera Hack",        desc: "CCTV & webcam access" },
+  { icon: Lightbulb,  name: "Electric Bulb Hack", desc: "Smart bulb takeover" },
+  { icon: Skull,      name: "& Much More 💀",     desc: "Custom hacks on request" },
+];
 
+function Home() {
   return (
     <div>
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 gradient-hero opacity-95" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_oklch(1_0_0/0.15),_transparent_60%)]" />
-        <div className="container relative mx-auto grid items-center gap-10 px-4 py-20 md:grid-cols-2 md:py-28">
-          <div className="text-primary-foreground">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold backdrop-blur">
-              <Zap className="h-3.5 w-3.5" /> New WiFi 7 arrivals
-            </span>
-            <h1 className="mt-5 text-4xl font-bold leading-tight md:text-6xl">
-              Faster WiFi.<br />Everywhere in your home.
-            </h1>
-            <p className="mt-4 max-w-md text-base text-white/85 md:text-lg">
-              Premium routers, mesh systems & networking gear from top brands. Free shipping on orders over Rs. 5,000.
+        <div className="container relative mx-auto px-4 py-24 md:py-32 text-center text-primary-foreground">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold backdrop-blur">
+            <ShieldAlert className="h-3.5 w-3.5" /> Underground Tech Store 💀
+          </span>
+          <h1 className="mt-5 text-4xl font-bold leading-tight md:text-6xl">
+            𓆩 Wiki Services 𓆪<br />
+            <span className="text-gradient">Jammers & Hacking Devices</span>
+          </h1>
+          <p className="mx-auto mt-5 max-w-xl text-base text-white/90 md:text-lg">
+            WiFi jamming, Bluetooth jammer, signal jammer & full device hack kits — cars, TV, AC, projector, laptop, PC, mobile, MP3/sound, camera, electric bulb and much more 💀
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <a href="#arsenal">
+              <Button size="lg" variant="cool" className="btn-neon h-12 px-7 text-base rounded-full">
+                Explore Arsenal <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </a>
+          </div>
+          <div className="mt-10 flex items-center justify-center gap-1">
+            {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-accent text-accent" />)}
+            <span className="ml-2 text-sm text-white/80">Trusted by 12,000+ underground users</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ARSENAL */}
+      <section id="arsenal" className="container mx-auto px-4 py-16">
+        <div className="mb-10 text-center">
+          <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary">
+            <Zap className="h-3.5 w-3.5" /> Hack Arsenal
+          </span>
+          <h2 className="mt-3 text-3xl font-bold md:text-4xl">Pick your weapon</h2>
+          <p className="mt-2 text-muted-foreground">Every device you need to jam, hack & control</p>
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {hacks.map((h) => (
+            <div
+              key={h.name}
+              className="card-hack group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card"
+            >
+              <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/10 blur-2xl transition group-hover:bg-primary/30" />
+              <div className="relative">
+                <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary/15 text-primary">
+                  <h.icon className="h-6 w-6" />
+                </span>
+                <h3 className="mt-4 text-lg font-bold">{h.name}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{h.desc}</p>
+                <Link to="/shop" className="mt-4 inline-block">
+                  <Button size="sm" variant="cool" className="btn-neon mt-2 rounded-full px-5">
+                    Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* PROMO */}
+      <section className="container mx-auto px-4 pb-16">
+        <div className="relative overflow-hidden rounded-3xl gradient-accent p-10 md:p-16 text-center">
+          <div className="relative mx-auto max-w-2xl text-accent-foreground">
+            <span className="text-xs font-bold uppercase tracking-widest opacity-80">Limited Drop 💀</span>
+            <h3 className="mt-2 text-3xl font-bold md:text-4xl">Custom builds on demand</h3>
+            <p className="mt-3 opacity-90">
+              Need a hack we didn't list? DM us — we build custom jammers, exploit kits & spy gear on request.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/shop">
-                <Button size="lg" variant="cool" className="h-12 px-7 text-base rounded-full">
-                  Shop now <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-              <Link to="/shop" search={{ category: "mesh" } as any}>
-                <Button size="lg" variant="outline" className="h-12 border-white/40 bg-white/10 text-white hover:bg-white/20 px-6">
-                  Explore Mesh
-                </Button>
-              </Link>
-            </div>
-            <div className="mt-10 flex items-center gap-1">
-              {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-accent text-accent" />)}
-              <span className="ml-2 text-sm text-white/80">Rated 4.8/5 by 12,000+ customers</span>
-            </div>
-          </div>
-          <div className="relative hidden md:block">
-            <img src="https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=900" alt="WiFi Router" className="rounded-3xl shadow-glow" />
-          </div>
-        </div>
-      </section>
-
-      {/* TRUST BAR */}
-      <section className="border-b">
-        <div className="container mx-auto grid grid-cols-2 gap-6 px-4 py-8 md:grid-cols-4">
-          {[
-            { icon: Truck, t: "Free Shipping", s: "On orders over Rs. 5,000" },
-            { icon: ShieldCheck, t: "2-Year Warranty", s: "On all products" },
-            { icon: Headphones, t: "Expert Support", s: "Network specialists" },
-            { icon: Zap, t: "Fast Setup", s: "Plug & play guides" },
-          ].map((f) => (
-            <div key={t(f.t)} className="flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary"><f.icon className="h-5 w-5" /></span>
-              <div>
-                <div className="font-semibold text-sm">{f.t}</div>
-                <div className="text-xs text-muted-foreground">{f.s}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CATEGORIES */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="mb-8 flex items-end justify-between">
-          <div>
-            <h2 className="text-3xl font-bold">Shop by category</h2>
-            <p className="mt-1 text-muted-foreground">Find exactly what you need</p>
-          </div>
-          <Link to="/shop" className="text-sm font-medium text-primary hover:underline">View all</Link>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {categories.map((c) => (
-            <Link key={c.id} to="/shop" search={{ category: c.slug } as any} className="group relative aspect-square overflow-hidden rounded-2xl border bg-secondary/40 hover-lift">
-              <div className="absolute inset-0 gradient-hero opacity-80 group-hover:opacity-90 transition-opacity" />
-              <div className="relative flex h-full items-end p-5">
-                <div className="text-primary-foreground">
-                  <div className="text-lg font-bold">{c.name}</div>
-                  <div className="text-xs opacity-80">Shop now →</div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* FEATURED */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="mb-8 flex items-end justify-between">
-          <h2 className="text-3xl font-bold">Featured products</h2>
-          <Link to="/shop" className="text-sm font-medium text-primary hover:underline">View all</Link>
-        </div>
-        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {featured.map((p) => <ProductCard key={p.id} p={p} />)}
-        </div>
-      </section>
-
-      {/* PROMO BANNER */}
-      <section className="container mx-auto px-4">
-        <div className="relative overflow-hidden rounded-3xl gradient-accent p-10 md:p-16">
-          <div className="relative max-w-xl text-accent-foreground">
-            <span className="text-xs font-bold uppercase tracking-widest opacity-80">Limited offer</span>
-            <h3 className="mt-2 text-3xl font-bold md:text-4xl">Save up to 30% on Mesh Systems</h3>
-            <p className="mt-3 opacity-90">Whole-home coverage with seamless roaming. Limited stock.</p>
-            <Link to="/shop" search={{ category: "mesh" } as any}>
-              <Button size="lg" className="mt-6 bg-foreground text-background hover:bg-foreground/90">Shop the sale</Button>
+            <Link to="/shop">
+              <Button size="lg" className="btn-neon mt-6 rounded-full bg-foreground text-background hover:bg-foreground/90">
+                Order Custom <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* TRENDING */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="mb-8 flex items-end justify-between">
-          <h2 className="text-3xl font-bold">Trending now</h2>
-          <Link to="/shop" className="text-sm font-medium text-primary hover:underline">View all</Link>
-        </div>
-        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {trending.map((p) => <ProductCard key={p.id} p={p} />)}
-        </div>
-      </section>
-
-      {/* REVIEWS */}
-      <section className="container mx-auto px-4 py-16">
-        <h2 className="mb-10 text-center text-3xl font-bold">Loved by 12,000+ customers</h2>
-        <div className="grid gap-5 md:grid-cols-3">
-          {[
-            { n: "Sarah M.", r: "Perfect coverage in our 3-story home. Setup took 5 minutes!", p: "MeshNet Trio" },
-            { n: "James L.", r: "My ping dropped by 30ms. Best gaming router I've owned.", p: "Velocity X8" },
-            { n: "Priya K.", r: "Fast shipping & the cable quality is genuinely premium.", p: "Cat 8 Cable" },
-          ].map((r) => (
-            <div key={r.n} className="rounded-2xl border bg-card p-6 shadow-card">
-              <div className="flex gap-1">{[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-accent text-accent" />)}</div>
-              <p className="mt-3 text-sm">"{r.r}"</p>
-              <div className="mt-4 text-sm font-semibold">{r.n}</div>
-              <div className="text-xs text-muted-foreground">Bought: {r.p}</div>
-            </div>
-          ))}
         </div>
       </section>
     </div>
   );
 }
-
-function t(s: string) { return s; }
