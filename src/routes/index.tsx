@@ -28,17 +28,16 @@ function Home() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 gradient-hero opacity-95" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_oklch(1_0_0/0.15),_transparent_60%)]" />
-        <div className="container relative mx-auto px-4 py-24 md:py-32 text-center text-primary-foreground">
+      <section className="relative overflow-hidden border-b">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_color-mix(in_oklab,_var(--primary)_18%,_transparent),_transparent_60%)]" />
+        <div className="container relative mx-auto px-4 py-24 md:py-32 text-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-destructive/20 px-5 py-2 text-sm md:text-base font-bold backdrop-blur ring-1 ring-destructive/50">
             <ShieldAlert className="h-5 w-5 text-red-500" /> UNDERGROUND WIKI STORE 💀
           </span>
           <h1 className="mt-5 text-5xl font-black uppercase leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
             <span className="block text-gradient text-3xl md:text-5xl">Jammers & Hacking Devices</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-base text-white/90 md:text-lg">
+          <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground md:text-lg">
             WiFi jamming, Bluetooth jammer, signal jammer & full device hack kits — cars, TV, AC, projector, laptop, PC, mobile, MP3/sound, camera, electric bulb and much more 💀
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
@@ -50,7 +49,7 @@ function Home() {
           </div>
           <div className="mt-10 flex items-center justify-center gap-1">
             {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-accent text-accent" />)}
-            <span className="ml-2 text-sm text-white/80">Trusted by 12,000+ underground users</span>
+            <span className="ml-2 text-sm text-muted-foreground">Trusted by 12,000+ underground users</span>
           </div>
         </div>
       </section>

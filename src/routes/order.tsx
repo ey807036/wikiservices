@@ -7,6 +7,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Banknote, Smartphone, Wallet, MapPin, Phone, User, ShieldAlert, ArrowRight } from "lucide-react";
 import { z } from "zod";
+import { saveOrder } from "@/lib/order-history";
 
 export const Route = createFileRoute("/order")({
   component: OrderPage,
@@ -50,10 +51,11 @@ function OrderPage() {
     const r = schema.safeParse(form);
     if (!r.success) { toast.error(r.error.issues[0].message); return; }
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 800));
+    await new Promise((r) => setTimeout(r, 600));
+    const order = saveOrder({ ...r.data, item: item || "Custom Order" });
     setSubmitting(false);
-    toast.success("Order placed 💀 We'll contact you shortly");
-    navigate({ to: "/" });
+    toast.success("Order placed 💀");
+    navigate({ to: "/receipt", search: { id: order.id } });
   };
 
   return (
