@@ -148,6 +148,21 @@ export function MobileHackerLogin() {
         </div>
       </div>
 
+      {/* ===== Rope/handle visibly pulled by the character ===== */}
+      {showRope && (
+        <div
+          className="fixed z-[58] flex flex-col items-center md:hidden pointer-events-none"
+          style={{
+            right: `${charRight + 46}px`,
+            top: phase === "pulling" || phase === "open" ? "258px" : "18px",
+            transition: "top 900ms cubic-bezier(0.22,1,0.36,1)",
+          }}
+        >
+          <div className="h-[170px] w-[3px] rounded-full bg-primary/70 shadow-[0_0_14px_color-mix(in_oklab,var(--primary)_70%,transparent)]" />
+          <div className="-mt-1 h-5 w-8 rounded-full border border-primary/60 bg-card/95 shadow-[0_0_18px_color-mix(in_oklab,var(--primary)_45%,transparent)]" />
+        </div>
+      )}
+
       {/* ===== Ground line shadow under character/briefcase ===== */}
       <div
         className="fixed bottom-[72px] right-0 z-[57] h-[2px] w-full bg-gradient-to-r from-transparent via-primary/20 to-transparent md:hidden pointer-events-none"
@@ -185,7 +200,7 @@ export function MobileHackerLogin() {
             transform: `scaleX(${flipped ? -1 : 1}) ${armUp ? "translateY(-4px)" : "translateY(0)"}`,
             animation:
               phase === "walking"  ? "hackerWalk 0.4s ease-in-out infinite" :
-              phase === "reaching" ? "hackerReach 0.6s ease-in-out infinite" :
+              phase === "grabbing" || phase === "pulling" ? "hackerPull 0.62s ease-in-out infinite" :
               isStanding           ? "hackerIdle 3.2s ease-in-out infinite" :
               undefined,
             transition: "transform 350ms ease",
@@ -193,7 +208,7 @@ export function MobileHackerLogin() {
         />
         {phase === "standing" && (
           <span className="pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-primary/40 bg-background/90 px-2 py-0.5 font-mono text-[9px] text-primary">
-            tap me
+            pull
           </span>
         )}
       </button>
@@ -203,9 +218,9 @@ export function MobileHackerLogin() {
           0%,100% { transform: scaleX(-1) translateY(0) }
           50%     { transform: scaleX(-1) translateY(-3px) }
         }
-        @keyframes hackerReach {
-          0%,100% { transform: translateY(-4px) scale(1.02) }
-          50%     { transform: translateY(-7px) scale(1.04) }
+        @keyframes hackerPull {
+          0%,100% { transform: translateY(-4px) rotate(-1deg) scale(1.02) }
+          50%     { transform: translateY(3px) rotate(2deg) scale(1.04) }
         }
         @keyframes hackerIdle {
           0%,100% { transform: translateY(0) }
