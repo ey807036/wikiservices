@@ -87,7 +87,6 @@ function ProductPage() {
               <button onClick={() => setQty(Math.min(p.stock, qty + 1))} className="p-3"><Plus className="h-4 w-4" /></button>
             </div>
             <Button
-            <Button
               size="lg"
               variant="cool"
               className="flex-1 h-12 rounded-full"
