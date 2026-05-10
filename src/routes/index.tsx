@@ -57,33 +57,38 @@ function Home() {
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {hacks.map((h) => {
             const isWifi = h.name === "WiFi Jammer";
-            const isBt = h.name === "Bluetooth Jammer";
-            const isHot = isWifi || isBt;
             const price = (h as any).price ?? "Rs. 5,000";
+            const sold = (h as any).sold ?? 0;
             return (
               <div
                 key={h.name}
-                className={`card-hack group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card ${isHot ? "ring-2 ring-red-500/70" : ""}`}
+                className={`card-hack group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card ${isWifi ? "ring-2 ring-red-500/70" : ""}`}
               >
-                {isHot && (
-                  <>
-                    <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)] animate-pulse">
-                      <Flame className="h-3 w-3" /> Hot Selling
-                    </span>
-                    <span className="absolute right-3 top-3 z-10 rotate-6 rounded-lg bg-gradient-to-br from-fuchsia-500 via-pink-500 to-red-500 px-2.5 py-1 text-[11px] font-black uppercase tracking-wider text-white shadow-[0_0_18px_oklch(0.7_0.27_350/0.7)] ring-2 ring-white/30">
-                      50% OFF 🔥
-                    </span>
-                  </>
+                {isWifi && (
+                  <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)] animate-pulse">
+                    <Flame className="h-3 w-3" /> Hot Selling
+                  </span>
                 )}
-                <div className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition ${isHot ? "bg-red-500/30 group-hover:bg-red-500/50" : "bg-primary/10 group-hover:bg-primary/30"}`} />
+                <span className="absolute right-3 top-3 z-10 rotate-6 rounded-lg bg-gradient-to-br from-fuchsia-500 via-pink-500 to-red-500 px-2.5 py-1 text-[11px] font-black uppercase tracking-wider text-white shadow-[0_0_18px_oklch(0.7_0.27_350/0.7)] ring-2 ring-white/30">
+                  50% OFF 🔥
+                </span>
+                <div className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition ${isWifi ? "bg-red-500/30 group-hover:bg-red-500/50" : "bg-primary/10 group-hover:bg-primary/30"}`} />
                 <div className="relative">
-                  <span className={`grid h-12 w-12 place-items-center rounded-xl ${isHot ? "bg-red-500/20 text-red-500" : "bg-primary/15 text-primary"}`}>
+                  <span className={`grid h-12 w-12 place-items-center rounded-xl ${isWifi ? "bg-red-500/20 text-red-500" : "bg-primary/15 text-primary"}`}>
                     <h.icon className="h-6 w-6" />
                   </span>
-                  <h3 className={`mt-4 text-lg font-bold ${isHot ? "text-red-500" : ""}`}>{h.name}</h3>
+                  <h3 className={`mt-4 text-lg font-bold ${isWifi ? "text-red-500" : ""}`}>{h.name}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{h.desc}</p>
-                  <div className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-3 py-1 text-sm font-black text-black shadow-[0_0_14px_oklch(0.85_0.18_85/0.55)]">
-                    {price}
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <div className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-3 py-1 text-sm font-black text-black shadow-[0_0_14px_oklch(0.85_0.18_85/0.55)]">
+                      {price}
+                    </div>
+                    <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/15 px-2 py-0.5 text-[11px] font-bold text-emerald-400 ring-1 ring-emerald-500/40">
+                      ✅ {sold} sold
+                    </span>
+                    <span className="inline-flex items-center rounded-md bg-zinc-700/40 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-zinc-300 ring-1 ring-zinc-500/40">
+                      fake
+                    </span>
                   </div>
                   <Link to="/order" search={{ item: h.name }} className="mt-3 block">
                     <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
