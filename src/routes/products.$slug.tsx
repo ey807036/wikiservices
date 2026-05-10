@@ -87,8 +87,10 @@ function ProductPage() {
               <button onClick={() => setQty(Math.min(p.stock, qty + 1))} className="p-3"><Plus className="h-4 w-4" /></button>
             </div>
             <Button
+            <Button
               size="lg"
-              className="flex-1 h-12"
+              variant="cool"
+              className="flex-1 h-12 rounded-full"
               disabled={p.stock === 0}
               onClick={() => {
                 add({ id: p.id, name: p.name, slug: p.slug, price: Number(p.price), image: images[0], stock: p.stock }, qty);
