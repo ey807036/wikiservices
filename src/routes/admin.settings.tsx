@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Save } from "lucide-react";
+import { Save, Volume2, VolumeX, Check } from "lucide-react";
+import { THEMES } from "@/components/site/theme-provider";
 
 export const Route = createFileRoute("/admin/settings")({ component: Settings });
 
@@ -26,6 +27,13 @@ function Settings() {
 
   useEffect(() => { if (data) setForm(data); }, [data]);
 
+  const [soundOn, setSoundOn] = useState(true);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setSoundOn(localStorage.getItem("wikiservices_click_sound") !== "off");
+    }
+  }, []);
+
   const save = async () => {
     setSaving(true);
     const { error } = await supabase.from("site_settings").update({
@@ -35,12 +43,21 @@ function Settings() {
       whatsapp_number: form.whatsapp_number,
       address: form.address,
       announcement: form.announcement,
+      theme: form.theme ?? "matrix",
       updated_at: new Date().toISOString(),
     }).eq("id", 1);
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success("Settings saved");
     qc.invalidateQueries({ queryKey: ["site-settings"] });
+    qc.invalidateQueries({ queryKey: ["site-theme"] });
+  };
+
+  const toggleSound = () => {
+    const next = !soundOn;
+    setSoundOn(next);
+    localStorage.setItem("wikiservices_click_sound", next ? "on" : "off");
+    toast.success(next ? "Click sound enabled" : "Click sound muted");
   };
 
   return (
