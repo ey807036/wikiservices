@@ -354,3 +354,55 @@
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-12px); }
 }
+
+@layer components {
+  .input-neon {
+    position: relative;
+    background: color-mix(in oklab, var(--card) 80%, transparent) !important;
+    border: 1px solid color-mix(in oklab, var(--primary) 40%, transparent) !important;
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--primary) 15%, transparent),
+      0 0 18px -4px color-mix(in oklab, var(--primary) 35%, transparent),
+      inset 0 1px 0 color-mix(in oklab, var(--primary) 10%, transparent);
+    transition: box-shadow .25s ease, border-color .25s ease, transform .2s ease;
+  }
+  .input-neon:hover {
+    border-color: color-mix(in oklab, var(--primary) 65%, transparent) !important;
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--primary) 25%, transparent),
+      0 0 24px -2px color-mix(in oklab, var(--primary) 50%, transparent);
+  }
+  .input-neon:focus,
+  .input-neon:focus-visible {
+    outline: none !important;
+    border-color: var(--primary) !important;
+    box-shadow:
+      0 0 0 2px color-mix(in oklab, var(--primary) 35%, transparent),
+      0 0 28px -2px color-mix(in oklab, var(--primary) 70%, transparent),
+      0 0 60px -10px color-mix(in oklab, var(--accent) 55%, transparent);
+  }
+  .field-neon {
+    position: relative;
+    border-radius: calc(var(--radius) + 2px);
+    padding: 1px;
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--primary) 55%, transparent),
+      color-mix(in oklab, var(--accent) 45%, transparent) 50%,
+      color-mix(in oklab, var(--primary) 25%, transparent));
+    transition: filter .25s ease, transform .2s ease;
+  }
+  .field-neon::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: inherit;
+    filter: blur(10px);
+    opacity: .35;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity .25s ease, filter .25s ease;
+  }
+  .field-neon:focus-within { filter: saturate(1.15); }
+  .field-neon:focus-within::after { opacity: .7; filter: blur(14px); }
+}
