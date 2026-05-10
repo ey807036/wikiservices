@@ -11,6 +11,7 @@ import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeIntensity } from "@/components/site/theme-intensity";
+import { WhatsAppButton } from "@/components/site/whatsapp-button";
 
 function NotFoundComponent() {
   return (
@@ -98,6 +99,7 @@ function RootComponent() {
           <CartProvider>
             <Layout><Outlet /></Layout>
             <ThemeIntensity />
+            <WhatsAppButton />
             <Toaster richColors position="top-right" />
           </CartProvider>
         </WishlistProvider>
