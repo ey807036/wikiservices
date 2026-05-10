@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, Wifi, Bluetooth, Radio, Car, Tv, Snowflake, Projector,
-  Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star,
+  Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star, Flame,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({ component: Home });
