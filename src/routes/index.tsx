@@ -75,12 +75,12 @@ function Home() {
                     </span>
                   </>
                 )}
-                <div className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition ${isWifi ? "bg-red-500/30 group-hover:bg-red-500/50" : "bg-primary/10 group-hover:bg-primary/30"}`} />
+                <div className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition ${isHot ? "bg-red-500/30 group-hover:bg-red-500/50" : "bg-primary/10 group-hover:bg-primary/30"}`} />
                 <div className="relative">
-                  <span className={`grid h-12 w-12 place-items-center rounded-xl ${isWifi ? "bg-red-500/20 text-red-500" : "bg-primary/15 text-primary"}`}>
+                  <span className={`grid h-12 w-12 place-items-center rounded-xl ${isHot ? "bg-red-500/20 text-red-500" : "bg-primary/15 text-primary"}`}>
                     <h.icon className="h-6 w-6" />
                   </span>
-                  <h3 className={`mt-4 text-lg font-bold ${isWifi ? "text-red-500" : ""}`}>{h.name}</h3>
+                  <h3 className={`mt-4 text-lg font-bold ${isHot ? "text-red-500" : ""}`}>{h.name}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{h.desc}</p>
                   <div className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-3 py-1 text-sm font-black text-black shadow-[0_0_14px_oklch(0.85_0.18_85/0.55)]">
                     {price}
