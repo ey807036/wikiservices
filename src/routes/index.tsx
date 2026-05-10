@@ -37,7 +37,7 @@ function Home() {
           <h1 className="mt-5 text-5xl font-black uppercase leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
             <span className="block text-gradient text-3xl md:text-5xl">Jammers & Hacking Devices</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-base text-white/90 md:text-lg">
+          <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground md:text-lg">
             WiFi jamming, Bluetooth jammer, signal jammer & full device hack kits — cars, TV, AC, projector, laptop, PC, mobile, MP3/sound, camera, electric bulb and much more 💀
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
@@ -49,7 +49,7 @@ function Home() {
           </div>
           <div className="mt-10 flex items-center justify-center gap-1">
             {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-accent text-accent" />)}
-            <span className="ml-2 text-sm text-white/80">Trusted by 12,000+ underground users</span>
+            <span className="ml-2 text-sm text-muted-foreground">Trusted by 12,000+ underground users</span>
           </div>
         </div>
       </section>
