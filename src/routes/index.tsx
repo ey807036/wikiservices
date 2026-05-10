@@ -28,10 +28,9 @@ function Home() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 gradient-hero opacity-95" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_oklch(1_0_0/0.15),_transparent_60%)]" />
-        <div className="container relative mx-auto px-4 py-24 md:py-32 text-center text-primary-foreground">
+      <section className="relative overflow-hidden border-b">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_color-mix(in_oklab,_var(--primary)_18%,_transparent),_transparent_60%)]" />
+        <div className="container relative mx-auto px-4 py-24 md:py-32 text-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-destructive/20 px-5 py-2 text-sm md:text-base font-bold backdrop-blur ring-1 ring-destructive/50">
             <ShieldAlert className="h-5 w-5 text-red-500" /> UNDERGROUND WIKI STORE 💀
           </span>
