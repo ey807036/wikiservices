@@ -16,15 +16,35 @@ function Checkout() {
   const { items, subtotal, clear } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const shipping = subtotal > 50 || subtotal === 0 ? 0 : 9.99;
-  const tax = +(subtotal * 0.08).toFixed(2);
-  const total = +(subtotal + shipping + tax).toFixed(2);
+  const [coupon, setCoupon] = useState<{ code: string; discount: number } | null>(null);
+  const [couponInput, setCouponInput] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+  const discount = coupon?.discount ?? 0;
+  const discountedSubtotal = Math.max(0, subtotal - discount);
+  const shipping = discountedSubtotal > 50 || subtotal === 0 ? 0 : 9.99;
+  const tax = +(discountedSubtotal * 0.08).toFixed(2);
+  const total = +(discountedSubtotal + shipping + tax).toFixed(2);
   const [submitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     name: "", email: user?.email ?? "", phone: "", address: "", city: "", postal: "", country: "US", notes: "",
   });
   const update = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  const applyCoupon = async () => {
+    const code = couponInput.trim().toUpperCase();
+    if (!code) return;
+    setCouponLoading(true);
+    const { data } = await supabase.from("coupons").select("*").eq("code", code).eq("active", true).maybeSingle();
+    setCouponLoading(false);
+    if (!data) { toast.error("Invalid coupon"); return; }
+    if (data.expires_at && new Date(data.expires_at) < new Date()) { toast.error("Coupon expired"); return; }
+    if (Number(subtotal) < Number(data.min_subtotal)) { toast.error(`Min subtotal $${data.min_subtotal}`); return; }
+    const value = Number(data.discount_value);
+    const d = data.discount_type === "percent" ? +(subtotal * value / 100).toFixed(2) : value;
+    setCoupon({ code: data.code, discount: d });
+    toast.success(`Coupon ${data.code} applied`);
+  };
 
   if (items.length === 0) {
     return <div className="container mx-auto px-4 py-20 text-center">Your cart is empty. <Link to="/shop" className="text-primary">Shop now</Link></div>;
@@ -40,7 +60,8 @@ function Checkout() {
     try {
       const { data: order, error: oErr } = await supabase.from("orders").insert({
         user_id: user.id,
-        subtotal, shipping, tax, total,
+        subtotal, shipping, tax, total, discount,
+        coupon_code: coupon?.code ?? null,
         payment_method: "cod",
         customer_name: form.name,
         customer_email: form.email,
@@ -126,10 +147,20 @@ function Checkout() {
           </ul>
           <dl className="mt-5 space-y-2 border-t pt-4 text-sm">
             <div className="flex justify-between"><dt>Subtotal</dt><dd>${subtotal.toFixed(2)}</dd></div>
+            {coupon && (
+              <div className="flex justify-between text-accent"><dt>Coupon ({coupon.code})</dt><dd>-${discount.toFixed(2)}</dd></div>
+            )}
             <div className="flex justify-between"><dt>Shipping</dt><dd>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</dd></div>
             <div className="flex justify-between"><dt>Tax</dt><dd>${tax.toFixed(2)}</dd></div>
             <div className="flex justify-between border-t pt-3 text-base font-bold"><dt>Total</dt><dd>${total.toFixed(2)}</dd></div>
           </dl>
+          <div className="mt-5 flex gap-2">
+            <Input placeholder="Coupon code" value={couponInput} onChange={(e) => setCouponInput(e.target.value)} />
+            <Button type="button" variant="outline" onClick={applyCoupon} disabled={couponLoading}>
+              {couponLoading ? "..." : "Apply"}
+            </Button>
+          </div>
+          <div className="mt-2 text-xs text-muted-foreground">Try <code>WELCOME10</code>, <code>SAVE20</code>, <code>FREESHIP</code></div>
           <Button type="submit" className="mt-6 w-full h-11" disabled={submitting || !user}>
             {submitting ? "Placing order..." : "Place order"}
           </Button>
