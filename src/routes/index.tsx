@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, Wifi, Bluetooth, Radio, Car, Tv, Snowflake, Projector,
-  Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star, Flame,
+  Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star, Flame, Plane,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({ component: Home });
@@ -11,6 +11,7 @@ const hacks = [
   { icon: Wifi,       name: "WiFi Jammer",        desc: "Block any WiFi signal in range", sold: 87 },
   { icon: Bluetooth,  name: "Bluetooth Jammer",   desc: "Kill nearby Bluetooth devices", sold: 64 },
   { icon: Smartphone, name: "SIM Signal Jammer",  desc: "Block all SIM / mobile network signals in range", price: "Rs. 50,000", sold: 1 },
+  { icon: Plane,      name: "Drone Jammer & Controller", desc: "Jam, hijack & take control of nearby drones", price: "Rs. 50,000", sold: 3 },
   { icon: Skull,      name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Electric Bulb & much more — all in one box", sold: 42 },
 ];
 
@@ -74,7 +75,7 @@ function Home() {
                 </span>
                 <div className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition ${isWifi ? "bg-red-500/30 group-hover:bg-red-500/50" : "bg-primary/10 group-hover:bg-primary/30"}`} />
                 <div className="relative">
-                  <span className={`grid h-12 w-12 place-items-center rounded-xl ${isWifi ? "bg-red-500/20 text-red-500" : "bg-primary/15 text-primary"}`}>
+                  <span className="grid h-12 w-12 place-items-center rounded-xl bg-red-500/20 text-red-500 ring-1 ring-red-500/40 shadow-[0_0_14px_oklch(0.65_0.25_25/0.55)]">
                     <h.icon className="h-6 w-6" />
                   </span>
                   <h3 className={`mt-4 text-lg font-bold ${isWifi ? "text-red-500" : ""}`}>{h.name}</h3>
