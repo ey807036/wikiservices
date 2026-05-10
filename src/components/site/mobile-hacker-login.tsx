@@ -6,21 +6,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { X, ArrowRight, Briefcase } from "lucide-react";
+import { X, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
-/**
- * Mobile auto-animation like the reference:
- * character enters by itself, grabs the hanging rope/handle with his hand,
- * pulls it down, then the login sheet drops from the top.
- */
-type Phase =
-  | "off"
-  | "walking"
-  | "grabbing"
-  | "pulling"
-  | "open"
-  | "standing";
+type Phase = "off" | "walk" | "bend" | "boot" | "form" | "parked";
 
 export function MobileHackerLogin() {
   const isMobile = useIsMobile();
@@ -30,57 +19,50 @@ export function MobileHackerLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const startedRef = useRef(false);
-  const pullTimersRef = useRef<number[]>([]);
+  const timersRef = useRef<number[]>([]);
 
-  const clearPullTimers = () => {
-    pullTimersRef.current.forEach(clearTimeout);
-    pullTimersRef.current = [];
+  const clearTimers = () => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
   };
 
-  const playPullSequence = () => {
-    clearPullTimers();
-    setPhase("grabbing");
-    pullTimersRef.current = [
-      window.setTimeout(() => setPhase("pulling"), 420),
-      window.setTimeout(() => setPhase("open"), 1550),
+  const playSequence = () => {
+    clearTimers();
+    setPhase("off");
+    timersRef.current = [
+      window.setTimeout(() => setPhase("walk"), 120),
+      window.setTimeout(() => setPhase("bend"), 1550),
+      window.setTimeout(() => setPhase("boot"), 2250),
+      window.setTimeout(() => setPhase("form"), 3150),
     ];
   };
 
-  // Auto-play sequence on mobile visit (signed-out only)
   useEffect(() => {
-    if (!isMobile || user) return;
-    if (startedRef.current) return;
+    if (!isMobile || user || startedRef.current) return;
     startedRef.current = true;
-    const timers: number[] = [];
-    timers.push(window.setTimeout(() => setPhase("walking"), 450));
-    timers.push(window.setTimeout(() => setPhase("grabbing"), 2150));
-    timers.push(window.setTimeout(() => setPhase("pulling"), 2700));
-    timers.push(window.setTimeout(() => setPhase("open"), 3850));
-    return () => {
-      timers.forEach(clearTimeout);
-      clearPullTimers();
-    };
+    playSequence();
+    return clearTimers;
   }, [isMobile, user]);
 
-  // Lock body scroll while sheet open
   useEffect(() => {
-    if (phase === "open") {
-      const prev = document.body.style.overflow;
+    if (phase === "form") {
+      const previous = document.body.style.overflow;
       document.body.style.overflow = "hidden";
-      return () => { document.body.style.overflow = prev; };
+      return () => {
+        document.body.style.overflow = previous;
+      };
     }
   }, [phase]);
 
   if (!isMobile || user) return null;
 
-  const close = () => setPhase("standing");
-  const reopen = () => {
-    if (phase === "open" || phase === "walking" || phase === "pulling") return;
-    playPullSequence();
+  const close = () => setPhase("parked");
+  const replay = () => {
+    if (phase === "parked") playSequence();
   };
 
-  const signIn = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const signIn = async (event: React.FormEvent) => {
+    event.preventDefault();
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
@@ -89,146 +71,162 @@ export function MobileHackerLogin() {
     close();
   };
 
-  // ----- positions -----
-  // Sheet: hidden → tugged down by the rope → open
-  const sheetY =
-    phase === "open"    ? 0   :
-    phase === "pulling" ? -18 :
-    phase === "grabbing" ? -96 :
-    -100;
-
-  // Character horizontal position (right offset in px from right edge)
-  const charRight =
-    phase === "off"     ? -128 :
-    phase === "walking" ? 150  :
-    150;
-
-  const flipped = phase === "walking"; // facing left while walking
-  const isStanding = phase === "open" || phase === "standing" || phase === "grabbing" || phase === "pulling";
-  const armUp = phase === "grabbing" || phase === "pulling" || phase === "open";
-
-  const showBriefcase = phase === "grabbing" || phase === "pulling" || phase === "open" || phase === "standing";
-  const showRope = phase === "grabbing" || phase === "pulling" || phase === "open";
+  const showStage = phase !== "parked";
+  const formVisible = phase === "form";
+  const charLeft =
+    phase === "off"
+      ? "-92px"
+      : phase === "walk"
+        ? "70px"
+        : phase === "bend"
+          ? "82px"
+          : phase === "boot"
+            ? "64px"
+            : "42px";
+  const laptopVisible = phase === "bend" || phase === "boot" || phase === "form";
 
   return (
     <>
-      {/* ===== Pull-down login sheet ===== */}
-      <div
-        className="fixed inset-x-0 top-0 z-[60] pointer-events-none md:hidden"
-        style={{
-          transform: `translateY(${sheetY}%)`,
-          transition: "transform 900ms cubic-bezier(0.22,1,0.36,1)",
-        }}
-      >
-        <div className="pointer-events-auto mx-auto w-full max-w-sm rounded-b-3xl border border-t-0 border-primary/40 bg-card/95 p-5 pb-7 shadow-[0_20px_60px_-10px_rgba(34,255,136,0.4)] backdrop-blur-xl">
-          <div className="mb-3 flex items-center justify-between">
-            <div className="font-mono text-xs uppercase tracking-wider text-primary">&gt; quick_login</div>
-            {phase === "open" && (
-              <button onClick={close} aria-label="Close" className="rounded-full p-1 text-muted-foreground hover:text-foreground">
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-          <form onSubmit={signIn} className="space-y-2">
-            <Input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-            <Input type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-            <Button type="submit" className="w-full gap-1" disabled={loading}>
-              {loading ? "..." : <>Sign in <ArrowRight className="h-4 w-4" /></>}
-            </Button>
-          </form>
-          <div className="mt-3 flex items-center justify-between text-xs">
-            <Link to="/auth" search={{ mode: "signup" } as any} onClick={close} className="text-primary underline-offset-2 hover:underline">
-              Create account
-            </Link>
-            <Link to="/auth" onClick={close} className="text-muted-foreground hover:text-foreground">
-              Full sign in →
-            </Link>
-          </div>
-          <div className="mx-auto mt-4 h-1 w-12 rounded-full bg-primary/30" />
-        </div>
-      </div>
+      {showStage && (
+        <div className="fixed inset-0 z-[90] md:hidden pointer-events-none">
+          <div className="absolute inset-x-3 top-20 h-[260px] overflow-hidden rounded-sm border border-primary/45 bg-[var(--login-stage)] shadow-[0_18px_45px_color-mix(in_oklab,var(--primary)_30%,transparent)]">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,var(--login-stage-glow),transparent_45%)]" />
+            <div className="absolute inset-x-0 bottom-0 h-12 bg-background/10" />
 
-      {/* ===== Rope/handle visibly pulled by the character ===== */}
-      {showRope && (
-        <div
-          className="fixed z-[58] flex flex-col items-center md:hidden pointer-events-none"
-          style={{
-            right: `${charRight + 46}px`,
-            top: phase === "pulling" || phase === "open" ? "258px" : "18px",
-            transition: "top 900ms cubic-bezier(0.22,1,0.36,1)",
-          }}
-        >
-          <div className="h-[170px] w-[3px] rounded-full bg-primary/70 shadow-[0_0_14px_color-mix(in_oklab,var(--primary)_70%,transparent)]" />
-          <div className="-mt-1 h-5 w-8 rounded-full border border-primary/60 bg-card/95 shadow-[0_0_18px_color-mix(in_oklab,var(--primary)_45%,transparent)]" />
+            <img
+              src={hacker}
+              alt="Login helper"
+              className="absolute bottom-7 z-[2] h-[112px] w-[94px] object-contain drop-shadow-[0_10px_16px_color-mix(in_oklab,var(--background)_45%,transparent)]"
+              style={{
+                left: charLeft,
+                transition: "left 1.25s cubic-bezier(0.33,0,0.2,1)",
+                animation:
+                  phase === "walk"
+                    ? "videoWalk 0.38s ease-in-out infinite"
+                    : phase === "bend"
+                      ? "videoBend 0.65s ease-in-out infinite"
+                      : phase === "boot"
+                        ? "videoBoot 0.55s ease-in-out infinite"
+                        : "videoStand 2.6s ease-in-out infinite",
+              }}
+            />
+
+            <div
+              className="absolute bottom-[58px] left-[134px] z-[1] h-7 w-10 rounded-sm border border-primary-foreground/25 bg-background/80 shadow-[0_10px_20px_color-mix(in_oklab,var(--background)_40%,transparent)] transition-all duration-500"
+              style={{
+                opacity: laptopVisible ? 1 : 0,
+                transform:
+                  phase === "bend" ? "translateY(8px) scale(0.85)" : "translateY(0) scale(1)",
+              }}
+            >
+              <span className="absolute inset-x-1 top-1 h-3 rounded-[2px] border border-primary/45 bg-primary/15" />
+              <span className="absolute bottom-1 left-1/2 h-1 w-7 -translate-x-1/2 rounded-full bg-primary/50" />
+            </div>
+
+            <div
+              className="absolute left-[152px] top-8 z-[3] w-[164px] transition-all duration-700 ease-out"
+              style={{
+                opacity: formVisible ? 1 : 0,
+                transform: formVisible ? "translateY(0) scale(1)" : "translateY(-14px) scale(0.96)",
+              }}
+            >
+              <div className="pointer-events-auto rounded-sm border border-primary-foreground/35 bg-card/95 p-3 shadow-[0_16px_40px_color-mix(in_oklab,var(--background)_50%,transparent)] backdrop-blur">
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="font-mono text-[10px] font-bold text-primary">Register now</div>
+                  <button
+                    onClick={close}
+                    aria-label="Close"
+                    className="rounded-full p-0.5 text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <form onSubmit={signIn} className="space-y-1.5">
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-7 text-xs"
+                  />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="h-7 text-xs"
+                  />
+                  <Button type="submit" className="h-7 w-full gap-1 text-xs" disabled={loading}>
+                    {loading ? (
+                      "..."
+                    ) : (
+                      <>
+                        Login <ArrowRight className="h-3 w-3" />
+                      </>
+                    )}
+                  </Button>
+                </form>
+                <div className="mt-2 flex justify-between text-[10px]">
+                  <Link
+                    to="/auth"
+                    search={{ mode: "signup" } as any}
+                    onClick={close}
+                    className="text-primary underline-offset-2 hover:underline"
+                  >
+                    Create
+                  </Link>
+                  <Link
+                    to="/auth"
+                    onClick={close}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Full →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* ===== Ground line shadow under character/briefcase ===== */}
-      <div
-        className="fixed bottom-[72px] right-0 z-[57] h-[2px] w-full bg-gradient-to-r from-transparent via-primary/20 to-transparent md:hidden pointer-events-none"
-      />
-
-      {/* ===== Briefcase on the ground ===== */}
-      {showBriefcase && (
-        <div
-          className="fixed bottom-[78px] z-[58] grid h-9 w-9 place-items-center rounded-md border border-primary/40 bg-primary/10 backdrop-blur-md md:hidden pointer-events-none"
-          style={{
-            right: `${charRight - 44}px`,
-            animation: "fadeInUp 0.4s ease-out",
-          }}
+      {phase === "parked" && (
+        <button
+          type="button"
+          aria-label="Replay login animation"
+          onClick={replay}
+          className="fixed bottom-[118px] right-3 z-[62] grid h-[74px] w-[74px] touch-none place-items-end md:hidden"
         >
-          <Briefcase className="h-4 w-4 text-primary" />
-        </div>
+          <img
+            src={hacker}
+            alt="Login helper"
+            className="h-full w-full object-contain drop-shadow-[0_8px_16px_color-mix(in_oklab,var(--primary)_45%,transparent)]"
+            style={{ animation: "videoFloat 3.2s ease-in-out infinite" }}
+          />
+        </button>
       )}
-
-      {/* ===== Character ===== */}
-      <button
-        type="button"
-        aria-label="Open quick login"
-        onClick={reopen}
-        className="fixed bottom-[78px] z-[59] grid h-[120px] w-[80px] touch-none place-items-end md:hidden"
-        style={{
-          right: `${charRight}px`,
-          transition: "right 1.6s cubic-bezier(0.32,0,0.32,1)",
-        }}
-      >
-        <img
-          src={hacker}
-          alt="Login helper"
-          className="h-full w-full object-contain drop-shadow-[0_8px_14px_rgba(34,255,136,0.45)]"
-          style={{
-            transform: `scaleX(${flipped ? -1 : 1}) ${armUp ? "translateY(-4px)" : "translateY(0)"}`,
-            animation:
-              phase === "walking"  ? "hackerWalk 0.4s ease-in-out infinite" :
-              phase === "grabbing" || phase === "pulling" ? "hackerPull 0.62s ease-in-out infinite" :
-              isStanding           ? "hackerIdle 3.2s ease-in-out infinite" :
-              undefined,
-            transition: "transform 350ms ease",
-          }}
-        />
-        {phase === "standing" && (
-          <span className="pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-primary/40 bg-background/90 px-2 py-0.5 font-mono text-[9px] text-primary">
-            pull
-          </span>
-        )}
-      </button>
 
       <style>{`
-        @keyframes hackerWalk {
-          0%,100% { transform: scaleX(-1) translateY(0) }
-          50%     { transform: scaleX(-1) translateY(-3px) }
+        @keyframes videoWalk {
+          0%,100% { transform: translateY(0) rotate(-1deg) scaleX(1) }
+          50% { transform: translateY(-5px) rotate(2deg) scaleX(1) }
         }
-        @keyframes hackerPull {
-          0%,100% { transform: translateY(-4px) rotate(-1deg) scale(1.02) }
-          50%     { transform: translateY(3px) rotate(2deg) scale(1.04) }
+        @keyframes videoBend {
+          0%,100% { transform: translateY(10px) rotate(8deg) scale(0.94) }
+          50% { transform: translateY(18px) rotate(12deg) scale(0.9) }
         }
-        @keyframes hackerIdle {
+        @keyframes videoBoot {
+          0%,100% { transform: translateY(4px) rotate(-2deg) scale(1.02) }
+          50% { transform: translateY(-2px) rotate(3deg) scale(1.04) }
+        }
+        @keyframes videoStand {
           0%,100% { transform: translateY(0) }
-          50%     { transform: translateY(-2px) }
+          50% { transform: translateY(-3px) }
         }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(8px) }
-          to   { opacity: 1; transform: translateY(0) }
+        @keyframes videoFloat {
+          0%,100% { transform: translateY(0) }
+          50% { transform: translateY(-7px) }
         }
       `}</style>
     </>
