@@ -12,6 +12,8 @@ import { Footer } from "@/components/site/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeIntensity } from "@/components/site/theme-intensity";
 import { WhatsAppButton } from "@/components/site/whatsapp-button";
+import { ThemeProvider } from "@/components/site/theme-provider";
+import { ClickSound } from "@/components/site/click-sound";
 
 function NotFoundComponent() {
   return (
@@ -97,6 +99,8 @@ function RootComponent() {
       <AuthProvider>
         <WishlistProvider>
           <CartProvider>
+            <ThemeProvider />
+            <ClickSound />
             <Layout><Outlet /></Layout>
             <ThemeIntensity />
             <WhatsAppButton />
