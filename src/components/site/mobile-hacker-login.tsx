@@ -6,21 +6,21 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { X, ArrowRight, Briefcase } from "lucide-react";
+import { X, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
 /**
- * Mobile auto-animation like the reference:
- * character enters by itself, grabs the hanging rope/handle with his hand,
- * pulls it down, then the login sheet drops from the top.
+ * Mobile auto-animation like the reference video:
+ * character enters by itself, bends/boots the login, the form appears,
+ * then closing parks the laptop character as a small floating helper.
  */
 type Phase =
   | "off"
-  | "walking"
-  | "grabbing"
-  | "pulling"
-  | "open"
-  | "standing";
+  | "walk"
+  | "bend"
+  | "boot"
+  | "form"
+  | "parked";
 
 export function MobileHackerLogin() {
   const isMobile = useIsMobile();
@@ -30,19 +30,21 @@ export function MobileHackerLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const startedRef = useRef(false);
-  const pullTimersRef = useRef<number[]>([]);
+  const timersRef = useRef<number[]>([]);
 
-  const clearPullTimers = () => {
-    pullTimersRef.current.forEach(clearTimeout);
-    pullTimersRef.current = [];
+  const clearTimers = () => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
   };
 
-  const playPullSequence = () => {
-    clearPullTimers();
-    setPhase("grabbing");
-    pullTimersRef.current = [
-      window.setTimeout(() => setPhase("pulling"), 420),
-      window.setTimeout(() => setPhase("open"), 1550),
+  const playSequence = () => {
+    clearTimers();
+    setPhase("off");
+    timersRef.current = [
+      window.setTimeout(() => setPhase("walk"), 120),
+      window.setTimeout(() => setPhase("bend"), 1650),
+      window.setTimeout(() => setPhase("boot"), 2300),
+      window.setTimeout(() => setPhase("form"), 3100),
     ];
   };
 
@@ -51,20 +53,13 @@ export function MobileHackerLogin() {
     if (!isMobile || user) return;
     if (startedRef.current) return;
     startedRef.current = true;
-    const timers: number[] = [];
-    timers.push(window.setTimeout(() => setPhase("walking"), 450));
-    timers.push(window.setTimeout(() => setPhase("grabbing"), 2150));
-    timers.push(window.setTimeout(() => setPhase("pulling"), 2700));
-    timers.push(window.setTimeout(() => setPhase("open"), 3850));
-    return () => {
-      timers.forEach(clearTimeout);
-      clearPullTimers();
-    };
+    playSequence();
+    return clearTimers;
   }, [isMobile, user]);
 
   // Lock body scroll while sheet open
   useEffect(() => {
-    if (phase === "open") {
+    if (phase === "form") {
       const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       return () => { document.body.style.overflow = prev; };
@@ -73,10 +68,10 @@ export function MobileHackerLogin() {
 
   if (!isMobile || user) return null;
 
-  const close = () => setPhase("standing");
+  const close = () => setPhase("parked");
   const reopen = () => {
-    if (phase === "open" || phase === "walking" || phase === "pulling") return;
-    playPullSequence();
+    if (phase !== "parked") return;
+    playSequence();
   };
 
   const signIn = async (e: React.FormEvent) => {
@@ -88,27 +83,7 @@ export function MobileHackerLogin() {
     toast.success("Access granted!");
     close();
   };
-
-  // ----- positions -----
-  // Sheet: hidden → tugged down by the rope → open
-  const sheetY =
-    phase === "open"    ? 0   :
-    phase === "pulling" ? -18 :
-    phase === "grabbing" ? -96 :
-    -100;
-
-  // Character horizontal position (right offset in px from right edge)
-  const charRight =
-    phase === "off"     ? -128 :
-    phase === "walking" ? 150  :
-    150;
-
-  const flipped = phase === "walking"; // facing left while walking
-  const isStanding = phase === "open" || phase === "standing" || phase === "grabbing" || phase === "pulling";
-  const armUp = phase === "grabbing" || phase === "pulling" || phase === "open";
-
-  const showBriefcase = phase === "grabbing" || phase === "pulling" || phase === "open" || phase === "standing";
-  const showRope = phase === "grabbing" || phase === "pulling" || phase === "open";
+  const showScene = phase !== "parked";
 
   return (
     <>
