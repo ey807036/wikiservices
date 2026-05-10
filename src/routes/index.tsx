@@ -11,6 +11,7 @@ const hacks = [
   { icon: Wifi,       name: "WiFi Jammer",        desc: "Block any WiFi signal in range" },
   { icon: Bluetooth,  name: "Bluetooth Jammer",   desc: "Kill nearby Bluetooth devices" },
   { icon: Radio,      name: "Signal Jammer",      desc: "Disrupt all wireless signals" },
+  { icon: Smartphone, name: "SIM Signal Jammer",  desc: "Block all SIM / mobile network signals in range", price: "Rs. 50,000" },
   { icon: Skull,      name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Electric Bulb & much more — all in one box" },
 ];
 
