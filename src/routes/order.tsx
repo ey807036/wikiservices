@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Banknote, Smartphone, Wallet, MapPin, Phone, User, ShieldAlert, ArrowRight } from "lucide-react";
+import { Banknote, Smartphone, Wallet, MapPin, Phone, User, ShieldAlert, ArrowRight, CreditCard } from "lucide-react";
 import { z } from "zod";
 import { saveOrder } from "@/lib/order-history";
 
@@ -25,9 +25,10 @@ const PROVINCES: Record<string, string[]> = {
 };
 
 const PAY = [
-  { id: "cod",        label: "Cash on Delivery", icon: Banknote,   tag: "Pay when you receive" },
-  { id: "easypaisa",  label: "Easypaisa",        icon: Smartphone, tag: "Mobile wallet" },
-  { id: "jazzcash",   label: "JazzCash",         icon: Wallet,     tag: "Mobile wallet" },
+  { id: "cod",        label: "Cash on Delivery", icon: Banknote,    tag: "Pay when you receive" },
+  { id: "easypaisa",  label: "Easypaisa",        icon: Smartphone,  tag: "Mobile wallet" },
+  { id: "jazzcash",   label: "JazzCash",         icon: Wallet,      tag: "Mobile wallet" },
+  { id: "card",       label: "Credit / Debit Card", icon: CreditCard, tag: "Visa / Master / UnionPay" },
 ];
 
 const schema = z.object({
@@ -122,7 +123,7 @@ function OrderPage() {
         {/* Payment */}
         <div>
           <Label className="text-base font-bold">Payment Method</Label>
-          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {PAY.map((p) => {
               const active = form.payment === p.id;
               return (

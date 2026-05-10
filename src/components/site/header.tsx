@@ -14,9 +14,7 @@ import { useState } from "react";
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/shop", label: "Shop" },
-  { to: "/shop?category=routers", label: "Routers" },
-  { to: "/shop?category=mesh", label: "Mesh" },
-  { to: "/shop?category=accessories", label: "Accessories" },
+  { to: "/my-orders", label: "Order History" },
 ];
 
 export function Header() {
