@@ -97,6 +97,7 @@ function RootComponent() {
         <WishlistProvider>
           <CartProvider>
             <Layout><Outlet /></Layout>
+            <ThemeIntensity />
             <Toaster richColors position="top-right" />
           </CartProvider>
         </WishlistProvider>
