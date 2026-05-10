@@ -1,10 +1,12 @@
-import { createFileRoute, Outlet, Link, useNavigate, useRouterState, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { useEffect } from "react";
-import { LayoutDashboard, Package, ShoppingBag, Tags, Users, ArrowLeft, Ticket } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Tags, Users, ArrowLeft, Ticket, BarChart3, Settings as SettingsIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/admin")({ component: AdminLayout });
+
+const ADMIN_EMAIL = "admin@wikiservices.pk";
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -13,6 +15,8 @@ const NAV = [
   { to: "/admin/categories", label: "Categories", icon: Tags },
   { to: "/admin/coupons", label: "Coupons", icon: Ticket },
   { to: "/admin/customers", label: "Customers", icon: Users },
+  { to: "/admin/reports", label: "Reports", icon: BarChart3 },
+  { to: "/admin/settings", label: "Settings", icon: SettingsIcon },
 ];
 
 function AdminLayout() {
@@ -20,13 +24,15 @@ function AdminLayout() {
   const navigate = useNavigate();
   const path = useRouterState({ select: s => s.location.pathname });
 
+  const allowed = !!user && isAdmin && user.email?.toLowerCase() === ADMIN_EMAIL;
+
   useEffect(() => {
     if (loading) return;
     if (!user) { navigate({ to: "/auth" }); return; }
-    if (!isAdmin) { navigate({ to: "/" }); }
-  }, [user, isAdmin, loading, navigate]);
+    if (!allowed) { navigate({ to: "/" }); }
+  }, [user, allowed, loading, navigate]);
 
-  if (loading || !user || !isAdmin) {
+  if (loading || !allowed) {
     return <div className="flex min-h-screen items-center justify-center text-muted-foreground">Loading admin...</div>;
   }
 

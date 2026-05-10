@@ -319,6 +319,39 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          address: string | null
+          announcement: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          id: number
+          store_name: string
+          updated_at: string
+          whatsapp_number: string | null
+        }
+        Insert: {
+          address?: string | null
+          announcement?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          id?: number
+          store_name?: string
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Update: {
+          address?: string | null
+          announcement?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          id?: number
+          store_name?: string
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

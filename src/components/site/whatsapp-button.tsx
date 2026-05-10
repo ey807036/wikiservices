@@ -1,12 +1,19 @@
 import { useState } from "react";
 import { MessageCircle, X } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
-const PHONE = "923000000000"; // change to your support number
 const MESSAGE = "Asalam-o-Alaikum! I need help with Wikiservices.";
 
 export function WhatsAppButton() {
   const [open, setOpen] = useState(false);
-  const href = `https://wa.me/${PHONE}?text=${encodeURIComponent(MESSAGE)}`;
+  const { data } = useQuery({
+    queryKey: ["site-settings"],
+    queryFn: async () => (await supabase.from("site_settings").select("whatsapp_number").eq("id", 1).maybeSingle()).data,
+    staleTime: 5 * 60 * 1000,
+  });
+  const phone = (data?.whatsapp_number || "923000000000").replace(/\D/g, "");
+  const href = `https://wa.me/${phone}?text=${encodeURIComponent(MESSAGE)}`;
 
   return (
     <div className="fixed bottom-5 left-5 z-50 flex flex-col items-start gap-2">
