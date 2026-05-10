@@ -14,6 +14,7 @@ import { ThemeIntensity } from "@/components/site/theme-intensity";
 import { WhatsAppButton } from "@/components/site/whatsapp-button";
 import { ThemeProvider } from "@/components/site/theme-provider";
 import { ClickSound } from "@/components/site/click-sound";
+import { ThemePullCord } from "@/components/site/theme-pull-cord";
 
 function NotFoundComponent() {
   return (
@@ -102,6 +103,7 @@ function RootComponent() {
             <ThemeProvider />
             <ClickSound />
             <Layout><Outlet /></Layout>
+            <ThemePullCord />
             <ThemeIntensity />
             <WhatsAppButton />
             <Toaster richColors position="top-right" />
