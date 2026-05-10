@@ -1,6 +1,9 @@
 import hacker from "@/assets/hacker-3d.png";
+import { useRouterState } from "@tanstack/react-router";
 
 export function FloatingMascots() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  if (path.startsWith("/auth")) return null;
   return (
     <div className="pointer-events-none fixed inset-x-0 top-1 z-[100] flex justify-center">
       <img
