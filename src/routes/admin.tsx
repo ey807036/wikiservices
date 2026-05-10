@@ -34,7 +34,7 @@ function AdminLayout() {
       <aside className="hidden w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground md:flex">
         <Link to="/" className="flex h-16 items-center gap-2 border-b border-sidebar-border px-6 font-bold">
           <span className="grid h-8 w-8 place-items-center rounded-lg gradient-hero"><Wifi className="h-4 w-4 text-primary-foreground" /></span>
-          WifiHub Admin
+          Wikiservices Admin
         </Link>
         <nav className="flex-1 space-y-1 p-3">
           {NAV.map((n) => {

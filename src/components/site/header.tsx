@@ -55,7 +55,7 @@ export function Header() {
           <span className="grid h-9 w-9 place-items-center rounded-lg gradient-hero text-primary-foreground">
             <Wifi className="h-5 w-5" />
           </span>
-          <span className="hidden sm:inline">WifiHub</span>
+          <span className="hidden sm:inline">Wikiservices</span>
         </Link>
 
         <nav className="ml-6 hidden items-center gap-6 md:flex">

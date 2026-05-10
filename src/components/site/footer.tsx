@@ -10,7 +10,7 @@ export function Footer() {
             <span className="grid h-9 w-9 place-items-center rounded-lg gradient-hero text-primary-foreground">
               <Wifi className="h-5 w-5" />
             </span>
-            WifiHub
+            Wikiservices
           </Link>
           <p className="mt-3 text-sm text-muted-foreground max-w-xs">
             Premium WiFi gear, mesh systems & networking accessories for fast, reliable connections everywhere.
@@ -43,7 +43,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t py-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} WifiHub. All rights reserved.
+        © {new Date().getFullYear()} Wikiservices. All rights reserved.
       </div>
     </footer>
   );
