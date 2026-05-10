@@ -108,9 +108,7 @@ function RootComponent() {
             <ThemeProvider />
             <ClickSound />
             <Layout><Outlet /></Layout>
-            <ThemeIntensity />
             <WhatsAppButton />
-            <MobileHackerLogin />
             <Toaster richColors position="top-right" />
           </CartProvider>
         </WishlistProvider>
