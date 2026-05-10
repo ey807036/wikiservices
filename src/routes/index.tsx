@@ -49,7 +49,7 @@ function Home() {
               Faster WiFi.<br />Everywhere in your home.
             </h1>
             <p className="mt-4 max-w-md text-base text-white/85 md:text-lg">
-              Premium routers, mesh systems & networking gear from top brands. Free shipping on orders over $50.
+              Premium routers, mesh systems & networking gear from top brands. Free shipping on orders over Rs. 5,000.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/shop">
@@ -78,7 +78,7 @@ function Home() {
       <section className="border-b">
         <div className="container mx-auto grid grid-cols-2 gap-6 px-4 py-8 md:grid-cols-4">
           {[
-            { icon: Truck, t: "Free Shipping", s: "On orders over $50" },
+            { icon: Truck, t: "Free Shipping", s: "On orders over Rs. 5,000" },
             { icon: ShieldCheck, t: "2-Year Warranty", s: "On all products" },
             { icon: Headphones, t: "Expert Support", s: "Network specialists" },
             { icon: Zap, t: "Fast Setup", s: "Plug & play guides" },

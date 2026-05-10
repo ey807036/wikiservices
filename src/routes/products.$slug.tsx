@@ -101,7 +101,7 @@ function ProductPage() {
 
           <div className="mt-8 grid grid-cols-3 gap-3 rounded-2xl border bg-secondary/30 p-4">
             {[
-              { i: Truck, t: "Free shipping", s: "Over $50" },
+              { i: Truck, t: "Free shipping", s: "Over Rs. 5,000" },
               { i: ShieldCheck, t: "2-yr warranty", s: "Included" },
               { i: RotateCcw, t: "30-day returns", s: "Hassle-free" },
             ].map((f) => (
