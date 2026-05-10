@@ -73,29 +73,61 @@ export function MobileHackerLogin() {
 
   const showStage = phase !== "parked";
   const formVisible = phase === "form";
-  const helperStyle =
-    phase === "parked"
-      ? { left: "12px", bottom: "92px", width: "74px", height: "74px" }
-      : {
-          left: phase === "off" ? "-96px" : phase === "walk" ? "54px" : "46px",
-          bottom: "252px",
-          width: "100px",
-          height: "116px",
-        };
+  const charLeft =
+    phase === "off"
+      ? "-92px"
+      : phase === "walk"
+        ? "70px"
+        : phase === "bend"
+          ? "82px"
+          : phase === "boot"
+            ? "64px"
+            : "42px";
+  const laptopVisible = phase === "bend" || phase === "boot" || phase === "form";
 
   return (
     <>
       {showStage && (
-        <div className="fixed inset-0 z-[58] md:hidden pointer-events-none">
-          <div className="absolute inset-x-3 top-20 h-[235px] overflow-hidden rounded-md border border-primary/45 bg-primary/85 shadow-[0_18px_45px_color-mix(in_oklab,var(--primary)_30%,transparent)]">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,hsl(var(--primary)/0.16),transparent_42%)]" />
+        <div className="fixed inset-0 z-[90] md:hidden pointer-events-none">
+          <div className="absolute inset-x-3 top-20 h-[260px] overflow-hidden rounded-sm border border-primary/45 bg-[var(--login-stage)] shadow-[0_18px_45px_color-mix(in_oklab,var(--primary)_30%,transparent)]">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,var(--login-stage-glow),transparent_45%)]" />
             <div className="absolute inset-x-0 bottom-0 h-12 bg-background/10" />
 
+            <img
+              src={hacker}
+              alt="Login helper"
+              className="absolute bottom-7 z-[2] h-[112px] w-[94px] object-contain drop-shadow-[0_10px_16px_color-mix(in_oklab,var(--background)_45%,transparent)]"
+              style={{
+                left: charLeft,
+                transition: "left 1.25s cubic-bezier(0.33,0,0.2,1)",
+                animation:
+                  phase === "walk"
+                    ? "videoWalk 0.38s ease-in-out infinite"
+                    : phase === "bend"
+                      ? "videoBend 0.65s ease-in-out infinite"
+                      : phase === "boot"
+                        ? "videoBoot 0.55s ease-in-out infinite"
+                        : "videoStand 2.6s ease-in-out infinite",
+              }}
+            />
+
             <div
-              className="absolute left-[118px] top-9 w-[168px] transition-all duration-700 ease-out"
+              className="absolute bottom-[58px] left-[134px] z-[1] h-7 w-10 rounded-sm border border-primary-foreground/25 bg-background/80 shadow-[0_10px_20px_color-mix(in_oklab,var(--background)_40%,transparent)] transition-all duration-500"
+              style={{
+                opacity: laptopVisible ? 1 : 0,
+                transform:
+                  phase === "bend" ? "translateY(8px) scale(0.85)" : "translateY(0) scale(1)",
+              }}
+            >
+              <span className="absolute inset-x-1 top-1 h-3 rounded-[2px] border border-primary/45 bg-primary/15" />
+              <span className="absolute bottom-1 left-1/2 h-1 w-7 -translate-x-1/2 rounded-full bg-primary/50" />
+            </div>
+
+            <div
+              className="absolute left-[152px] top-8 z-[3] w-[164px] transition-all duration-700 ease-out"
               style={{
                 opacity: formVisible ? 1 : 0,
-                transform: formVisible ? "translateY(0) scale(1)" : "translateY(-12px) scale(0.96)",
+                transform: formVisible ? "translateY(0) scale(1)" : "translateY(-14px) scale(0.96)",
               }}
             >
               <div className="pointer-events-auto rounded-sm border border-primary-foreground/35 bg-card/95 p-3 shadow-[0_16px_40px_color-mix(in_oklab,var(--background)_50%,transparent)] backdrop-blur">
@@ -155,51 +187,25 @@ export function MobileHackerLogin() {
                 </div>
               </div>
             </div>
-
-            <div
-              className="absolute bottom-[54px] left-[134px] h-7 w-10 rounded-sm border border-primary-foreground/25 bg-background/75 shadow-[0_10px_20px_color-mix(in_oklab,var(--background)_40%,transparent)] transition-all duration-500"
-              style={{
-                opacity: phase === "bend" || phase === "boot" || phase === "form" ? 1 : 0,
-                transform:
-                  phase === "bend" ? "translateY(8px) scale(0.85)" : "translateY(0) scale(1)",
-              }}
-            >
-              <span className="absolute inset-x-1 top-1 h-3 rounded-[2px] border border-primary/45 bg-primary/15" />
-              <span className="absolute bottom-1 left-1/2 h-1 w-7 -translate-x-1/2 rounded-full bg-primary/50" />
-            </div>
           </div>
         </div>
       )}
 
-      <button
-        type="button"
-        aria-label="Replay login animation"
-        onClick={replay}
-        className="fixed z-[60] grid touch-none place-items-end md:hidden"
-        style={{
-          ...helperStyle,
-          transition:
-            "left 1.35s cubic-bezier(0.33,0,0.2,1), bottom 900ms ease, width 900ms ease, height 900ms ease",
-        }}
-      >
-        <img
-          src={hacker}
-          alt="Login helper"
-          className="h-full w-full object-contain drop-shadow-[0_8px_16px_color-mix(in_oklab,var(--primary)_45%,transparent)]"
-          style={{
-            animation:
-              phase === "walk"
-                ? "videoWalk 0.38s ease-in-out infinite"
-                : phase === "bend"
-                  ? "videoBend 0.65s ease-in-out infinite"
-                  : phase === "boot"
-                    ? "videoBoot 0.55s ease-in-out infinite"
-                    : phase === "parked"
-                      ? "videoFloat 3.2s ease-in-out infinite"
-                      : "videoStand 2.6s ease-in-out infinite",
-          }}
-        />
-      </button>
+      {phase === "parked" && (
+        <button
+          type="button"
+          aria-label="Replay login animation"
+          onClick={replay}
+          className="fixed bottom-[118px] right-3 z-[62] grid h-[74px] w-[74px] touch-none place-items-end md:hidden"
+        >
+          <img
+            src={hacker}
+            alt="Login helper"
+            className="h-full w-full object-contain drop-shadow-[0_8px_16px_color-mix(in_oklab,var(--primary)_45%,transparent)]"
+            style={{ animation: "videoFloat 3.2s ease-in-out infinite" }}
+          />
+        </button>
+      )}
 
       <style>{`
         @keyframes videoWalk {
