@@ -43,7 +43,7 @@ function Home() {
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a href="#arsenal">
               <Button size="lg" variant="cool" className="btn-neon h-12 px-7 text-base rounded-full">
-                Explore Arsenal <ArrowRight className="ml-2 h-4 w-4" />
+                Shop Now <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </a>
           </div>
@@ -65,26 +65,37 @@ function Home() {
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {hacks.map((h) => (
-            <div
-              key={h.name}
-              className="card-hack group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card"
-            >
-              <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/10 blur-2xl transition group-hover:bg-primary/30" />
-              <div className="relative">
-                <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary/15 text-primary">
-                  <h.icon className="h-6 w-6" />
-                </span>
-                <h3 className="mt-4 text-lg font-bold">{h.name}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{h.desc}</p>
-                <Link to="/order" search={{ item: h.name }} className="mt-4 inline-block">
-                  <Button size="sm" variant="cool" className="btn-neon mt-2 rounded-full px-5">
-                    Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-                  </Button>
-                </Link>
+          {hacks.map((h) => {
+            const isWifi = h.name === "WiFi Jammer";
+            return (
+              <div
+                key={h.name}
+                className={`card-hack group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card ${isWifi ? "ring-2 ring-red-500/70" : ""}`}
+              >
+                {isWifi && (
+                  <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)] animate-pulse">
+                    <Flame className="h-3 w-3" /> Hot Selling
+                  </span>
+                )}
+                <div className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition ${isWifi ? "bg-red-500/30 group-hover:bg-red-500/50" : "bg-primary/10 group-hover:bg-primary/30"}`} />
+                <div className="relative">
+                  <span className={`grid h-12 w-12 place-items-center rounded-xl ${isWifi ? "bg-red-500/20 text-red-500" : "bg-primary/15 text-primary"}`}>
+                    <h.icon className="h-6 w-6" />
+                  </span>
+                  <h3 className={`mt-4 text-lg font-bold ${isWifi ? "text-red-500" : ""}`}>{h.name}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{h.desc}</p>
+                  <div className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-3 py-1 text-sm font-black text-black shadow-[0_0_14px_oklch(0.85_0.18_85/0.55)]">
+                    Rs. 5,000
+                  </div>
+                  <Link to="/order" search={{ item: h.name }} className="mt-3 block">
+                    <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
+                      Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                    </Button>
+                  </Link>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
