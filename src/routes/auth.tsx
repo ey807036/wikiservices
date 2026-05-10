@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { Terminal, Mail, Lock, User, ArrowRight } from "lucide-react";
 import logo from "@/assets/logo.png";
+import hacker from "@/assets/hacker-3d.png";
 
 type S = { mode?: string };
 
@@ -98,30 +99,35 @@ function Auth() {
               <span className="font-mono text-lg font-bold tracking-wider">WIKISERVICES</span>
             </Link>
 
-            <div className="space-y-6">
-              <div className="rounded-lg border border-primary/40 bg-black/60 p-5 font-mono text-sm shadow-[0_0_30px_rgba(34,255,136,0.15)] backdrop-blur">
-                <div className="mb-3 flex gap-1.5">
-                  <span className="h-3 w-3 rounded-full bg-red-500" />
-                  <span className="h-3 w-3 rounded-full bg-yellow-500" />
-                  <span className="h-3 w-3 rounded-full bg-green-500" />
-                  <span className="ml-2 text-xs text-muted-foreground">~ wikiservices/auth.sh</span>
-                </div>
-                <p className="text-primary">$ initializing secure tunnel...</p>
-                <p className="text-primary/80">$ encryption: <span className="text-foreground">AES-256</span></p>
-                <p className="text-primary/80">$ status: <span className="text-foreground">ready</span></p>
-                <p className="mt-2 text-primary">
-                  $ awaiting credentials<span className="ml-1 inline-block h-4 w-2 animate-pulse bg-primary align-middle" />
-                </p>
-              </div>
+            <div className="relative flex flex-1 items-center justify-center py-6">
+              {/* glow ring behind character */}
+              <div className="absolute h-72 w-72 rounded-full bg-primary/20 blur-3xl animate-pulse" />
+              <div className="absolute h-56 w-56 rounded-full border border-primary/30 animate-[spin_20s_linear_infinite]" />
+              <div className="absolute h-72 w-72 rounded-full border border-primary/10 animate-[spin_30s_linear_infinite_reverse]" />
 
-              <div>
-                <h2 className="font-mono text-3xl font-bold leading-tight text-foreground">
-                  &gt; Access the <span className="text-gradient">Network</span>
-                </h2>
-                <p className="mt-2 max-w-md font-mono text-sm text-muted-foreground">
-                  Premium WiFi gear, blazing fast checkout. Login to track orders & unlock member pricing.
-                </p>
+              {/* 3D hacker character */}
+              <img
+                src={hacker}
+                alt="Wikiservices hacker mascot"
+                className="relative z-10 h-[320px] w-auto drop-shadow-[0_20px_40px_rgba(34,255,136,0.35)] animate-[float_4s_ease-in-out_infinite]"
+                loading="lazy"
+              />
+
+              {/* floating terminal chip */}
+              <div className="absolute bottom-2 right-0 max-w-[260px] rounded-lg border border-primary/40 bg-black/80 p-3 font-mono text-xs shadow-[0_0_20px_rgba(34,255,136,0.25)] backdrop-blur">
+                <p className="text-primary">$ tunnel <span className="text-foreground">secure</span></p>
+                <p className="text-primary/80">$ enc: <span className="text-foreground">AES-256</span></p>
+                <p className="text-primary">$ awaiting<span className="ml-1 inline-block h-3 w-1.5 animate-pulse bg-primary align-middle" /></p>
               </div>
+            </div>
+
+            <div>
+              <h2 className="font-mono text-2xl font-bold leading-tight text-foreground">
+                &gt; Access the <span className="text-gradient">Network</span>
+              </h2>
+              <p className="mt-2 max-w-md font-mono text-sm text-muted-foreground">
+                Premium WiFi gear, blazing fast checkout. Login to unlock member pricing.
+              </p>
             </div>
 
             <div className="flex gap-6 font-mono text-xs text-muted-foreground">
