@@ -220,9 +220,11 @@ function Field({ icon, label, children }: { icon: React.ReactNode; label: string
   return (
     <div>
       <Label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
-      <div className="relative mt-1.5">
-        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-primary/70">{icon}</span>
-        {children}
+      <div className="field-neon relative mt-1.5">
+        <div className="relative rounded-[calc(var(--radius)+1px)] bg-card/70">
+          <span className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-primary drop-shadow-[0_0_6px_color-mix(in_oklab,var(--primary)_70%,transparent)]">{icon}</span>
+          {children}
+        </div>
       </div>
     </div>
   );
