@@ -16,12 +16,12 @@ export function ThemeProvider() {
     queryKey: ["site-theme"],
     queryFn: async () => {
       const { data } = await supabase.from("site_settings").select("theme").eq("id", 1).maybeSingle();
-      return data?.theme ?? "matrix";
+      return data?.theme ?? "light";
     },
   });
 
   useEffect(() => {
-    const t = data ?? "matrix";
+    const t = data ?? "light";
     document.documentElement.setAttribute("data-theme", t);
     document.documentElement.style.colorScheme = t === "light" ? "light" : "dark";
   }, [data]);
