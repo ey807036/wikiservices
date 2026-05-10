@@ -57,13 +57,15 @@ function Home() {
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {hacks.map((h) => {
             const isWifi = h.name === "WiFi Jammer";
+            const isBt = h.name === "Bluetooth Jammer";
+            const isHot = isWifi || isBt;
             const price = (h as any).price ?? "Rs. 5,000";
             return (
               <div
                 key={h.name}
-                className={`card-hack group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card ${isWifi ? "ring-2 ring-red-500/70" : ""}`}
+                className={`card-hack group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card ${isHot ? "ring-2 ring-red-500/70" : ""}`}
               >
-                {isWifi && (
+                {isHot && (
                   <>
                     <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)] animate-pulse">
                       <Flame className="h-3 w-3" /> Hot Selling
