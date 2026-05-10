@@ -7,6 +7,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Banknote, Smartphone, Wallet, MapPin, Phone, User, ShieldAlert, ArrowRight } from "lucide-react";
 import { z } from "zod";
+import { saveOrder } from "@/lib/order-history";
 
 export const Route = createFileRoute("/order")({
   component: OrderPage,
