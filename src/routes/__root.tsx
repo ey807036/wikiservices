@@ -10,6 +10,7 @@ import { WishlistProvider } from "@/lib/wishlist-store";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeIntensity } from "@/components/site/theme-intensity";
 
 function NotFoundComponent() {
   return (
@@ -96,6 +97,7 @@ function RootComponent() {
         <WishlistProvider>
           <CartProvider>
             <Layout><Outlet /></Layout>
+            <ThemeIntensity />
             <Toaster richColors position="top-right" />
           </CartProvider>
         </WishlistProvider>
