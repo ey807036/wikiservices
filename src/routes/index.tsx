@@ -143,6 +143,12 @@ function Home() {
                         Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                       </Button>
                     </Link>
+                  ) : h.action === "pro" ? (
+                    <Link to="/pro-accounts" className="mt-3 block">
+                      <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
+                        Browse <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                      </Button>
+                    </Link>
                   ) : h.href ? (
                     <a href={h.href} target="_blank" rel="noreferrer" className="mt-3 block">
                       <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
