@@ -83,7 +83,7 @@ function FakeWhatsAppDialog() {
           Pick any half-shown number — clicking will message us on WhatsApp to confirm your pick.
         </p>
         <div className="mt-2 grid gap-2 max-h-[50vh] overflow-y-auto pr-1">
-          {numbers.map((n) => (
+          {numbers.map((n, i) => (
             <a
               key={n.masked}
               href={waLink(`Salam! I want to BUY this Fake WhatsApp Number: ${n.masked} (Rs. 150). Please confirm.`)}
