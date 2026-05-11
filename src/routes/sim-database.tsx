@@ -50,7 +50,21 @@ function SimDatabasePage() {
       const text = await res.text();
       let json: any;
       try { json = JSON.parse(text); } catch { json = { raw: text }; }
-      const arr: SimRecord[] = Array.isArray(json) ? json : (json?.data?.records ?? json?.records ?? json?.data ?? json?.results ?? [json]);
+      let arr: SimRecord[] = Array.isArray(json)
+        ? json
+        : (json?.data?.records ?? json?.records ?? json?.results ?? (Array.isArray(json?.data) ? json.data : []));
+      // Treat upstream "not found" / error / empty as no records so the danger card shows
+      const status = String(json?.status ?? "").toLowerCase();
+      const isNotFound =
+        !json ||
+        json?.success === false ||
+        status === "error" ||
+        status === "not_found" ||
+        status === "false" ||
+        (json?.message && /not\s*found|no\s*record|no\s*data/i.test(String(json.message)));
+      if (isNotFound) arr = [];
+      // Filter out empty/garbage rows
+      arr = (arr || []).filter((r) => r && typeof r === "object" && Object.keys(r).length > 0);
       setData(arr);
     } catch (err: any) {
       setError(err?.message ?? "Failed to fetch SIM data");
