@@ -34,7 +34,7 @@ function SimDatabasePage() {
       const text = await res.text();
       let json: any;
       try { json = JSON.parse(text); } catch { json = { raw: text }; }
-      const arr: SimRecord[] = Array.isArray(json) ? json : (json?.data ?? json?.results ?? [json]);
+      const arr: SimRecord[] = Array.isArray(json) ? json : (json?.data?.records ?? json?.records ?? json?.data ?? json?.results ?? [json]);
       setData(arr);
     } catch (err: any) {
       setError(err?.message ?? "Failed to fetch SIM data");
