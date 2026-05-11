@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, ShieldAlert, Skull, Database, Zap, AlertTriangle, Loader2 } from "lucide-react";
+import { Search, ShieldAlert, Skull, Database, Zap, AlertTriangle, Loader2, Copy, Check } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/sim-database")({
   head: () => ({
@@ -21,6 +22,21 @@ function SimDatabasePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<SimRecord[] | null>(null);
+  const [copiedIdx, setCopiedIdx] = useState<number | "all" | null>(null);
+
+  const formatRecord = (rec: SimRecord) =>
+    Object.entries(rec).map(([k, v]) => `${k}: ${v ?? "—"}`).join("\n");
+
+  const copyText = async (text: string, key: number | "all") => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedIdx(key);
+      toast.success("Copied to clipboard 📋");
+      setTimeout(() => setCopiedIdx((c) => (c === key ? null : c)), 1500);
+    } catch {
+      toast.error("Copy failed");
+    }
+  };
 
   const lookup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,16 +133,38 @@ function SimDatabasePage() {
 
           {data && data.length > 0 && (
             <div className="space-y-3 animate-fade-in">
-              <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-emerald-400">
-                <Zap className="h-4 w-4" /> {data.length} record{data.length > 1 ? "s" : ""} found
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-emerald-400">
+                  <Zap className="h-4 w-4" /> {data.length} record{data.length > 1 ? "s" : ""} found
+                </div>
+                <button
+                  type="button"
+                  onClick={() => copyText(data.map((r, i) => `── Record #${i + 1} ──\n${formatRecord(r)}`).join("\n\n"), "all")}
+                  className="group relative inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-emerald-500 px-4 py-2 text-xs font-black uppercase tracking-widest text-white shadow-[0_0_20px_oklch(0.75_0.2_200/0.7)] hover:shadow-[0_0_32px_oklch(0.75_0.2_320/0.9)] transition-all hover:scale-105 ring-1 ring-white/20"
+                >
+                  <span className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 opacity-40 blur-md group-hover:opacity-70 transition-opacity" />
+                  {copiedIdx === "all" ? <Check className="relative h-3.5 w-3.5" /> : <Copy className="relative h-3.5 w-3.5" />}
+                  <span className="relative">{copiedIdx === "all" ? "Copied" : "Copy All"}</span>
+                </button>
               </div>
               {data.map((rec, i) => (
                 <div
                   key={i}
                   className="rounded-2xl border-2 border-red-500/40 bg-gradient-to-br from-card/90 to-card/60 p-5 backdrop-blur shadow-[0_0_22px_oklch(0.65_0.25_25/0.35)]"
                 >
-                  <div className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-red-400">
-                    <Skull className="h-4 w-4" /> Record #{i + 1}
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-red-400">
+                      <Skull className="h-4 w-4" /> Record #{i + 1}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => copyText(formatRecord(rec), i)}
+                      className="group relative inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-fuchsia-500 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white shadow-[0_0_16px_oklch(0.75_0.2_160/0.7)] hover:shadow-[0_0_28px_oklch(0.75_0.2_320/0.9)] transition-all hover:scale-110 ring-1 ring-white/20"
+                    >
+                      <span className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-400 to-fuchsia-500 opacity-40 blur-md group-hover:opacity-70 transition-opacity" />
+                      {copiedIdx === i ? <Check className="relative h-3 w-3" /> : <Copy className="relative h-3 w-3" />}
+                      <span className="relative">{copiedIdx === i ? "Copied" : "Copy"}</span>
+                    </button>
                   </div>
                   <div className="grid gap-2 sm:grid-cols-2">
                     {Object.entries(rec).map(([k, v]) => (
