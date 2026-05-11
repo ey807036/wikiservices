@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ShoppingCart, User, Menu, Search, LogOut, LayoutDashboard, Package, Heart, MoreVertical, Gift, Wallet, Megaphone, Zap, Plug, Radio, BatteryCharging } from "lucide-react";
+import { ShoppingCart, User, Menu, Search, LogOut, LayoutDashboard, Package, Heart, MoreVertical, Zap, BatteryCharging } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
@@ -122,8 +122,8 @@ export function Header() {
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/20 focus:text-white text-white">
                 <Link to="/refer">
-                  <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-emerald-400 to-emerald-700 text-white shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.7_0.18_150/0.5)] transition-transform group-hover:scale-110 group-hover:rotate-6">
-                    <Plug className="h-4 w-4" />
+                  <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-emerald-400 to-emerald-700 text-white shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.7_0.18_150/0.5)] text-base transition-transform group-hover:scale-110 group-hover:rotate-6">
+                    💰
                   </span>
                   <span className="font-semibold">My Balance</span>
                 </Link>
@@ -132,8 +132,8 @@ export function Header() {
                 onClick={() => toast.info("WhatsApp Channel — Coming Soon 💀")}
                 className="group cursor-pointer rounded-lg focus:bg-red-500/20 focus:text-white text-white"
               >
-                <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-sky-400 to-indigo-700 text-white shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.65_0.2_260/0.5)] transition-transform group-hover:scale-110 group-hover:-rotate-6 animate-pulse">
-                  <Radio className="h-4 w-4" />
+                <span className="mr-2 grid h-6 w-6 place-items-center rounded-md bg-[#25D366] text-white shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_rgba(37,211,102,0.5)] transition-transform group-hover:scale-110 group-hover:-rotate-6">
+                  <svg viewBox="0 0 32 32" className="h-3.5 w-3.5" fill="currentColor"><path d="M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.888 2.722.888.817 0 2.15-.515 2.478-1.318.13-.33.244-.73.244-1.09 0-.058 0-.144-.03-.215-.1-.172-2.434-1.39-2.678-1.39zm-2.908 7.593c-1.747 0-3.48-.53-4.942-1.49L7.793 24.41l1.132-3.337a8.955 8.955 0 0 1-1.72-5.272c0-4.955 4.04-8.995 8.997-8.995S25.2 10.845 25.2 15.8c0 4.958-4.04 8.998-8.998 8.998zm0-19.798c-5.96 0-10.8 4.842-10.8 10.8 0 1.964.53 3.898 1.546 5.574L5 27.176l5.974-1.92a10.807 10.807 0 0 0 16.03-9.455c0-5.958-4.842-10.8-10.802-10.8z"/></svg>
                 </span>
                 <span className="font-semibold">WhatsApp Channel</span>
               </DropdownMenuItem>
