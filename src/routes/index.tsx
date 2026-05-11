@@ -78,8 +78,8 @@ function FakeWhatsAppDialog() {
         <div className="mt-2 grid gap-2 max-h-[50vh] overflow-y-auto pr-1">
           {numbers.map((n) => (
             <a
-              key={n.full}
-              href={`https://wa.me/${n.full}`}
+              key={n.masked}
+              href={waLink(`Salam! I want to BUY this Fake WhatsApp Number: ${n.masked} (Rs. 150). Please confirm.`)}
               target="_blank"
               rel="noreferrer"
               className="flex items-center justify-between rounded-xl border border-emerald-500/40 bg-background/60 px-4 py-3 font-mono text-sm font-bold text-emerald-300 hover:border-emerald-400 hover:bg-emerald-500/10 transition"
@@ -87,7 +87,7 @@ function FakeWhatsAppDialog() {
               <span className="flex items-center gap-2">
                 <MessageCircle className="h-4 w-4 text-emerald-400" /> {n.masked}
               </span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-red-400">Chat →</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-red-400">Select →</span>
             </a>
           ))}
         </div>
