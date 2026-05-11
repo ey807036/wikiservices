@@ -73,7 +73,7 @@ function FakeWhatsAppDialog() {
           </DialogTitle>
         </DialogHeader>
         <p className="text-xs text-muted-foreground">
-          Pick any number — clicking will open WhatsApp chat instantly.
+          Pick any half-shown number — clicking will message us on WhatsApp to confirm your pick.
         </p>
         <div className="mt-2 grid gap-2 max-h-[50vh] overflow-y-auto pr-1">
           {numbers.map((n) => (
