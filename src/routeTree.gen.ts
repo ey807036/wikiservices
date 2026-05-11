@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as SimDatabaseRouteImport } from './routes/sim-database'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as ReferRouteImport } from './routes/refer'
 import { Route as ReceiptRouteImport } from './routes/receipt'
 import { Route as ProAccountsRouteImport } from './routes/pro-accounts'
 import { Route as OrderRouteImport } from './routes/order'
@@ -27,6 +28,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
+import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
@@ -46,6 +48,11 @@ const SimDatabaseRoute = SimDatabaseRouteImport.update({
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReferRoute = ReferRouteImport.update({
+  id: '/refer',
+  path: '/refer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReceiptRoute = ReceiptRouteImport.update({
@@ -123,6 +130,11 @@ const AdminReportsRoute = AdminReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminReferralsRoute = AdminReferralsRouteImport.update({
+  id: '/referrals',
+  path: '/referrals',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProductsRoute = AdminProductsRouteImport.update({
   id: '/products',
   path: '/products',
@@ -161,6 +173,7 @@ export interface FileRoutesByFullPath {
   '/order': typeof OrderRoute
   '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
+  '/refer': typeof ReferRoute
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
   '/wishlist': typeof WishlistRoute
@@ -169,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -185,6 +199,7 @@ export interface FileRoutesByTo {
   '/order': typeof OrderRoute
   '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
+  '/refer': typeof ReferRoute
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
   '/wishlist': typeof WishlistRoute
@@ -193,6 +208,7 @@ export interface FileRoutesByTo {
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -211,6 +227,7 @@ export interface FileRoutesById {
   '/order': typeof OrderRoute
   '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
+  '/refer': typeof ReferRoute
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
   '/wishlist': typeof WishlistRoute
@@ -219,6 +236,7 @@ export interface FileRoutesById {
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -238,6 +256,7 @@ export interface FileRouteTypes {
     | '/order'
     | '/pro-accounts'
     | '/receipt'
+    | '/refer'
     | '/shop'
     | '/sim-database'
     | '/wishlist'
@@ -246,6 +265,7 @@ export interface FileRouteTypes {
     | '/admin/customers'
     | '/admin/orders'
     | '/admin/products'
+    | '/admin/referrals'
     | '/admin/reports'
     | '/admin/settings'
     | '/products/$slug'
@@ -262,6 +282,7 @@ export interface FileRouteTypes {
     | '/order'
     | '/pro-accounts'
     | '/receipt'
+    | '/refer'
     | '/shop'
     | '/sim-database'
     | '/wishlist'
@@ -270,6 +291,7 @@ export interface FileRouteTypes {
     | '/admin/customers'
     | '/admin/orders'
     | '/admin/products'
+    | '/admin/referrals'
     | '/admin/reports'
     | '/admin/settings'
     | '/products/$slug'
@@ -287,6 +309,7 @@ export interface FileRouteTypes {
     | '/order'
     | '/pro-accounts'
     | '/receipt'
+    | '/refer'
     | '/shop'
     | '/sim-database'
     | '/wishlist'
@@ -295,6 +318,7 @@ export interface FileRouteTypes {
     | '/admin/customers'
     | '/admin/orders'
     | '/admin/products'
+    | '/admin/referrals'
     | '/admin/reports'
     | '/admin/settings'
     | '/products/$slug'
@@ -313,6 +337,7 @@ export interface RootRouteChildren {
   OrderRoute: typeof OrderRoute
   ProAccountsRoute: typeof ProAccountsRoute
   ReceiptRoute: typeof ReceiptRoute
+  ReferRoute: typeof ReferRoute
   ShopRoute: typeof ShopRoute
   SimDatabaseRoute: typeof SimDatabaseRoute
   WishlistRoute: typeof WishlistRoute
@@ -340,6 +365,13 @@ declare module '@tanstack/react-router' {
       path: '/shop'
       fullPath: '/shop'
       preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refer': {
+      id: '/refer'
+      path: '/refer'
+      fullPath: '/refer'
+      preLoaderRoute: typeof ReferRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/receipt': {
@@ -447,6 +479,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReportsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/referrals': {
+      id: '/admin/referrals'
+      path: '/referrals'
+      fullPath: '/admin/referrals'
+      preLoaderRoute: typeof AdminReferralsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/products': {
       id: '/admin/products'
       path: '/products'
@@ -491,6 +530,7 @@ interface AdminRouteChildren {
   AdminCustomersRoute: typeof AdminCustomersRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
+  AdminReferralsRoute: typeof AdminReferralsRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -502,6 +542,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCustomersRoute: AdminCustomersRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,
+  AdminReferralsRoute: AdminReferralsRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -521,6 +562,7 @@ const rootRouteChildren: RootRouteChildren = {
   OrderRoute: OrderRoute,
   ProAccountsRoute: ProAccountsRoute,
   ReceiptRoute: ReceiptRoute,
+  ReferRoute: ReferRoute,
   ShopRoute: ShopRoute,
   SimDatabaseRoute: SimDatabaseRoute,
   WishlistRoute: WishlistRoute,
@@ -529,3 +571,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
