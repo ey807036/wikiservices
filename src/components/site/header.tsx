@@ -41,7 +41,7 @@ export function Header() {
           </SheetTrigger>
           <SheetContent side="left" className="w-72">
             <div className="mt-8 flex flex-col gap-4">
-              {NAV.map((n) => (
+              {NAV.filter((n) => n.label !== "Shop").map((n) => (
                 <Link key={n.label} to={n.to as any} onClick={() => setOpen(false)} className="text-lg font-medium">
                   {n.label}
                 </Link>
