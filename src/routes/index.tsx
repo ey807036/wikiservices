@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import {
   ArrowRight, Wifi, Bluetooth, Car, Tv, Snowflake,
   Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star, Flame,
-  Database, IdCard, MessageCircle,
+  Database, IdCard, MessageCircle, Crown,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({ component: Home });
@@ -17,7 +17,7 @@ type Hack = {
   hot?: boolean;
   href?: string;       // external link (opens new tab)
   to?: string;         // internal route
-  action?: "fakewa";   // special handler
+  action?: "fakewa" | "pro";   // special handler
 };
 
 const fmt = (n: number) =>
@@ -28,6 +28,7 @@ const waLink = (msg: string) => `https://wa.me/${ADMIN_WA}?text=${encodeURICompo
 
 const HACKS: Hack[] = [
   { icon: MessageCircle, name: "Fake WhatsApp Number", desc: "Anonymous WhatsApp numbers — pick & chat instantly", priceNum: 150, sold: 2000, hot: true, action: "fakewa" },
+  { icon: Crown,         name: "Pro Accounts (All-in-One)", desc: "Netflix, CapCut Pro, Remini, Spotify, ChatGPT+, Canva & 20+ premium accounts", priceNum: 100, sold: 8200, hot: true, action: "pro" },
   { icon: Database,      name: "New SimData Service",   desc: "Fresh 2024–2026 SIM owner data lookup (paid)", priceNum: 500, sold: 4500, hot: true, href: waLink("Salam! I want to buy 'New SimData Service' (Rs. 500). Please share details.") },
   { icon: Wifi,          name: "WiFi Jammer",           desc: "Block any WiFi signal in range", priceNum: 5000, sold: 87, hot: true },
   { icon: Skull,         name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Bulb & more", priceNum: 5000, sold: 42 },
@@ -140,6 +141,12 @@ function Home() {
                     <Link to="/fake-whatsapp" className="mt-3 block">
                       <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
                         Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                      </Button>
+                    </Link>
+                  ) : h.action === "pro" ? (
+                    <Link to="/pro-accounts" className="mt-3 block">
+                      <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
+                        Browse <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                       </Button>
                     </Link>
                   ) : h.href ? (
