@@ -110,7 +110,7 @@ export function Header() {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="w-60 border-red-500/30 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black shadow-[0_10px_40px_oklch(0.65_0.25_25/0.4)] backdrop-blur"
+              className="w-60 border-red-500/30 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black text-white shadow-[0_10px_40px_oklch(0.65_0.25_25/0.4)] backdrop-blur"
             >
               <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/10">
                 <Link to="/refer">
