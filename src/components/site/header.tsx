@@ -137,15 +137,6 @@ export function Header() {
                 </span>
                 <span className="font-semibold">WhatsApp Channel</span>
               </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-red-500/20" />
-              <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/20 focus:text-white text-white">
-                <Link to="/shop">
-                  <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-fuchsia-500 to-purple-800 text-white shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.6_0.25_320/0.5)] transition-transform group-hover:scale-110 group-hover:rotate-6">
-                    <BatteryCharging className="h-4 w-4" />
-                  </span>
-                  <span className="font-semibold">Power Shop</span>
-                </Link>
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
