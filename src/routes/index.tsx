@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import {
   ArrowRight, Wifi, Bluetooth, Car, Tv, Snowflake,
   Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star, Flame,
-  Database, IdCard, MessageCircle,
+  Database, IdCard, MessageCircle, Crown,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({ component: Home });
