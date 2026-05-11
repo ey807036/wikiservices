@@ -98,16 +98,20 @@ function Home() {
       {/* INTRO VIDEO */}
       <section className="container mx-auto px-4 pt-8">
         <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border ring-2 ring-red-500/40 shadow-[0_0_30px_oklch(0.65_0.25_25/0.4)]">
-          <video
-            src="/intro.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster="/intro.gif"
-            className="h-auto w-full"
-          />
+          <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              poster="/intro.gif"
+              controls
+              className="absolute inset-0 h-full w-full object-cover"
+            >
+              <source src="/intro.mp4" type="video/mp4" />
+            </video>
+          </div>
         </div>
       </section>
 
