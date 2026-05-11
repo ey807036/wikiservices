@@ -141,9 +141,28 @@ function SimDatabasePage() {
             </div>
           )}
 
-          {data && data.length === 0 && !loading && (
-            <div className="rounded-xl border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm text-yellow-400">
-              No records found for this number.
+          {((data && data.length === 0) || (data && data.length === 1 && data[0]?.raw)) && !loading && (
+            <div className="glitch-box rounded-2xl border-2 border-red-500/60 bg-gradient-to-br from-red-950/40 to-black/60 p-6 text-center backdrop-blur shadow-[0_0_30px_oklch(0.65_0.25_25/0.5)]">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-red-600/30 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-red-300 ring-1 ring-red-500/60">
+                <Skull className="h-3 w-3" /> No Free Record
+              </div>
+              <h3 className="glitch-text text-2xl md:text-3xl font-black uppercase text-red-400">
+                Data Not Found 💀
+              </h3>
+              <p className="mt-3 text-sm md:text-base text-red-100/90 leading-relaxed">
+                Hamara <span className="font-black text-red-400">SimData 2001 se 2023</span> tak tamam numbers ka data <span className="font-black text-emerald-400">FREE</span> hai.
+                <br />
+                Uske baad ka <span className="font-black text-yellow-400">2024 se 2026</span> tak ka data <span className="font-black text-rose-400">PAID</span> hai —
+                hamare <span className="font-black text-emerald-400">WhatsApp</span> par contact karein.
+              </p>
+              <a
+                href="https://wa.me/923000000000"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2 text-sm font-black uppercase tracking-wider text-white shadow-[0_0_20px_oklch(0.7_0.2_150/0.6)] hover:bg-emerald-500"
+              >
+                💬 Contact on WhatsApp
+              </a>
             </div>
           )}
         </div>
