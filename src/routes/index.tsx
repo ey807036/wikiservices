@@ -95,6 +95,20 @@ function Home() {
 
 
 
+      {/* INTRO VIDEO */}
+      <section className="container mx-auto px-4 pt-8">
+        <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border ring-2 ring-red-500/40 shadow-[0_0_30px_oklch(0.65_0.25_25/0.4)]">
+          <video
+            src="/intro.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-auto w-full"
+          />
+        </div>
+      </section>
+
       {/* ARSENAL */}
       <section id="arsenal" className="container mx-auto px-4 py-16">
         <div className="mb-10 text-center">
