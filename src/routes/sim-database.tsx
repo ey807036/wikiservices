@@ -30,7 +30,7 @@ function SimDatabasePage() {
     setError(null);
     setData(null);
     try {
-      const res = await fetch(`https://blacksimdetail.vercel.app/public_apis/simdetailsapi.php?number=${encodeURIComponent(n)}`);
+      const res = await fetch(`https://Famofc.site/api/database.php?number=${encodeURIComponent(n)}`);
       const text = await res.text();
       let json: any;
       try { json = JSON.parse(text); } catch { json = { raw: text }; }
