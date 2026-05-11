@@ -427,3 +427,31 @@
 .card-hack { animation: glitchHue 6s ease-in-out infinite; transition: transform .3s ease, box-shadow .3s ease; }
 .card-hack:hover { transform: translateY(-6px); box-shadow: 0 18px 40px -12px var(--primary); }
 
+
+@keyframes glitchSkew {
+  0%, 100% { transform: translate(0); text-shadow: 2px 0 oklch(0.65 0.25 25), -2px 0 oklch(0.7 0.25 200); }
+  20% { transform: translate(-2px, 1px); text-shadow: -2px 0 oklch(0.65 0.25 25), 2px 0 oklch(0.7 0.25 200); }
+  40% { transform: translate(2px, -1px); text-shadow: 2px 1px oklch(0.7 0.27 350), -2px -1px oklch(0.7 0.25 200); }
+  60% { transform: translate(-1px, 2px); text-shadow: -1px 1px oklch(0.65 0.25 25), 1px -1px oklch(0.7 0.25 200); }
+  80% { transform: translate(1px, -2px); text-shadow: 1px -1px oklch(0.7 0.27 350), -1px 1px oklch(0.65 0.25 25); }
+}
+.glitch-text { animation: glitchSkew 1.4s infinite steps(2, end); }
+
+@keyframes scanlines {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+.glitch-box {
+  position: relative;
+  overflow: hidden;
+}
+.glitch-box::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    transparent 0 2px,
+    oklch(0.65 0.25 25 / 0.08) 2px 3px
+  );
+  pointer-events: none;
+  animation: scanlines 4s linear infinite;
+}
