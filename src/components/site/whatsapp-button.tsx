@@ -12,7 +12,7 @@ export function WhatsAppButton() {
     queryFn: async () => (await supabase.from("site_settings").select("whatsapp_number").eq("id", 1).maybeSingle()).data,
     staleTime: 5 * 60 * 1000,
   });
-  const phone = (data?.whatsapp_number || "923000000000").replace(/\D/g, "");
+  const phone = (data?.whatsapp_number || "923186376181").replace(/\D/g, "");
   const href = `https://wa.me/${phone}?text=${encodeURIComponent(MESSAGE)}`;
 
   return (
