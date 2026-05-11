@@ -50,7 +50,21 @@ function SimDatabasePage() {
       const text = await res.text();
       let json: any;
       try { json = JSON.parse(text); } catch { json = { raw: text }; }
-      const arr: SimRecord[] = Array.isArray(json) ? json : (json?.data?.records ?? json?.records ?? json?.data ?? json?.results ?? [json]);
+      let arr: SimRecord[] = Array.isArray(json)
+        ? json
+        : (json?.data?.records ?? json?.records ?? json?.results ?? (Array.isArray(json?.data) ? json.data : []));
+      // Treat upstream "not found" / error / empty as no records so the danger card shows
+      const status = String(json?.status ?? "").toLowerCase();
+      const isNotFound =
+        !json ||
+        json?.success === false ||
+        status === "error" ||
+        status === "not_found" ||
+        status === "false" ||
+        (json?.message && /not\s*found|no\s*record|no\s*data/i.test(String(json.message)));
+      if (isNotFound) arr = [];
+      // Filter out empty/garbage rows
+      arr = (arr || []).filter((r) => r && typeof r === "object" && Object.keys(r).length > 0);
       setData(arr);
     } catch (err: any) {
       setError(err?.message ?? "Failed to fetch SIM data");
@@ -179,7 +193,7 @@ function SimDatabasePage() {
             </div>
           )}
 
-          {((data && data.length === 0) || (data && data.length === 1 && data[0]?.raw)) && !loading && (
+          {data && data.length === 0 && !loading && (
             <div className="glitch-box rounded-2xl border-2 border-red-500/60 bg-gradient-to-br from-red-950/40 to-black/60 p-6 text-center backdrop-blur shadow-[0_0_30px_oklch(0.65_0.25_25/0.5)]">
               <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-red-600/30 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-red-300 ring-1 ring-red-500/60">
                 <Skull className="h-3 w-3" /> No Free Record
