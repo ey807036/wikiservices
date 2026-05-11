@@ -1,9 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   ArrowRight, Wifi, Bluetooth, Car, Tv, Snowflake,
   Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star, Flame,
@@ -41,67 +37,6 @@ const HACKS: Hack[] = [
   { icon: Camera,        name: "Drone Jammer & Controller", desc: "Jam, hijack & take control of nearby camera drones", priceNum: 50000, sold: 3 },
 ];
 
-// Generate random masked WhatsApp-style numbers
-function genMaskedNumbers(seed: number) {
-  const out: { full: string; masked: string }[] = [];
-  let s = seed;
-  const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
-  for (let i = 0; i < 8; i++) {
-    const prefix = ["300","301","302","303","310","311","312","320","321","333","342","345"][Math.floor(rnd() * 12)];
-    const rest = Array.from({ length: 7 }, () => Math.floor(rnd() * 10)).join("");
-    const full = `92${prefix}${rest}`;
-    // Mask last 1-2 digits with **  →  +923425687**
-    const starCount = Math.floor(rnd() * 2) + 1; // 1 or 2 stars
-    const masked = `+92${prefix}${rest.slice(0, 7 - starCount)}${"*".repeat(starCount)}`;
-    out.push({ full, masked });
-  }
-  return out;
-}
-
-function FakeWhatsAppDialog() {
-  const [open, setOpen] = useState(false);
-  const [seed, setSeed] = useState(() => Math.floor(Math.random() * 99999) + 1);
-  const numbers = useMemo(() => genMaskedNumbers(seed), [seed]);
-  const handleOpen = (v: boolean) => {
-    if (v) setSeed(Math.floor(Math.random() * 99999) + 1);
-    setOpen(v);
-  };
-  return (
-    <Dialog open={open} onOpenChange={handleOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
-          Pick Number <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="glitch-box border-2 border-red-500/60 bg-gradient-to-br from-card via-card to-red-950/30">
-        <DialogHeader>
-          <DialogTitle className="glitch-text text-2xl font-black uppercase tracking-wider text-red-400">
-            Choose Anonymous Number 💀
-          </DialogTitle>
-        </DialogHeader>
-        <p className="text-xs text-muted-foreground">
-          Pick any half-shown number — clicking will message us on WhatsApp to confirm your pick.
-        </p>
-        <div className="mt-2 grid gap-2 max-h-[50vh] overflow-y-auto pr-1">
-          {numbers.map((n, i) => (
-            <a
-              key={`${n.masked}-${i}`}
-              href={waLink(`Salam! I want to BUY this Fake WhatsApp Number: ${n.masked} (Rs. 150). Please confirm.`)}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-between rounded-xl border border-emerald-500/40 bg-background/60 px-4 py-3 font-mono text-sm font-bold text-emerald-300 hover:border-emerald-400 hover:bg-emerald-500/10 transition"
-            >
-              <span className="flex items-center gap-2">
-                <MessageCircle className="h-4 w-4 text-emerald-400" /> {n.masked}
-              </span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-red-400">Select →</span>
-            </a>
-          ))}
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
 
 function Home() {
   return (
@@ -202,7 +137,11 @@ function Home() {
                     </span>
                   </div>
                   {h.action === "fakewa" ? (
-                    <div className="mt-3"><FakeWhatsAppDialog /></div>
+                    <Link to="/fake-whatsapp" className="mt-3 block">
+                      <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
+                        Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                      </Button>
+                    </Link>
                   ) : h.href ? (
                     <a href={h.href} target="_blank" rel="noreferrer" className="mt-3 block">
                       <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
