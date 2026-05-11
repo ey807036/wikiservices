@@ -80,6 +80,17 @@ function Home() {
                 Shop Now <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </a>
+            <Link to="/sim-database">
+              <Button
+                size="lg"
+                className="relative h-12 px-7 text-base rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_25px_oklch(0.65_0.25_25/0.7)] hover:opacity-90 animate-pulse"
+              >
+                <Skull className="mr-2 h-4 w-4" /> Free SimData
+                <span className="absolute -top-2 -right-2 rounded-full bg-yellow-400 px-2 py-0.5 text-[9px] font-black text-black ring-2 ring-background">
+                  DANGER
+                </span>
+              </Button>
+            </Link>
           </div>
           <div className="mt-10 flex items-center justify-center gap-1">
             {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-accent text-accent" />)}
