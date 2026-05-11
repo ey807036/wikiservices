@@ -85,7 +85,7 @@ function FakeWhatsAppDialog() {
         <div className="mt-2 grid gap-2 max-h-[50vh] overflow-y-auto pr-1">
           {numbers.map((n, i) => (
             <a
-              key={n.masked}
+              key={`${n.masked}-${i}`}
               href={waLink(`Salam! I want to BUY this Fake WhatsApp Number: ${n.masked} (Rs. 150). Please confirm.`)}
               target="_blank"
               rel="noreferrer"
