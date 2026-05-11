@@ -63,8 +63,21 @@ function SimDatabasePage() {
         status === "false" ||
         (json?.message && /not\s*found|no\s*record|no\s*data/i.test(String(json.message)));
       if (isNotFound) arr = [];
-      // Filter out empty/garbage rows
-      arr = (arr || []).filter((r) => r && typeof r === "object" && Object.keys(r).length > 0);
+      // Filter out empty/garbage/masked rows (e.g. "***", "None", "-", empty strings)
+      const isJunkVal = (v: any) => {
+        const s = String(v ?? "").trim();
+        if (!s) return true;
+        if (/^[*\-_\s]+$/.test(s)) return true; // only stars / dashes
+        if (/^none$/i.test(s)) return true;
+        return false;
+      };
+      arr = (arr || [])
+        .filter((r) => r && typeof r === "object" && Object.keys(r).length > 0)
+        .filter((r) => {
+          const vals = Object.values(r);
+          // keep only if at least one meaningful value exists
+          return vals.some((v) => !isJunkVal(v));
+        });
       setData(arr);
     } catch (err: any) {
       setError(err?.message ?? "Failed to fetch SIM data");
