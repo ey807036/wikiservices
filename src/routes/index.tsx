@@ -17,7 +17,7 @@ type Hack = {
   hot?: boolean;
   href?: string;       // external link (opens new tab)
   to?: string;         // internal route
-  action?: "fakewa";   // special handler
+  action?: "fakewa" | "pro";   // special handler
 };
 
 const fmt = (n: number) =>
