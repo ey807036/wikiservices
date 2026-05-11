@@ -152,16 +152,22 @@ function SimDatabasePage() {
               <p className="mt-3 text-sm md:text-base text-red-100/90 leading-relaxed">
                 Hamara <span className="font-black text-red-400">SimData 2001 se 2023</span> tak tamam numbers ka data <span className="font-black text-emerald-400">FREE</span> hai.
                 <br />
-                Uske baad ka <span className="font-black text-yellow-400">2024 se 2026</span> tak ka data <span className="font-black text-rose-400">PAID</span> hai —
-                hamare <span className="font-black text-emerald-400">WhatsApp</span> par contact karein.
+                Naye number ka data sirf <span className="font-black text-yellow-300 text-lg">Rs. 500</span> mein milega —
+                <span className="font-black text-emerald-400"> 2024 se 2026</span> tak full details.
+                <br />
+                Abhi WhatsApp par contact karein 👇
               </p>
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-yellow-400/20 px-4 py-1 text-sm font-black uppercase tracking-wider text-yellow-300 ring-1 ring-yellow-400/60 mb-3">
+                💰 Price Tag: Rs. 500 / Number
+              </div>
+              <br />
               <a
-                href="https://wa.me/923000000000"
+                href={`https://wa.me/923186376181?text=${encodeURIComponent("Salam! I want NEW SimData (2024-2026) for number, Rs. 500. Please share details.")}`}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2 text-sm font-black uppercase tracking-wider text-white shadow-[0_0_20px_oklch(0.7_0.2_150/0.6)] hover:bg-emerald-500"
+                className="mt-2 inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2 text-sm font-black uppercase tracking-wider text-white shadow-[0_0_20px_oklch(0.7_0.2_150/0.6)] hover:bg-emerald-500 animate-pulse"
               >
-                💬 Contact on WhatsApp
+                💬 Contact on WhatsApp · Rs. 500
               </a>
             </div>
           )}

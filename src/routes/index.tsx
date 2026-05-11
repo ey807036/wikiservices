@@ -47,10 +47,12 @@ function genMaskedNumbers(seed: number) {
   let s = seed;
   const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
   for (let i = 0; i < 8; i++) {
-    const prefix = ["300","301","302","303","310","311","312","320","321","333","345"][Math.floor(rnd() * 11)];
+    const prefix = ["300","301","302","303","310","311","312","320","321","333","342","345"][Math.floor(rnd() * 12)];
     const rest = Array.from({ length: 7 }, () => Math.floor(rnd() * 10)).join("");
     const full = `92${prefix}${rest}`;
-    const masked = `+92 ${prefix} ${rest.slice(0,3)}XX${rest.slice(5)}`;
+    // Mask last 1-2 digits with **  →  +923425687**
+    const starCount = Math.floor(rnd() * 2) + 1; // 1 or 2 stars
+    const masked = `+92${prefix}${rest.slice(0, 7 - starCount)}${"*".repeat(starCount)}`;
     out.push({ full, masked });
   }
   return out;
