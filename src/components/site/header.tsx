@@ -104,6 +104,19 @@ export function Header() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label="More"><MoreVertical className="h-5 w-5" /></Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuItem asChild><Link to="/refer"><Gift className="mr-2 h-4 w-4" />Refer & Earn</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/refer"><Wallet className="mr-2 h-4 w-4" />My Balance</Link></DropdownMenuItem>
+              <DropdownMenuItem onClick={() => toast.info("WhatsApp Channel — Coming Soon 💀")}>
+                <Megaphone className="mr-2 h-4 w-4" />WhatsApp Channel
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon"><User className="h-5 w-5" /></Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
