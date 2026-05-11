@@ -22,6 +22,21 @@ function SimDatabasePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<SimRecord[] | null>(null);
+  const [copiedIdx, setCopiedIdx] = useState<number | "all" | null>(null);
+
+  const formatRecord = (rec: SimRecord) =>
+    Object.entries(rec).map(([k, v]) => `${k}: ${v ?? "—"}`).join("\n");
+
+  const copyText = async (text: string, key: number | "all") => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedIdx(key);
+      toast.success("Copied to clipboard 📋");
+      setTimeout(() => setCopiedIdx((c) => (c === key ? null : c)), 1500);
+    } catch {
+      toast.error("Copy failed");
+    }
+  };
 
   const lookup = async (e: React.FormEvent) => {
     e.preventDefault();
