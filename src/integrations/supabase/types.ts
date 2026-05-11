@@ -319,6 +319,96 @@ export type Database = {
         }
         Relationships: []
       }
+      promo_redemptions: {
+        Row: {
+          amount: number
+          code: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          code: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          code?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      referral_settings: {
+        Row: {
+          id: number
+          max_promo_per_user: number
+          max_referrals_per_user: number
+          promo_amount: number
+          promo_code: string
+          referral_reward: number
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          max_promo_per_user?: number
+          max_referrals_per_user?: number
+          promo_amount?: number
+          promo_code?: string
+          referral_reward?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          max_promo_per_user?: number
+          max_referrals_per_user?: number
+          promo_amount?: number
+          promo_code?: string
+          referral_reward?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      referral_submissions: {
+        Row: {
+          admin_note: string | null
+          created_at: string
+          id: string
+          note: string | null
+          reviewed_at: string | null
+          reward_pkr: number
+          screenshot_url: string
+          status: Database["public"]["Enums"]["submission_status"]
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          reviewed_at?: string | null
+          reward_pkr?: number
+          screenshot_url: string
+          status?: Database["public"]["Enums"]["submission_status"]
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          reviewed_at?: string | null
+          reward_pkr?: number
+          screenshot_url?: string
+          status?: Database["public"]["Enums"]["submission_status"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           address: string | null
@@ -352,6 +442,24 @@ export type Database = {
           theme?: string
           updated_at?: string
           whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
+      user_balances: {
+        Row: {
+          balance: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -417,6 +525,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      redeem_promo: { Args: { _code: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "customer"
@@ -427,6 +536,7 @@ export type Database = {
         | "shipped"
         | "delivered"
         | "cancelled"
+      submission_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -563,6 +673,7 @@ export const Constants = {
         "delivered",
         "cancelled",
       ],
+      submission_status: ["pending", "approved", "rejected"],
     },
   },
 } as const

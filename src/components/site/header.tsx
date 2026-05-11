@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ShoppingCart, User, Menu, Search, LogOut, LayoutDashboard, Package, Heart } from "lucide-react";
+import { ShoppingCart, User, Menu, Search, LogOut, LayoutDashboard, Package, Heart, MoreVertical, Gift, Wallet, Megaphone } from "lucide-react";
+import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-store";
@@ -100,6 +101,19 @@ export function Header() {
               )}
             </Button>
           </Link>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label="More"><MoreVertical className="h-5 w-5" /></Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuItem asChild><Link to="/refer"><Gift className="mr-2 h-4 w-4" />Refer & Earn</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/refer"><Wallet className="mr-2 h-4 w-4" />My Balance</Link></DropdownMenuItem>
+              <DropdownMenuItem onClick={() => toast.info("WhatsApp Channel — Coming Soon 💀")}>
+                <Megaphone className="mr-2 h-4 w-4" />WhatsApp Channel
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
