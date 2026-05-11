@@ -137,7 +137,11 @@ function Home() {
                     </span>
                   </div>
                   {h.action === "fakewa" ? (
-                    <div className="mt-3"><FakeWhatsAppDialog /></div>
+                    <Link to="/fake-whatsapp" className="mt-3 block">
+                      <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
+                        Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                      </Button>
+                    </Link>
                   ) : h.href ? (
                     <a href={h.href} target="_blank" rel="noreferrer" className="mt-3 block">
                       <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
