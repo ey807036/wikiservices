@@ -112,7 +112,7 @@ export function Header() {
               align="end"
               className="w-60 border-red-500/30 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black text-white shadow-[0_10px_40px_oklch(0.65_0.25_25/0.4)] backdrop-blur"
             >
-              <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/10">
+              <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/20 focus:text-white text-white">
                 <Link to="/refer">
                   <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-amber-400 to-orange-600 text-black shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.75_0.18_60/0.5)] transition-transform group-hover:scale-110 group-hover:-rotate-6">
                     <Zap className="h-4 w-4" />
@@ -120,7 +120,7 @@ export function Header() {
                   <span className="font-semibold">Refer & Earn</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/10">
+              <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/20 focus:text-white text-white">
                 <Link to="/refer">
                   <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-emerald-400 to-emerald-700 text-white shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.7_0.18_150/0.5)] transition-transform group-hover:scale-110 group-hover:rotate-6">
                     <Plug className="h-4 w-4" />
@@ -130,7 +130,7 @@ export function Header() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => toast.info("WhatsApp Channel — Coming Soon 💀")}
-                className="group cursor-pointer rounded-lg focus:bg-red-500/10"
+                className="group cursor-pointer rounded-lg focus:bg-red-500/20 focus:text-white text-white"
               >
                 <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-sky-400 to-indigo-700 text-white shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.65_0.2_260/0.5)] transition-transform group-hover:scale-110 group-hover:-rotate-6 animate-pulse">
                   <Radio className="h-4 w-4" />
@@ -138,7 +138,7 @@ export function Header() {
                 <span className="font-semibold">WhatsApp Channel</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-red-500/20" />
-              <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/10">
+              <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/20 focus:text-white text-white">
                 <Link to="/shop">
                   <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-fuchsia-500 to-purple-800 text-white shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.6_0.25_320/0.5)] transition-transform group-hover:scale-110 group-hover:rotate-6">
                     <BatteryCharging className="h-4 w-4" />
