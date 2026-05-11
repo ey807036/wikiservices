@@ -15,6 +15,7 @@ import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ReceiptRouteImport } from './routes/receipt'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as MyOrdersRouteImport } from './routes/my-orders'
+import { Route as FakeWhatsappRouteImport } from './routes/fake-whatsapp'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -59,6 +60,11 @@ const OrderRoute = OrderRouteImport.update({
 const MyOrdersRoute = MyOrdersRouteImport.update({
   id: '/my-orders',
   path: '/my-orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FakeWhatsappRoute = FakeWhatsappRouteImport.update({
+  id: '/fake-whatsapp',
+  path: '/fake-whatsapp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -144,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/fake-whatsapp': typeof FakeWhatsappRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
   '/receipt': typeof ReceiptRoute
@@ -166,6 +173,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/fake-whatsapp': typeof FakeWhatsappRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
   '/receipt': typeof ReceiptRoute
@@ -190,6 +198,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/fake-whatsapp': typeof FakeWhatsappRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
   '/receipt': typeof ReceiptRoute
@@ -215,6 +224,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/checkout'
+    | '/fake-whatsapp'
     | '/my-orders'
     | '/order'
     | '/receipt'
@@ -237,6 +247,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/checkout'
+    | '/fake-whatsapp'
     | '/my-orders'
     | '/order'
     | '/receipt'
@@ -260,6 +271,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/checkout'
+    | '/fake-whatsapp'
     | '/my-orders'
     | '/order'
     | '/receipt'
@@ -284,6 +296,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
+  FakeWhatsappRoute: typeof FakeWhatsappRoute
   MyOrdersRoute: typeof MyOrdersRoute
   OrderRoute: typeof OrderRoute
   ReceiptRoute: typeof ReceiptRoute
@@ -335,6 +348,13 @@ declare module '@tanstack/react-router' {
       path: '/my-orders'
       fullPath: '/my-orders'
       preLoaderRoute: typeof MyOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fake-whatsapp': {
+      id: '/fake-whatsapp'
+      path: '/fake-whatsapp'
+      fullPath: '/fake-whatsapp'
+      preLoaderRoute: typeof FakeWhatsappRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -476,6 +496,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
+  FakeWhatsappRoute: FakeWhatsappRoute,
   MyOrdersRoute: MyOrdersRoute,
   OrderRoute: OrderRoute,
   ReceiptRoute: ReceiptRoute,
