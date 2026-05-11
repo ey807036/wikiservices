@@ -60,7 +60,12 @@ function genMaskedNumbers(seed: number) {
 
 function FakeWhatsAppDialog() {
   const [open, setOpen] = useState(false);
-  const numbers = useMemo(() => genMaskedNumbers(Date.now() % 100000), [open]);
+  const [seed, setSeed] = useState(() => Math.floor(Math.random() * 99999) + 1);
+  const numbers = useMemo(() => genMaskedNumbers(seed), [seed]);
+  const handleOpen = (v: boolean) => {
+    if (v) setSeed(Math.floor(Math.random() * 99999) + 1);
+    setOpen(v);
+  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
