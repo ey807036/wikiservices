@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, ShieldAlert, Skull, Database, Zap, AlertTriangle, Loader2 } from "lucide-react";
+import { Search, ShieldAlert, Skull, Database, Zap, AlertTriangle, Loader2, Copy, Check } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/sim-database")({
   head: () => ({
