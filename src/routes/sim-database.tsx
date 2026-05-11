@@ -159,9 +159,9 @@ function SimDatabasePage() {
                     <button
                       type="button"
                       onClick={() => copyText(formatRecord(rec), i)}
-                      className="group relative inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-fuchsia-500 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white shadow-[0_0_16px_oklch(0.75_0.2_160/0.7)] hover:shadow-[0_0_28px_oklch(0.75_0.2_320/0.9)] transition-all hover:scale-110 ring-1 ring-white/20"
+                      className="group relative inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white shadow-[0_0_16px_oklch(0.65_0.25_25/0.8)] hover:shadow-[0_0_28px_oklch(0.65_0.25_25/1)] transition-all hover:scale-110 ring-1 ring-red-300/40"
                     >
-                      <span className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-400 to-fuchsia-500 opacity-40 blur-md group-hover:opacity-70 transition-opacity" />
+                      <span className="absolute inset-0 rounded-full bg-gradient-to-r from-red-500 to-rose-600 opacity-50 blur-md group-hover:opacity-80 transition-opacity animate-pulse" />
                       {copiedIdx === i ? <Check className="relative h-3 w-3" /> : <Copy className="relative h-3 w-3" />}
                       <span className="relative">{copiedIdx === i ? "Copied" : "Copy"}</span>
                     </button>
