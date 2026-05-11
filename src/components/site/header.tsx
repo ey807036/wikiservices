@@ -104,14 +104,8 @@ export function Header() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label="More"
-                className="relative h-9 w-9 rounded-full bg-gradient-to-br from-red-500 via-rose-600 to-red-700 text-white shadow-[0_4px_14px_oklch(0.65_0.25_25/0.65),inset_0_-2px_4px_rgba(0,0,0,0.35),inset_0_2px_3px_rgba(255,255,255,0.35)] ring-2 ring-red-300/40 hover:scale-110 hover:rotate-12 transition-transform animate-pulse hover:from-red-400 hover:to-red-600"
-              >
-                <span className="absolute inset-0 rounded-full bg-red-500/40 blur-md animate-ping" />
-                <MoreVertical className="relative h-5 w-5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" />
+              <Button variant="ghost" size="icon" aria-label="More" className="text-red-500 hover:text-red-600 hover:bg-red-500/10">
+                <MoreVertical className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
