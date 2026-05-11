@@ -27,12 +27,15 @@ type Hack = {
 const fmt = (n: number) =>
   n >= 1000 ? `Rs. ${(n / 1000).toLocaleString()}${n % 1000 === 0 ? "k" : ""}` : `Rs. ${n}`;
 
+const ADMIN_WA = "923186376181";
+const waLink = (msg: string) => `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`;
+
 const HACKS: Hack[] = [
   { icon: MessageCircle, name: "Fake WhatsApp Number", desc: "Anonymous WhatsApp numbers — pick & chat instantly", priceNum: 150, sold: 2000, hot: true, action: "fakewa" },
-  { icon: Database,      name: "New SimData Service",   desc: "Fresh 2024–2026 SIM owner data lookup (paid)", priceNum: 500, sold: 4500, hot: true },
+  { icon: Database,      name: "New SimData Service",   desc: "Fresh 2024–2026 SIM owner data lookup (paid)", priceNum: 500, sold: 4500, hot: true, href: waLink("Salam! I want to buy 'New SimData Service' (Rs. 500). Please share details.") },
   { icon: Wifi,          name: "WiFi Jammer",           desc: "Block any WiFi signal in range", priceNum: 5000, sold: 87, hot: true },
   { icon: Skull,         name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Bulb & more", priceNum: 5000, sold: 42 },
-  { icon: IdCard,        name: "CNIC Colour Copy + Family Details", desc: "Full colour CNIC copy plus complete family record", priceNum: 5000, sold: 500 },
+  { icon: IdCard,        name: "CNIC Colour Copy + Family Details", desc: "Full colour CNIC copy plus complete family record", priceNum: 5000, sold: 500, href: waLink("Salam! I want 'CNIC Colour Copy + Family Details' (Rs. 5000). Please share details.") },
   { icon: Bluetooth,     name: "Bluetooth Jammer",      desc: "Kill nearby Bluetooth devices", priceNum: 10000, sold: 64 },
   { icon: Smartphone,    name: "SIM Signal Jammer",     desc: "Block all SIM / mobile network signals in range", priceNum: 50000, sold: 1 },
   { icon: Camera,        name: "Drone Jammer & Controller", desc: "Jam, hijack & take control of nearby camera drones", priceNum: 50000, sold: 3 },
@@ -70,13 +73,13 @@ function FakeWhatsAppDialog() {
           </DialogTitle>
         </DialogHeader>
         <p className="text-xs text-muted-foreground">
-          Pick any number — clicking will open WhatsApp chat instantly.
+          Pick any half-shown number — clicking will message us on WhatsApp to confirm your pick.
         </p>
         <div className="mt-2 grid gap-2 max-h-[50vh] overflow-y-auto pr-1">
           {numbers.map((n) => (
             <a
-              key={n.full}
-              href={`https://wa.me/${n.full}`}
+              key={n.masked}
+              href={waLink(`Salam! I want to BUY this Fake WhatsApp Number: ${n.masked} (Rs. 150). Please confirm.`)}
               target="_blank"
               rel="noreferrer"
               className="flex items-center justify-between rounded-xl border border-emerald-500/40 bg-background/60 px-4 py-3 font-mono text-sm font-bold text-emerald-300 hover:border-emerald-400 hover:bg-emerald-500/10 transition"
@@ -84,7 +87,7 @@ function FakeWhatsAppDialog() {
               <span className="flex items-center gap-2">
                 <MessageCircle className="h-4 w-4 text-emerald-400" /> {n.masked}
               </span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-red-400">Chat →</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-red-400">Select →</span>
             </a>
           ))}
         </div>
@@ -147,21 +150,7 @@ function Home() {
         </div>
       </section>
 
-      {/* COMING SOON (moved to top, like cool buttons) */}
-      <section className="container mx-auto px-4 pt-10">
-        <div className="relative overflow-hidden rounded-3xl border border-dashed border-primary/40 bg-card/40 p-8 md:p-10 text-center backdrop-blur">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_color-mix(in_oklab,_var(--primary)_15%,_transparent),_transparent_70%)]" />
-          <div className="relative">
-            <span className="inline-flex items-center gap-2 rounded-full bg-primary/15 px-3 py-1 text-xs font-black uppercase tracking-widest text-primary animate-pulse">
-              <Zap className="h-3.5 w-3.5" /> Coming Soon
-            </span>
-            <h3 className="mt-3 text-2xl font-black md:text-4xl text-gradient">More Hacks Loading…</h3>
-            <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-              New underground gadgets dropping soon — spy cams, GPS trackers, RFID cloners & more 💀 Stay tuned.
-            </p>
-          </div>
-        </div>
-      </section>
+
 
       {/* ARSENAL */}
       <section id="arsenal" className="container mx-auto px-4 py-16">
@@ -207,6 +196,12 @@ function Home() {
                   </div>
                   {h.action === "fakewa" ? (
                     <div className="mt-3"><FakeWhatsAppDialog /></div>
+                  ) : h.href ? (
+                    <a href={h.href} target="_blank" rel="noreferrer" className="mt-3 block">
+                      <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
+                        Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                      </Button>
+                    </a>
                   ) : (
                     <Link to="/order" search={{ item: h.name }} className="mt-3 block">
                       <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
