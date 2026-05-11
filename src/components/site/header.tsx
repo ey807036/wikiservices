@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ShoppingCart, User, Menu, Search, LogOut, LayoutDashboard, Package, Heart, MoreVertical, Gift, Wallet, Megaphone } from "lucide-react";
+import { ShoppingCart, User, Menu, Search, LogOut, LayoutDashboard, Package, Heart, MoreVertical, Gift, Wallet, Megaphone, Zap, Plug, Radio, BatteryCharging } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
@@ -104,13 +104,53 @@ export function Header() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="More"><MoreVertical className="h-5 w-5" /></Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="More"
+                className="relative h-9 w-9 rounded-full bg-gradient-to-br from-red-500 via-rose-600 to-red-700 text-white shadow-[0_4px_14px_oklch(0.65_0.25_25/0.65),inset_0_-2px_4px_rgba(0,0,0,0.35),inset_0_2px_3px_rgba(255,255,255,0.35)] ring-2 ring-red-300/40 hover:scale-110 hover:rotate-12 transition-transform animate-pulse hover:from-red-400 hover:to-red-600"
+              >
+                <span className="absolute inset-0 rounded-full bg-red-500/40 blur-md animate-ping" />
+                <MoreVertical className="relative h-5 w-5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" />
+              </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem asChild><Link to="/refer"><Gift className="mr-2 h-4 w-4" />Refer & Earn</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/refer"><Wallet className="mr-2 h-4 w-4" />My Balance</Link></DropdownMenuItem>
-              <DropdownMenuItem onClick={() => toast.info("WhatsApp Channel — Coming Soon 💀")}>
-                <Megaphone className="mr-2 h-4 w-4" />WhatsApp Channel
+            <DropdownMenuContent
+              align="end"
+              className="w-60 border-red-500/30 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black shadow-[0_10px_40px_oklch(0.65_0.25_25/0.4)] backdrop-blur"
+            >
+              <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/10">
+                <Link to="/refer">
+                  <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-amber-400 to-orange-600 text-black shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.75_0.18_60/0.5)] transition-transform group-hover:scale-110 group-hover:-rotate-6">
+                    <Zap className="h-4 w-4" />
+                  </span>
+                  <span className="font-semibold">Refer & Earn</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/10">
+                <Link to="/refer">
+                  <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-emerald-400 to-emerald-700 text-white shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.7_0.18_150/0.5)] transition-transform group-hover:scale-110 group-hover:rotate-6">
+                    <Plug className="h-4 w-4" />
+                  </span>
+                  <span className="font-semibold">My Balance</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => toast.info("WhatsApp Channel — Coming Soon 💀")}
+                className="group cursor-pointer rounded-lg focus:bg-red-500/10"
+              >
+                <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-sky-400 to-indigo-700 text-white shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.65_0.2_260/0.5)] transition-transform group-hover:scale-110 group-hover:-rotate-6 animate-pulse">
+                  <Radio className="h-4 w-4" />
+                </span>
+                <span className="font-semibold">WhatsApp Channel</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-red-500/20" />
+              <DropdownMenuItem asChild className="group cursor-pointer rounded-lg focus:bg-red-500/10">
+                <Link to="/shop">
+                  <span className="mr-2 grid h-7 w-7 place-items-center rounded-md bg-gradient-to-br from-fuchsia-500 to-purple-800 text-white shadow-[inset_0_-2px_3px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4),0_2px_6px_oklch(0.6_0.25_320/0.5)] transition-transform group-hover:scale-110 group-hover:rotate-6">
+                    <BatteryCharging className="h-4 w-4" />
+                  </span>
+                  <span className="font-semibold">Power Shop</span>
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
