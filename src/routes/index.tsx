@@ -67,7 +67,7 @@ function FakeWhatsAppDialog() {
     setOpen(v);
   };
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
           Pick Number <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
