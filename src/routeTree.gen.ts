@@ -13,6 +13,7 @@ import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as SimDatabaseRouteImport } from './routes/sim-database'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ReceiptRouteImport } from './routes/receipt'
+import { Route as ProAccountsRouteImport } from './routes/pro-accounts'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as MyOrdersRouteImport } from './routes/my-orders'
 import { Route as FakeWhatsappRouteImport } from './routes/fake-whatsapp'
@@ -50,6 +51,11 @@ const ShopRoute = ShopRouteImport.update({
 const ReceiptRoute = ReceiptRouteImport.update({
   id: '/receipt',
   path: '/receipt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProAccountsRoute = ProAccountsRouteImport.update({
+  id: '/pro-accounts',
+  path: '/pro-accounts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrderRoute = OrderRouteImport.update({
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/fake-whatsapp': typeof FakeWhatsappRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
+  '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
@@ -176,6 +183,7 @@ export interface FileRoutesByTo {
   '/fake-whatsapp': typeof FakeWhatsappRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
+  '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
@@ -201,6 +209,7 @@ export interface FileRoutesById {
   '/fake-whatsapp': typeof FakeWhatsappRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
+  '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
@@ -227,6 +236,7 @@ export interface FileRouteTypes {
     | '/fake-whatsapp'
     | '/my-orders'
     | '/order'
+    | '/pro-accounts'
     | '/receipt'
     | '/shop'
     | '/sim-database'
@@ -250,6 +260,7 @@ export interface FileRouteTypes {
     | '/fake-whatsapp'
     | '/my-orders'
     | '/order'
+    | '/pro-accounts'
     | '/receipt'
     | '/shop'
     | '/sim-database'
@@ -274,6 +285,7 @@ export interface FileRouteTypes {
     | '/fake-whatsapp'
     | '/my-orders'
     | '/order'
+    | '/pro-accounts'
     | '/receipt'
     | '/shop'
     | '/sim-database'
@@ -299,6 +311,7 @@ export interface RootRouteChildren {
   FakeWhatsappRoute: typeof FakeWhatsappRoute
   MyOrdersRoute: typeof MyOrdersRoute
   OrderRoute: typeof OrderRoute
+  ProAccountsRoute: typeof ProAccountsRoute
   ReceiptRoute: typeof ReceiptRoute
   ShopRoute: typeof ShopRoute
   SimDatabaseRoute: typeof SimDatabaseRoute
@@ -334,6 +347,13 @@ declare module '@tanstack/react-router' {
       path: '/receipt'
       fullPath: '/receipt'
       preLoaderRoute: typeof ReceiptRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pro-accounts': {
+      id: '/pro-accounts'
+      path: '/pro-accounts'
+      fullPath: '/pro-accounts'
+      preLoaderRoute: typeof ProAccountsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/order': {
@@ -499,6 +519,7 @@ const rootRouteChildren: RootRouteChildren = {
   FakeWhatsappRoute: FakeWhatsappRoute,
   MyOrdersRoute: MyOrdersRoute,
   OrderRoute: OrderRoute,
+  ProAccountsRoute: ProAccountsRoute,
   ReceiptRoute: ReceiptRoute,
   ShopRoute: ShopRoute,
   SimDatabaseRoute: SimDatabaseRoute,
@@ -508,3 +529,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
