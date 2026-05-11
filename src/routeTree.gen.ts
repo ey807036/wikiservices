@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as SimDatabaseRouteImport } from './routes/sim-database'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ReceiptRouteImport } from './routes/receipt'
 import { Route as OrderRouteImport } from './routes/order'
@@ -33,6 +34,11 @@ import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
   path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimDatabaseRoute = SimDatabaseRouteImport.update({
+  id: '/sim-database',
+  path: '/sim-database',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShopRoute = ShopRouteImport.update({
@@ -142,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/order': typeof OrderRoute
   '/receipt': typeof ReceiptRoute
   '/shop': typeof ShopRoute
+  '/sim-database': typeof SimDatabaseRoute
   '/wishlist': typeof WishlistRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByTo {
   '/order': typeof OrderRoute
   '/receipt': typeof ReceiptRoute
   '/shop': typeof ShopRoute
+  '/sim-database': typeof SimDatabaseRoute
   '/wishlist': typeof WishlistRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -186,6 +194,7 @@ export interface FileRoutesById {
   '/order': typeof OrderRoute
   '/receipt': typeof ReceiptRoute
   '/shop': typeof ShopRoute
+  '/sim-database': typeof SimDatabaseRoute
   '/wishlist': typeof WishlistRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/order'
     | '/receipt'
     | '/shop'
+    | '/sim-database'
     | '/wishlist'
     | '/admin/categories'
     | '/admin/coupons'
@@ -231,6 +241,7 @@ export interface FileRouteTypes {
     | '/order'
     | '/receipt'
     | '/shop'
+    | '/sim-database'
     | '/wishlist'
     | '/admin/categories'
     | '/admin/coupons'
@@ -253,6 +264,7 @@ export interface FileRouteTypes {
     | '/order'
     | '/receipt'
     | '/shop'
+    | '/sim-database'
     | '/wishlist'
     | '/admin/categories'
     | '/admin/coupons'
@@ -276,6 +288,7 @@ export interface RootRouteChildren {
   OrderRoute: typeof OrderRoute
   ReceiptRoute: typeof ReceiptRoute
   ShopRoute: typeof ShopRoute
+  SimDatabaseRoute: typeof SimDatabaseRoute
   WishlistRoute: typeof WishlistRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
 }
@@ -287,6 +300,13 @@ declare module '@tanstack/react-router' {
       path: '/wishlist'
       fullPath: '/wishlist'
       preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sim-database': {
+      id: '/sim-database'
+      path: '/sim-database'
+      fullPath: '/sim-database'
+      preLoaderRoute: typeof SimDatabaseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shop': {
@@ -460,6 +480,7 @@ const rootRouteChildren: RootRouteChildren = {
   OrderRoute: OrderRoute,
   ReceiptRoute: ReceiptRoute,
   ShopRoute: ShopRoute,
+  SimDatabaseRoute: SimDatabaseRoute,
   WishlistRoute: WishlistRoute,
   ProductsSlugRoute: ProductsSlugRoute,
 }
