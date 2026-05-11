@@ -60,9 +60,14 @@ function genMaskedNumbers(seed: number) {
 
 function FakeWhatsAppDialog() {
   const [open, setOpen] = useState(false);
-  const numbers = useMemo(() => genMaskedNumbers(Date.now() % 100000), [open]);
+  const [seed, setSeed] = useState(() => Math.floor(Math.random() * 99999) + 1);
+  const numbers = useMemo(() => genMaskedNumbers(seed), [seed]);
+  const handleOpen = (v: boolean) => {
+    if (v) setSeed(Math.floor(Math.random() * 99999) + 1);
+    setOpen(v);
+  };
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
           Pick Number <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
@@ -78,9 +83,9 @@ function FakeWhatsAppDialog() {
           Pick any half-shown number — clicking will message us on WhatsApp to confirm your pick.
         </p>
         <div className="mt-2 grid gap-2 max-h-[50vh] overflow-y-auto pr-1">
-          {numbers.map((n) => (
+          {numbers.map((n, i) => (
             <a
-              key={n.masked}
+              key={`${n.masked}-${i}`}
               href={waLink(`Salam! I want to BUY this Fake WhatsApp Number: ${n.masked} (Rs. 150). Please confirm.`)}
               target="_blank"
               rel="noreferrer"
