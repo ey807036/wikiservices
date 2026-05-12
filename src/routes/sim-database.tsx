@@ -4,6 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, ShieldAlert, Skull, Database, Zap, AlertTriangle, Loader2, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
+import { VerifiedBadge } from "@/components/site/verified-badge";
+import emojiHappy from "@/assets/emoji-happy.png";
+import emojiCry from "@/assets/emoji-cry.png";
+import emojiThink from "@/assets/emoji-think.png";
+import emojiGrin from "@/assets/emoji-grin.png";
+import emojiSparkle from "@/assets/emoji-sparkle.png";
+import emojiWink from "@/assets/emoji-wink.png";
+
+const RECORD_EMOJIS = [emojiHappy, emojiSparkle, emojiWink, emojiGrin];
+const TICK_COLORS = ["blue", "green", "red", "gold"] as const;
 
 export const Route = createFileRoute("/sim-database")({
   head: () => ({
@@ -174,14 +184,18 @@ function SimDatabasePage() {
                   <span className="relative">{copiedIdx === "all" ? "Copied" : "Copy All"}</span>
                 </button>
               </div>
-              {data.map((rec, i) => (
+              {data.map((rec, i) => {
+                const headerEmoji = RECORD_EMOJIS[i % RECORD_EMOJIS.length];
+                return (
                 <div
                   key={i}
                   className="rounded-2xl border-2 border-red-500/40 bg-gradient-to-br from-card/90 to-card/60 p-5 backdrop-blur shadow-[0_0_22px_oklch(0.65_0.25_25/0.35)]"
                 >
                   <div className="mb-3 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-red-400">
-                      <Skull className="h-4 w-4" /> Record #{i + 1}
+                      <img src={headerEmoji} alt="" width={28} height={28} className="h-7 w-7 object-contain drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]" loading="lazy" />
+                      <span>Record #{i + 1}</span>
+                      <VerifiedBadge color="green" size={18} />
                     </div>
                     <button
                       type="button"
@@ -194,15 +208,18 @@ function SimDatabasePage() {
                     </button>
                   </div>
                   <div className="grid gap-2 sm:grid-cols-2">
-                    {Object.entries(rec).map(([k, v]) => (
+                    {Object.entries(rec).map(([k, v], fi) => (
                       <div key={k} className="rounded-lg bg-background/60 px-3 py-2 ring-1 ring-red-500/20">
                         <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{k}</div>
-                        <div className="mt-0.5 break-words text-sm font-semibold">{String(v ?? "—")}</div>
+                        <div className="mt-0.5 flex items-center gap-1.5 break-words text-sm font-semibold">
+                          <span className="break-all">{String(v ?? "—")}</span>
+                          <VerifiedBadge color={TICK_COLORS[fi % TICK_COLORS.length]} size={14} />
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
-              ))}
+              );})}
             </div>
           )}
 
