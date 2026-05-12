@@ -208,15 +208,18 @@ function SimDatabasePage() {
                     </button>
                   </div>
                   <div className="grid gap-2 sm:grid-cols-2">
-                    {Object.entries(rec).map(([k, v], fi) => (
-                      <div key={k} className="rounded-lg bg-background/60 px-3 py-2 ring-1 ring-red-500/20">
-                        <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{k}</div>
-                        <div className="mt-0.5 flex items-center gap-1.5 break-words text-sm font-semibold">
-                          <span className="break-all">{String(v ?? "—")}</span>
-                          <VerifiedBadge color={TICK_COLORS[fi % TICK_COLORS.length]} size={14} />
+                    {Object.entries(rec).map(([k, v], fi) => {
+                      const lineEmoji = FIELD_EMOJIS[(fi + i) % FIELD_EMOJIS.length];
+                      return (
+                        <div key={k} className="flex items-start gap-2 rounded-lg bg-background/60 px-3 py-2 ring-1 ring-red-500/20">
+                          <img src={lineEmoji} alt="" width={28} height={28} className="mt-0.5 h-7 w-7 shrink-0 object-contain" loading="lazy" />
+                          <div className="min-w-0 flex-1">
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{k}</div>
+                            <div className="mt-0.5 break-all text-sm font-semibold">{String(v ?? "—")}</div>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               );})}
