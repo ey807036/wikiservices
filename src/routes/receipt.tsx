@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { findOrder, PAY_LABEL } from "@/lib/order-history";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Package, MapPin, Phone, User, CreditCard, Calendar, ArrowRight, Home, ScrollText } from "lucide-react";
+import { VerifiedBadge } from "@/components/site/verified-badge";
+import emojiSparkle from "@/assets/emoji-sparkle.png";
 
 export const Route = createFileRoute("/receipt")({
   component: Receipt,

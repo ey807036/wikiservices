@@ -228,6 +228,10 @@ function SimDatabasePage() {
               <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-red-600/30 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-red-300 ring-1 ring-red-500/60">
                 <Skull className="h-3 w-3" /> No Free Record
               </div>
+              <div className="mb-3 flex items-center justify-center gap-2">
+                <img src={emojiCry} alt="" width={56} height={56} className="h-14 w-14 object-contain drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]" loading="lazy" />
+                <img src={emojiThink} alt="" width={56} height={56} className="h-14 w-14 object-contain drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]" loading="lazy" />
+              </div>
               <h3 className="glitch-text text-2xl md:text-3xl font-black uppercase text-red-400">
                 Data Not Found 💀
               </h3>
