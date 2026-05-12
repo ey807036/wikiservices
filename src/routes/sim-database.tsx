@@ -12,8 +12,8 @@ import emojiGrin from "@/assets/emoji-grin.png";
 import emojiSparkle from "@/assets/emoji-sparkle.png";
 import emojiWink from "@/assets/emoji-wink.png";
 
-const RECORD_EMOJIS = [emojiHappy, emojiSparkle, emojiWink, emojiGrin];
-const TICK_COLORS = ["blue", "green", "red", "gold"] as const;
+const RECORD_EMOJIS = [emojiHappy, emojiSparkle, emojiWink, emojiGrin, emojiThink];
+const FIELD_EMOJIS = [emojiHappy, emojiWink, emojiGrin, emojiSparkle, emojiThink];
 
 export const Route = createFileRoute("/sim-database")({
   head: () => ({
