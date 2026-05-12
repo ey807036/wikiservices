@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Banknote } from "lucide-react";
 import { money, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE, TAX_RATE } from "@/lib/format";
+import { VerifiedBadge } from "@/components/site/verified-badge";
 
 export const Route = createFileRoute("/checkout")({ component: Checkout });
 
@@ -44,7 +45,7 @@ function Checkout() {
     const value = Number(data.discount_value);
     const d = data.discount_type === "percent" ? +(subtotal * value / 100).toFixed(2) : value;
     setCoupon({ code: data.code, discount: d });
-    toast.success(`Coupon ${data.code} applied`);
+    toast.success(`Coupon ${data.code} applied ✅`);
   };
 
   if (items.length === 0) {
