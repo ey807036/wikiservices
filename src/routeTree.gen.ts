@@ -15,6 +15,7 @@ import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ReferRouteImport } from './routes/refer'
 import { Route as ReceiptRouteImport } from './routes/receipt'
 import { Route as ProAccountsRouteImport } from './routes/pro-accounts'
+import { Route as PayfastResultRouteImport } from './routes/payfast-result'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as MyOrdersRouteImport } from './routes/my-orders'
 import { Route as LuckyDrawRouteImport } from './routes/lucky-draw'
@@ -65,6 +66,11 @@ const ReceiptRoute = ReceiptRouteImport.update({
 const ProAccountsRoute = ProAccountsRouteImport.update({
   id: '/pro-accounts',
   path: '/pro-accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PayfastResultRoute = PayfastResultRouteImport.update({
+  id: '/payfast-result',
+  path: '/payfast-result',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrderRoute = OrderRouteImport.update({
@@ -184,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
+  '/payfast-result': typeof PayfastResultRoute
   '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
   '/refer': typeof ReferRoute
@@ -212,6 +219,7 @@ export interface FileRoutesByTo {
   '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
+  '/payfast-result': typeof PayfastResultRoute
   '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
   '/refer': typeof ReferRoute
@@ -242,6 +250,7 @@ export interface FileRoutesById {
   '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
+  '/payfast-result': typeof PayfastResultRoute
   '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
   '/refer': typeof ReferRoute
@@ -273,6 +282,7 @@ export interface FileRouteTypes {
     | '/lucky-draw'
     | '/my-orders'
     | '/order'
+    | '/payfast-result'
     | '/pro-accounts'
     | '/receipt'
     | '/refer'
@@ -301,6 +311,7 @@ export interface FileRouteTypes {
     | '/lucky-draw'
     | '/my-orders'
     | '/order'
+    | '/payfast-result'
     | '/pro-accounts'
     | '/receipt'
     | '/refer'
@@ -330,6 +341,7 @@ export interface FileRouteTypes {
     | '/lucky-draw'
     | '/my-orders'
     | '/order'
+    | '/payfast-result'
     | '/pro-accounts'
     | '/receipt'
     | '/refer'
@@ -360,6 +372,7 @@ export interface RootRouteChildren {
   LuckyDrawRoute: typeof LuckyDrawRoute
   MyOrdersRoute: typeof MyOrdersRoute
   OrderRoute: typeof OrderRoute
+  PayfastResultRoute: typeof PayfastResultRoute
   ProAccountsRoute: typeof ProAccountsRoute
   ReceiptRoute: typeof ReceiptRoute
   ReferRoute: typeof ReferRoute
@@ -412,6 +425,13 @@ declare module '@tanstack/react-router' {
       path: '/pro-accounts'
       fullPath: '/pro-accounts'
       preLoaderRoute: typeof ProAccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payfast-result': {
+      id: '/payfast-result'
+      path: '/payfast-result'
+      fullPath: '/payfast-result'
+      preLoaderRoute: typeof PayfastResultRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/order': {
@@ -601,6 +621,7 @@ const rootRouteChildren: RootRouteChildren = {
   LuckyDrawRoute: LuckyDrawRoute,
   MyOrdersRoute: MyOrdersRoute,
   OrderRoute: OrderRoute,
+  PayfastResultRoute: PayfastResultRoute,
   ProAccountsRoute: ProAccountsRoute,
   ReceiptRoute: ReceiptRoute,
   ReferRoute: ReferRoute,
