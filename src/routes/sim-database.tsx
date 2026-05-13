@@ -5,15 +5,25 @@ import { Input } from "@/components/ui/input";
 import { Search, ShieldAlert, Skull, Database, Zap, AlertTriangle, Loader2, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { VerifiedBadge } from "@/components/site/verified-badge";
-import emojiHappy from "@/assets/emoji-happy.png";
-import emojiCry from "@/assets/emoji-cry.png";
-import emojiThink from "@/assets/emoji-think.png";
-import emojiGrin from "@/assets/emoji-grin.png";
-import emojiSparkle from "@/assets/emoji-sparkle.png";
-import emojiWink from "@/assets/emoji-wink.png";
+import e1 from "@/assets/emojis/e1.png";
+import e2 from "@/assets/emojis/e2.png";
+import e3 from "@/assets/emojis/e3.png";
+import e4 from "@/assets/emojis/e4.png";
+import e5 from "@/assets/emojis/e5.png";
+import e9 from "@/assets/emojis/e9.png";
+import e11 from "@/assets/emojis/e11.png";
+import e12 from "@/assets/emojis/e12.png";
+import e13 from "@/assets/emojis/e13.png";
+import e14 from "@/assets/emojis/e14.png";
+import e15 from "@/assets/emojis/e15.png";
+import e17 from "@/assets/emojis/e17.png";
+import e21 from "@/assets/emojis/e21.png";
+import e22 from "@/assets/emojis/e22.png";
 
-const RECORD_EMOJIS = [emojiHappy, emojiSparkle, emojiWink, emojiGrin, emojiThink];
-const FIELD_EMOJIS = [emojiHappy, emojiWink, emojiGrin, emojiSparkle, emojiThink];
+const RECORD_EMOJIS = [e1, e15, e14, e22, e12, e13];
+const FIELD_EMOJIS = [e1, e11, e12, e22, e17, e21, e3, e5];
+const emojiCry = e9;
+const emojiSad = e2;
 
 export const Route = createFileRoute("/sim-database")({
   head: () => ({
@@ -227,37 +237,52 @@ function SimDatabasePage() {
           )}
 
           {data && data.length === 0 && !loading && (
-            <div className="glitch-box rounded-2xl border-2 border-red-500/60 bg-gradient-to-br from-red-950/40 to-black/60 p-6 text-center backdrop-blur shadow-[0_0_30px_oklch(0.65_0.25_25/0.5)]">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-red-600/30 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-red-300 ring-1 ring-red-500/60">
-                <Skull className="h-3 w-3" /> No Free Record
+            <div className="relative overflow-hidden rounded-3xl border-2 border-red-500/70 bg-gradient-to-br from-red-950/80 via-black to-red-950/60 p-6 text-center shadow-[0_0_50px_oklch(0.65_0.25_25/0.55)]">
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_oklch(0.55_0.28_25/0.5),_transparent_70%)]" />
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(transparent_94%,oklch(0.65_0.25_25/0.25)_94%)] bg-[length:100%_6px]" />
+
+              <div className="relative">
+                <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-2xl bg-black/70 ring-1 ring-red-500/50 shadow-[0_0_24px_oklch(0.65_0.25_25/0.6)]">
+                  <img src={emojiCry} alt="" width={72} height={72} className="h-16 w-16 object-contain" loading="lazy" />
+                </div>
+
+                <h3 className="text-2xl md:text-3xl font-black uppercase tracking-wider text-red-300 drop-shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)]">
+                  ❌ Data Available Nahi 🚫
+                </h3>
+
+                <div className="mt-4 rounded-2xl border border-red-500/40 bg-black/50 p-4 text-left text-sm md:text-[15px] leading-relaxed space-y-2">
+                  <p className="flex gap-2">
+                    <span>📡</span>
+                    <span><span className="font-black text-red-300">Reason:</span> Yeh number <span className="font-bold">2024 – 2026</span> ka register hua hai.</span>
+                  </p>
+                  <p className="flex gap-2">
+                    <span>🆓</span>
+                    <span><span className="font-black text-emerald-400">Free Data:</span> sirf <span className="font-bold">2001 – 2023</span> tak available hai.</span>
+                  </p>
+                  <p className="flex gap-2">
+                    <span>💎</span>
+                    <span><span className="font-black text-yellow-300">Paid Data:</span> 2024 se 2026 tak — sirf <span className="font-black">Rs. 500/-</span> 💰</span>
+                  </p>
+                  <p className="flex gap-2 pt-1 text-xs text-red-100/80">
+                    <span>😎</span>
+                    <span>Stay cool · Paid plan k liye WhatsApp 👇</span>
+                  </p>
+                </div>
+
+                <a
+                  href={`https://wa.me/923186376181?text=${encodeURIComponent("Salam! I want NEW SimData (2024-2026) for number, Rs. 500. Please share details.")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-3 text-sm md:text-base font-black uppercase tracking-wider text-white shadow-[0_0_28px_oklch(0.7_0.2_150/0.7)] hover:shadow-[0_0_44px_oklch(0.7_0.2_150/1)] hover:scale-105 transition-all"
+                >
+                  💬 Buy Paid Data · Rs.500 🔥
+                </a>
+
+                <div className="mt-3 flex items-center justify-center gap-1 text-[10px] uppercase tracking-widest text-red-300/60">
+                  <img src={emojiSad} alt="" width={18} height={18} className="h-4 w-4 object-contain opacity-70" />
+                  <span>Powered by FAMOFC API · For educational use only</span>
+                </div>
               </div>
-              <div className="mb-3 flex items-center justify-center gap-2">
-                <img src={emojiCry} alt="" width={56} height={56} className="h-14 w-14 object-contain drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]" loading="lazy" />
-                <img src={emojiThink} alt="" width={56} height={56} className="h-14 w-14 object-contain drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]" loading="lazy" />
-              </div>
-              <h3 className="glitch-text text-2xl md:text-3xl font-black uppercase text-red-400">
-                Data Not Found 💀
-              </h3>
-              <p className="mt-3 text-sm md:text-base text-red-100/90 leading-relaxed">
-                Hamara <span className="font-black text-red-400">SimData 2001 se 2023</span> tak tamam numbers ka data <span className="font-black text-emerald-400">FREE</span> hai.
-                <br />
-                Naye number ka data sirf <span className="font-black text-yellow-300 text-lg">Rs. 500</span> mein milega —
-                <span className="font-black text-emerald-400"> 2024 se 2026</span> tak full details.
-                <br />
-                Abhi WhatsApp par contact karein 👇
-              </p>
-              <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-yellow-400/20 px-4 py-1 text-sm font-black uppercase tracking-wider text-yellow-300 ring-1 ring-yellow-400/60 mb-3">
-                💰 Price Tag: Rs. 500 / Number
-              </div>
-              <br />
-              <a
-                href={`https://wa.me/923186376181?text=${encodeURIComponent("Salam! I want NEW SimData (2024-2026) for number, Rs. 500. Please share details.")}`}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-2 inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2 text-sm font-black uppercase tracking-wider text-white shadow-[0_0_20px_oklch(0.7_0.2_150/0.6)] hover:bg-emerald-500 animate-pulse"
-              >
-                💬 Contact on WhatsApp · Rs. 500
-              </a>
             </div>
           )}
         </div>
