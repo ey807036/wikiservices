@@ -15,6 +15,7 @@ import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ReferRouteImport } from './routes/refer'
 import { Route as ReceiptRouteImport } from './routes/receipt'
 import { Route as ProAccountsRouteImport } from './routes/pro-accounts'
+import { Route as PayfastResultRouteImport } from './routes/payfast-result'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as MyOrdersRouteImport } from './routes/my-orders'
 import { Route as LuckyDrawRouteImport } from './routes/lucky-draw'
@@ -36,6 +37,7 @@ import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as ApiPublicSimRouteImport } from './routes/api/public/sim'
+import { Route as ApiPublicPayfastCallbackRouteImport } from './routes/api/public/payfast-callback'
 
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
@@ -65,6 +67,11 @@ const ReceiptRoute = ReceiptRouteImport.update({
 const ProAccountsRoute = ProAccountsRouteImport.update({
   id: '/pro-accounts',
   path: '/pro-accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PayfastResultRoute = PayfastResultRouteImport.update({
+  id: '/payfast-result',
+  path: '/payfast-result',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrderRoute = OrderRouteImport.update({
@@ -172,6 +179,12 @@ const ApiPublicSimRoute = ApiPublicSimRouteImport.update({
   path: '/api/public/sim',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPayfastCallbackRoute =
+  ApiPublicPayfastCallbackRouteImport.update({
+    id: '/api/public/payfast-callback',
+    path: '/api/public/payfast-callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -184,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
+  '/payfast-result': typeof PayfastResultRoute
   '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
   '/refer': typeof ReferRoute
@@ -200,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
 export interface FileRoutesByTo {
@@ -212,6 +227,7 @@ export interface FileRoutesByTo {
   '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
+  '/payfast-result': typeof PayfastResultRoute
   '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
   '/refer': typeof ReferRoute
@@ -228,6 +244,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
 export interface FileRoutesById {
@@ -242,6 +259,7 @@ export interface FileRoutesById {
   '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
+  '/payfast-result': typeof PayfastResultRoute
   '/pro-accounts': typeof ProAccountsRoute
   '/receipt': typeof ReceiptRoute
   '/refer': typeof ReferRoute
@@ -258,6 +276,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
 export interface FileRouteTypes {
@@ -273,6 +292,7 @@ export interface FileRouteTypes {
     | '/lucky-draw'
     | '/my-orders'
     | '/order'
+    | '/payfast-result'
     | '/pro-accounts'
     | '/receipt'
     | '/refer'
@@ -289,6 +309,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/products/$slug'
     | '/admin/'
+    | '/api/public/payfast-callback'
     | '/api/public/sim'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -301,6 +322,7 @@ export interface FileRouteTypes {
     | '/lucky-draw'
     | '/my-orders'
     | '/order'
+    | '/payfast-result'
     | '/pro-accounts'
     | '/receipt'
     | '/refer'
@@ -317,6 +339,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/products/$slug'
     | '/admin'
+    | '/api/public/payfast-callback'
     | '/api/public/sim'
   id:
     | '__root__'
@@ -330,6 +353,7 @@ export interface FileRouteTypes {
     | '/lucky-draw'
     | '/my-orders'
     | '/order'
+    | '/payfast-result'
     | '/pro-accounts'
     | '/receipt'
     | '/refer'
@@ -346,6 +370,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/products/$slug'
     | '/admin/'
+    | '/api/public/payfast-callback'
     | '/api/public/sim'
   fileRoutesById: FileRoutesById
 }
@@ -360,6 +385,7 @@ export interface RootRouteChildren {
   LuckyDrawRoute: typeof LuckyDrawRoute
   MyOrdersRoute: typeof MyOrdersRoute
   OrderRoute: typeof OrderRoute
+  PayfastResultRoute: typeof PayfastResultRoute
   ProAccountsRoute: typeof ProAccountsRoute
   ReceiptRoute: typeof ReceiptRoute
   ReferRoute: typeof ReferRoute
@@ -367,6 +393,7 @@ export interface RootRouteChildren {
   SimDatabaseRoute: typeof SimDatabaseRoute
   WishlistRoute: typeof WishlistRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
+  ApiPublicPayfastCallbackRoute: typeof ApiPublicPayfastCallbackRoute
   ApiPublicSimRoute: typeof ApiPublicSimRoute
 }
 
@@ -412,6 +439,13 @@ declare module '@tanstack/react-router' {
       path: '/pro-accounts'
       fullPath: '/pro-accounts'
       preLoaderRoute: typeof ProAccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payfast-result': {
+      id: '/payfast-result'
+      path: '/payfast-result'
+      fullPath: '/payfast-result'
+      preLoaderRoute: typeof PayfastResultRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/order': {
@@ -561,6 +595,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicSimRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/payfast-callback': {
+      id: '/api/public/payfast-callback'
+      path: '/api/public/payfast-callback'
+      fullPath: '/api/public/payfast-callback'
+      preLoaderRoute: typeof ApiPublicPayfastCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -601,6 +642,7 @@ const rootRouteChildren: RootRouteChildren = {
   LuckyDrawRoute: LuckyDrawRoute,
   MyOrdersRoute: MyOrdersRoute,
   OrderRoute: OrderRoute,
+  PayfastResultRoute: PayfastResultRoute,
   ProAccountsRoute: ProAccountsRoute,
   ReceiptRoute: ReceiptRoute,
   ReferRoute: ReferRoute,
@@ -608,18 +650,9 @@ const rootRouteChildren: RootRouteChildren = {
   SimDatabaseRoute: SimDatabaseRoute,
   WishlistRoute: WishlistRoute,
   ProductsSlugRoute: ProductsSlugRoute,
+  ApiPublicPayfastCallbackRoute: ApiPublicPayfastCallbackRoute,
   ApiPublicSimRoute: ApiPublicSimRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
