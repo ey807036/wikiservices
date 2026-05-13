@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Crown, ShieldAlert } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Crown, ShieldAlert, X } from "lucide-react";
+import { PayfastCheckout } from "@/components/site/payfast-checkout";
 
 export const Route = createFileRoute("/pro-accounts")({ component: ProAccountsPage });
 
@@ -44,6 +46,7 @@ const ACCOUNTS: Acc[] = [
 const CATEGORIES = ["Streaming", "Editing", "AI Tools", "Social", "Other"];
 
 function ProAccountsPage() {
+  const [picked, setPicked] = useState<Acc | null>(null);
   return (
     <div className="container mx-auto max-w-4xl px-4 py-10">
       <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
@@ -88,12 +91,11 @@ function ProAccountsPage() {
               </h2>
               <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
                 {list.map((a) => (
-                  <a
+                  <button
                     key={a.name}
-                    href={waLink(`Salam! I want to BUY: ${a.name} (Pro Account · Rs. 100). Please confirm.`)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group flex items-center justify-between rounded-2xl border-2 border-amber-500/30 bg-background/60 p-3 transition hover:border-amber-400 hover:bg-amber-500/10 hover:scale-[1.03]"
+                    type="button"
+                    onClick={() => setPicked(a)}
+                    className="group flex items-center justify-between rounded-2xl border-2 border-amber-500/30 bg-background/60 p-3 transition hover:border-amber-400 hover:bg-amber-500/10 hover:scale-[1.03] text-left"
                   >
                     <span className="flex items-center gap-2.5">
                       <span className={`grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br ${a.color} text-lg shadow-md ring-1 ring-white/20`}>
@@ -109,7 +111,7 @@ function ProAccountsPage() {
                     <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400 group-hover:text-emerald-300">
                       Buy →
                     </span>
-                  </a>
+                  </button>
                 ))}
               </div>
             </div>
