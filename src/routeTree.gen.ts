@@ -17,6 +17,7 @@ import { Route as ReceiptRouteImport } from './routes/receipt'
 import { Route as ProAccountsRouteImport } from './routes/pro-accounts'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as MyOrdersRouteImport } from './routes/my-orders'
+import { Route as LuckyDrawRouteImport } from './routes/lucky-draw'
 import { Route as FakeWhatsappRouteImport } from './routes/fake-whatsapp'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
@@ -74,6 +75,11 @@ const OrderRoute = OrderRouteImport.update({
 const MyOrdersRoute = MyOrdersRouteImport.update({
   id: '/my-orders',
   path: '/my-orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LuckyDrawRoute = LuckyDrawRouteImport.update({
+  id: '/lucky-draw',
+  path: '/lucky-draw',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FakeWhatsappRoute = FakeWhatsappRouteImport.update({
@@ -175,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/fake-whatsapp': typeof FakeWhatsappRoute
+  '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
   '/pro-accounts': typeof ProAccountsRoute
@@ -202,6 +209,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/fake-whatsapp': typeof FakeWhatsappRoute
+  '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
   '/pro-accounts': typeof ProAccountsRoute
@@ -231,6 +239,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/fake-whatsapp': typeof FakeWhatsappRoute
+  '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
   '/pro-accounts': typeof ProAccountsRoute
@@ -261,6 +270,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/fake-whatsapp'
+    | '/lucky-draw'
     | '/my-orders'
     | '/order'
     | '/pro-accounts'
@@ -288,6 +298,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/fake-whatsapp'
+    | '/lucky-draw'
     | '/my-orders'
     | '/order'
     | '/pro-accounts'
@@ -316,6 +327,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/fake-whatsapp'
+    | '/lucky-draw'
     | '/my-orders'
     | '/order'
     | '/pro-accounts'
@@ -345,6 +357,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   FakeWhatsappRoute: typeof FakeWhatsappRoute
+  LuckyDrawRoute: typeof LuckyDrawRoute
   MyOrdersRoute: typeof MyOrdersRoute
   OrderRoute: typeof OrderRoute
   ProAccountsRoute: typeof ProAccountsRoute
@@ -413,6 +426,13 @@ declare module '@tanstack/react-router' {
       path: '/my-orders'
       fullPath: '/my-orders'
       preLoaderRoute: typeof MyOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lucky-draw': {
+      id: '/lucky-draw'
+      path: '/lucky-draw'
+      fullPath: '/lucky-draw'
+      preLoaderRoute: typeof LuckyDrawRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/fake-whatsapp': {
@@ -578,6 +598,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   FakeWhatsappRoute: FakeWhatsappRoute,
+  LuckyDrawRoute: LuckyDrawRoute,
   MyOrdersRoute: MyOrdersRoute,
   OrderRoute: OrderRoute,
   ProAccountsRoute: ProAccountsRoute,

@@ -107,9 +107,10 @@ function SimDatabasePage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-black text-white">
       {/* Danger animated background */}
       <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_oklch(0.55_0.25_25/0.35),_transparent_60%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(transparent_95%,oklch(0.65_0.25_25/0.25)_95%)] bg-[length:100%_8px] animate-pulse" />
         <div className="absolute -left-20 top-1/4 h-72 w-72 rounded-full bg-red-600/20 blur-3xl animate-pulse" />
@@ -250,23 +251,23 @@ function SimDatabasePage() {
                   ❌ Data Available Nahi 🚫
                 </h3>
 
-                <div className="mt-4 rounded-2xl border border-red-500/40 bg-black/50 p-4 text-left text-sm md:text-[15px] leading-relaxed space-y-2">
-                  <p className="flex gap-2">
-                    <span>📡</span>
-                    <span><span className="font-black text-red-300">Reason:</span> Yeh number <span className="font-bold">2024 – 2026</span> ka register hua hai.</span>
-                  </p>
-                  <p className="flex gap-2">
-                    <span>🆓</span>
-                    <span><span className="font-black text-emerald-400">Free Data:</span> sirf <span className="font-bold">2001 – 2023</span> tak available hai.</span>
-                  </p>
-                  <p className="flex gap-2">
-                    <span>💎</span>
-                    <span><span className="font-black text-yellow-300">Paid Data:</span> 2024 se 2026 tak — sirf <span className="font-black">Rs. 500/-</span> 💰</span>
-                  </p>
-                  <p className="flex gap-2 pt-1 text-xs text-red-100/80">
-                    <span>😎</span>
-                    <span>Stay cool · Paid plan k liye WhatsApp 👇</span>
-                  </p>
+                <div className="mt-4 rounded-2xl border border-red-500/40 bg-black/70 p-4 text-left text-sm md:text-[15px] leading-relaxed space-y-3">
+                  <div className="flex items-start gap-3">
+                    <img src={e11} alt="" width={28} height={28} className="h-7 w-7 shrink-0 object-contain" loading="lazy" />
+                    <p className="min-w-0 flex-1"><span className="font-black text-red-300">Reason:</span> Yeh number <span className="font-bold">2024 – 2026</span> ka register hua hai, isliye free database mein available nahi hai.</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <img src={e3} alt="" width={28} height={28} className="h-7 w-7 shrink-0 object-contain" loading="lazy" />
+                    <p className="min-w-0 flex-1"><span className="font-black text-emerald-400">Free Data:</span> sirf <span className="font-bold">2001 – 2023</span> tak available hai. Purane numbers free try karein.</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <img src={e4} alt="" width={28} height={28} className="h-7 w-7 shrink-0 object-contain" loading="lazy" />
+                    <p className="min-w-0 flex-1"><span className="font-black text-yellow-300">Paid Data:</span> 2024 – 2026 ka full record sirf <span className="font-black">Rs. 500/-</span> mein milta hai 💰</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <img src={e5} alt="" width={24} height={24} className="h-6 w-6 shrink-0 object-contain opacity-90" loading="lazy" />
+                    <p className="min-w-0 flex-1 text-xs text-red-100/80">Stay cool · Paid plan ke liye neeche WhatsApp button dabayein 👇</p>
+                  </div>
                 </div>
 
                 <a
