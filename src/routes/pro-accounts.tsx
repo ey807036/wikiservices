@@ -141,6 +141,7 @@ function ProAccountsPage() {
               purpose={`Pro Account: ${picked.name}`}
               basketPrefix="PRO"
               buttonLabel={`Pay Rs.101 · ${picked.name}`}
+              whatsappAfter={waLink(`Salam! Payment done for Pro Account: ${picked.name} (Rs. 100). Please deliver login details.`)}
             />
             <a
               href={waLink(`Salam! I want to BUY: ${picked.name} (Pro Account · Rs. 100). Please confirm.`)}
