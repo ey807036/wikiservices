@@ -5,15 +5,25 @@ import { Input } from "@/components/ui/input";
 import { Search, ShieldAlert, Skull, Database, Zap, AlertTriangle, Loader2, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { VerifiedBadge } from "@/components/site/verified-badge";
-import emojiHappy from "@/assets/emoji-happy.png";
-import emojiCry from "@/assets/emoji-cry.png";
-import emojiThink from "@/assets/emoji-think.png";
-import emojiGrin from "@/assets/emoji-grin.png";
-import emojiSparkle from "@/assets/emoji-sparkle.png";
-import emojiWink from "@/assets/emoji-wink.png";
+import e1 from "@/assets/emojis/e1.png";
+import e2 from "@/assets/emojis/e2.png";
+import e3 from "@/assets/emojis/e3.png";
+import e4 from "@/assets/emojis/e4.png";
+import e5 from "@/assets/emojis/e5.png";
+import e9 from "@/assets/emojis/e9.png";
+import e11 from "@/assets/emojis/e11.png";
+import e12 from "@/assets/emojis/e12.png";
+import e13 from "@/assets/emojis/e13.png";
+import e14 from "@/assets/emojis/e14.png";
+import e15 from "@/assets/emojis/e15.png";
+import e17 from "@/assets/emojis/e17.png";
+import e21 from "@/assets/emojis/e21.png";
+import e22 from "@/assets/emojis/e22.png";
 
-const RECORD_EMOJIS = [emojiHappy, emojiSparkle, emojiWink, emojiGrin, emojiThink];
-const FIELD_EMOJIS = [emojiHappy, emojiWink, emojiGrin, emojiSparkle, emojiThink];
+const RECORD_EMOJIS = [e1, e15, e14, e22, e12, e13];
+const FIELD_EMOJIS = [e1, e11, e12, e22, e17, e21, e3, e5];
+const emojiCry = e9;
+const emojiSad = e2;
 
 export const Route = createFileRoute("/sim-database")({
   head: () => ({
