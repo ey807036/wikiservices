@@ -31,10 +31,10 @@ const waLink = (msg: string) => `https://wa.me/${ADMIN_WA}?text=${encodeURICompo
 const HACKS: Hack[] = [
   { icon: MessageCircle, name: "Fake WhatsApp Number", desc: "Anonymous WhatsApp numbers — pick & chat instantly", priceNum: 150, sold: 2000, hot: true, action: "fakewa" },
   { icon: Crown,         name: "Pro Accounts by Wiki", desc: "Netflix, CapCut Pro, Remini, Spotify, ChatGPT+, Canva & 20+ premium accounts", priceNum: 100, sold: 8200, hot: true, action: "pro" },
-  { icon: Database,      name: "New SimData by Wiki",   desc: "Fresh 2024–2026 SIM owner data lookup (paid)", priceNum: 500, sold: 4500, hot: true, href: waLink("Salam! I want to buy 'New SimData by Wiki' (Rs. 500). Please share details.") },
+  { icon: Database,      name: "New SimData by Wiki",   desc: "Fresh 2024–2026 SIM owner data lookup (paid)", priceNum: 500, sold: 4500, hot: true },
   { icon: Wifi,          name: "WiFi Jammer",           desc: "Block any WiFi signal in range", priceNum: 5000, sold: 87, hot: true },
   { icon: Skull,         name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Bulb & more", priceNum: 5000, sold: 42 },
-  { icon: IdCard,        name: "CNIC Colour Copy + Family Details", desc: "Full colour CNIC copy plus complete family record", priceNum: 5000, sold: 500, href: waLink("Salam! I want 'CNIC Colour Copy + Family Details' (Rs. 5000). Please share details.") },
+  { icon: IdCard,        name: "CNIC Colour Copy + Family Details", desc: "Full colour CNIC copy plus complete family record", priceNum: 5000, sold: 500 },
   { icon: Bluetooth,     name: "Bluetooth Jammer",      desc: "Kill nearby Bluetooth devices", priceNum: 10000, sold: 64 },
   { icon: Smartphone,    name: "SIM Signal Jammer",     desc: "Block all SIM / mobile network signals in range", priceNum: 50000, sold: 1 },
   { icon: Camera,        name: "Drone Jammer & Controller", desc: "Jam, hijack & take control of nearby camera drones", priceNum: 50000, sold: 3 },
@@ -181,14 +181,16 @@ function Home() {
                         Browse <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                       </Button>
                     </Link>
-                  ) : h.href ? (
-                    <a href={h.href} target="_blank" rel="noreferrer" className="mt-3 block">
-                      <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
-                        Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-                      </Button>
-                    </a>
                   ) : (
-                    <Link to="/order" search={{ item: h.name }} className="mt-3 block">
+                    <Link
+                      to="/order"
+                      search={{
+                        item: h.name,
+                        price: h.priceNum,
+                        wa: waLink(`Salam! Payment done for: ${h.name} (Rs. ${h.priceNum}). Please process my order.`),
+                      }}
+                      className="mt-3 block"
+                    >
                       <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
                         Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                       </Button>

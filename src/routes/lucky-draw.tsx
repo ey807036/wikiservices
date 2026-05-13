@@ -127,9 +127,16 @@ function LuckyDrawPage() {
 
         {/* PayFast Deposit */}
         <div className="mx-auto mt-6 max-w-xl">
-          <PayfastCheckout amount={1} purpose="Lucky Draw Entry" basketPrefix="LUCKY" buttonLabel="Join Lucky Draw · Pay Rs.2" />
+          <PayfastCheckout
+            amount={1}
+            purpose="Lucky Draw Entry"
+            basketPrefix="LUCKY"
+            buttonLabel="Join Lucky Draw · Pay Rs.2"
+            requireAuth
+            whatsappAfter={`https://wa.me/923186376181?text=${encodeURIComponent("Salam! I joined the Rs.1 Lucky Draw. Please confirm my entry.")}`}
+          />
           <p className="mt-2 text-center text-[10px] uppercase tracking-widest text-red-200/50">
-            Approve hote hi auto confirm — entry list mae add ho jaye gae
+            Login → Pay → entry auto save · Order History mae record bhe save ho jaye gae
           </p>
         </div>
 

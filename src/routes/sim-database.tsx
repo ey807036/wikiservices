@@ -273,7 +273,13 @@ function SimDatabasePage() {
 
                 <div className="mt-5 space-y-3">
                   <div className="mx-auto max-w-md text-left">
-                    <PayfastCheckout amount={500} purpose="SIM Data 2024-2026" basketPrefix="SIM" buttonLabel="Pay Rs.501 · Unlock Data" />
+                    <PayfastCheckout
+                      amount={500}
+                      purpose={`SIM Data 2024-2026 · ${number}`}
+                      basketPrefix="SIM"
+                      buttonLabel="Pay Rs.501 · Unlock Data"
+                      whatsappAfter={`https://wa.me/923186376181?text=${encodeURIComponent(`Salam! Payment done for NEW SimData (2024-2026) of number ${number}. Please share details.`)}`}
+                    />
                   </div>
                   <a
                     href={`https://wa.me/923186376181?text=${encodeURIComponent("Salam! I want NEW SimData (2024-2026) for number, Rs. 500. Please share details.")}`}
