@@ -181,14 +181,16 @@ function Home() {
                         Browse <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                       </Button>
                     </Link>
-                  ) : h.href ? (
-                    <a href={h.href} target="_blank" rel="noreferrer" className="mt-3 block">
-                      <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
-                        Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-                      </Button>
-                    </a>
                   ) : (
-                    <Link to="/order" search={{ item: h.name }} className="mt-3 block">
+                    <Link
+                      to="/order"
+                      search={{
+                        item: h.name,
+                        price: h.priceNum,
+                        wa: waLink(`Salam! Payment done for: ${h.name} (Rs. ${h.priceNum}). Please process my order.`),
+                      }}
+                      className="mt-3 block"
+                    >
                       <Button size="sm" variant="cool" className="btn-neon mt-1 rounded-full px-5">
                         Buy Now <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                       </Button>
