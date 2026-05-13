@@ -2,8 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Coins, Trophy, Clock, Sparkles, ShieldAlert } from "lucide-react";
+import { Coins, Trophy, Clock, ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
+import { PayfastCheckout } from "@/components/site/payfast-checkout";
 import e1 from "@/assets/emojis/e1.png";
 import e4 from "@/assets/emojis/e4.png";
 import e12 from "@/assets/emojis/e12.png";
@@ -146,35 +147,13 @@ function LuckyDrawPage() {
           ))}
         </div>
 
-        {/* Form */}
-        <form onSubmit={submit} className="mx-auto mt-6 max-w-xl rounded-2xl border-2 border-red-500/50 bg-card/70 p-5 backdrop-blur space-y-3 shadow-[0_0_30px_oklch(0.65_0.25_25/0.4)]">
-          <h3 className="flex items-center gap-2 text-base font-black uppercase tracking-widest text-yellow-300">
-            <Sparkles className="h-4 w-4" /> Rs.1 Deposit & Join
-          </h3>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Input placeholder="Apna Naam" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="bg-background/60 border-red-500/40" />
-            <Input placeholder="Mobile Number" inputMode="numeric" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="bg-background/60 border-red-500/40" />
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <select
-              value={form.method}
-              onChange={(e) => setForm({ ...form, method: e.target.value })}
-              className="h-9 rounded-md border border-red-500/40 bg-background/60 px-3 text-sm"
-            >
-              <option value="easypaisa">Easypaisa</option>
-              <option value="jazzcash">JazzCash</option>
-              <option value="bank">Pak Bank Transfer</option>
-              <option value="card">Debit / Credit Card</option>
-            </select>
-            <Input placeholder="Transaction ID / Ref" value={form.txn} onChange={(e) => setForm({ ...form, txn: e.target.value })} className="bg-background/60 border-red-500/40" />
-          </div>
-          <div className="rounded-lg bg-black/60 p-3 text-xs text-red-100/80 ring-1 ring-red-500/30">
-            <b className="text-yellow-300">Payment Account:</b> Easypaisa / JazzCash <b>0318-6376181</b> · Amount <b>Rs. 1</b> bhejein, phir transaction ID upar likhein.
-          </div>
-          <Button type="submit" className="w-full h-12 bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_20px_oklch(0.65_0.25_25/0.7)]">
-            <Coins className="h-4 w-4 mr-1" /> Join Now · Rs.1 💰
-          </Button>
-        </form>
+        {/* PayFast Deposit */}
+        <div className="mx-auto mt-6 max-w-xl">
+          <PayfastCheckout amount={1} purpose="Lucky Draw Entry" basketPrefix="LUCKY" buttonLabel="Join Lucky Draw · Pay Rs.2" />
+          <p className="mt-2 text-center text-[10px] uppercase tracking-widest text-red-200/50">
+            Approve hote hi auto confirm — entry list mae add ho jaye gae
+          </p>
+        </div>
 
         {/* Winner / Entries */}
         {winner && (
