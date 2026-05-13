@@ -48,7 +48,6 @@ function LuckyDrawPage() {
   const { h, m, s } = useCountdown();
   const [entries, setEntries] = useState<Entry[]>([]);
   const [winner, setWinner] = useState<Entry | null>(null);
-  const [form, setForm] = useState({ name: "", phone: "", method: "easypaisa", txn: "" });
 
   useEffect(() => {
     try {
@@ -58,27 +57,6 @@ function LuckyDrawPage() {
       if (w) setWinner(JSON.parse(w));
     } catch {}
   }, []);
-
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name.trim() || !form.phone.trim() || !form.txn.trim()) {
-      toast.error("Sab fields zaroori hain");
-      return;
-    }
-    const entry: Entry = {
-      id: crypto.randomUUID(),
-      name: form.name.trim(),
-      phone: form.phone.trim(),
-      method: form.method,
-      txn: form.txn.trim(),
-      ts: Date.now(),
-    };
-    const next = [entry, ...entries].slice(0, 500);
-    setEntries(next);
-    localStorage.setItem("lucky_entries", JSON.stringify(next));
-    setForm({ name: "", phone: "", method: form.method, txn: "" });
-    toast.success("Aap shamil ho gaye 🎉 — 10 PM ko result aayega");
-  };
 
   const pickWinner = () => {
     if (!entries.length) return;
