@@ -201,7 +201,7 @@ function SimDatabasePage() {
                 return (
                 <div
                   key={i}
-                  className="rounded-2xl border-2 border-red-500/40 bg-gradient-to-br from-card/90 to-card/60 p-5 backdrop-blur shadow-[0_0_22px_oklch(0.65_0.25_25/0.35)]"
+                  className="rounded-2xl border-2 border-red-500/60 bg-black/90 p-5 backdrop-blur shadow-[0_0_28px_oklch(0.65_0.25_25/0.55)]"
                 >
                   <div className="mb-3 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-red-400">
@@ -223,7 +223,7 @@ function SimDatabasePage() {
                     {Object.entries(rec).map(([k, v], fi) => {
                       const lineEmoji = FIELD_EMOJIS[(fi + i) % FIELD_EMOJIS.length];
                       return (
-                        <div key={k} className="flex items-start gap-2 rounded-lg bg-background/60 px-3 py-2 ring-1 ring-red-500/20">
+                        <div key={k} className="flex items-start gap-2 rounded-lg bg-black/70 px-3 py-2 ring-1 ring-red-500/40 shadow-[0_0_12px_oklch(0.65_0.25_25/0.25)]">
                           <img src={lineEmoji} alt="" width={28} height={28} className="mt-0.5 h-7 w-7 shrink-0 object-contain" loading="lazy" />
                           <div className="min-w-0 flex-1">
                             <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{k}</div>

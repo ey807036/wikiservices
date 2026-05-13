@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Crown, ShieldAlert } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Crown, ShieldAlert, X } from "lucide-react";
+import { PayfastCheckout } from "@/components/site/payfast-checkout";
 
 export const Route = createFileRoute("/pro-accounts")({ component: ProAccountsPage });
 
@@ -44,6 +46,7 @@ const ACCOUNTS: Acc[] = [
 const CATEGORIES = ["Streaming", "Editing", "AI Tools", "Social", "Other"];
 
 function ProAccountsPage() {
+  const [picked, setPicked] = useState<Acc | null>(null);
   return (
     <div className="container mx-auto max-w-4xl px-4 py-10">
       <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
@@ -88,12 +91,11 @@ function ProAccountsPage() {
               </h2>
               <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
                 {list.map((a) => (
-                  <a
+                  <button
                     key={a.name}
-                    href={waLink(`Salam! I want to BUY: ${a.name} (Pro Account · Rs. 100). Please confirm.`)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group flex items-center justify-between rounded-2xl border-2 border-amber-500/30 bg-background/60 p-3 transition hover:border-amber-400 hover:bg-amber-500/10 hover:scale-[1.03]"
+                    type="button"
+                    onClick={() => setPicked(a)}
+                    className="group flex items-center justify-between rounded-2xl border-2 border-amber-500/30 bg-background/60 p-3 transition hover:border-amber-400 hover:bg-amber-500/10 hover:scale-[1.03] text-left"
                   >
                     <span className="flex items-center gap-2.5">
                       <span className={`grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br ${a.color} text-lg shadow-md ring-1 ring-white/20`}>
@@ -109,7 +111,7 @@ function ProAccountsPage() {
                     <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400 group-hover:text-emerald-300">
                       Buy →
                     </span>
-                  </a>
+                  </button>
                 ))}
               </div>
             </div>
@@ -120,6 +122,38 @@ function ProAccountsPage() {
           ⚡ All accounts come with warranty · Replacement guaranteed if any issue
         </p>
       </div>
+
+      {picked && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4 backdrop-blur" onClick={() => setPicked(null)}>
+          <div className="w-full max-w-md rounded-2xl border-2 border-amber-400/60 bg-black p-5 shadow-[0_0_40px_oklch(0.85_0.18_85/0.4)]" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className={`grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br ${picked.color} text-lg ring-1 ring-white/20`}>{picked.emoji}</span>
+                <div>
+                  <div className="text-sm font-black text-amber-300">{picked.name}</div>
+                  <div className="text-[10px] uppercase tracking-widest text-amber-400">Rs. 100 · Pro Account</div>
+                </div>
+              </div>
+              <button onClick={() => setPicked(null)} className="rounded-full p-1.5 hover:bg-white/10"><X className="h-4 w-4" /></button>
+            </div>
+            <PayfastCheckout
+              amount={100}
+              purpose={`Pro Account: ${picked.name}`}
+              basketPrefix="PRO"
+              buttonLabel={`Pay Rs.101 · ${picked.name}`}
+            />
+            <a
+              href={waLink(`Salam! I want to BUY: ${picked.name} (Pro Account · Rs. 100). Please confirm.`)}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 block text-center text-[11px] uppercase tracking-widest text-emerald-400 underline"
+            >
+              Ya WhatsApp par order karein
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

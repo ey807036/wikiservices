@@ -1,11 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const PAYFAST_BASE = "https://ipguat.apps.net.pk/Ecommerce/api/Transaction";
-// Live: https://ipg1.apps.net.pk/Ecommerce/api/Transaction
-const CHECKOUT_URL = "https://ipguat.apps.net.pk/Ecommerce/api/Transaction/PostTransaction";
-
-const TAX = 1; // Rs.1 tax per transaction
+// LIVE production gateway (per merchant instructions)
+const CHECKOUT_URL = "https://ipg1.apps.net.pk/Ecommerce/api/Transaction/PostTransaction";
+const TAX = 1; // Rs.1 per transaction
 
 export const createPayfastCheckout = createServerFn({ method: "POST" })
   .inputValidator((d) =>
@@ -21,51 +19,36 @@ export const createPayfastCheckout = createServerFn({ method: "POST" })
       .parse(d)
   )
   .handler(async ({ data }) => {
-    const MERCHANT_ID = process.env.PAYFAST_MERCHANT_ID!;
-    const SECURED_KEY = process.env.PAYFAST_SECURED_KEY!;
-    const total = (Number(data.amount) + TAX).toFixed(2);
+    const MERCHANT_ID = process.env.PAYFAST_MERCHANT_ID || "25193";
+    const SECURED_KEY = process.env.PAYFAST_SECURED_KEY || "bVKzwCm0x7SoQbEk62WCaV";
 
-    // Step 1: Get access token
-    const params = new URLSearchParams({
+    const total = (Number(data.amount) + TAX).toFixed(2);
+    const orderId = data.basketId;
+
+    // Direct POST flow per PHP reference — no token pre-fetch.
+    const fields: Record<string, string> = {
       MERCHANT_ID,
       SECURED_KEY,
-      TXNAMT: total,
-      BASKET_ID: data.basketId,
-      CURRENCY_CODE: "PKR",
-    });
-
-    const tokenRes = await fetch(`${PAYFAST_BASE}/GetAccessToken`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params.toString(),
-    });
-    const tokenJson: any = await tokenRes.json().catch(() => ({}));
-    const ACCESS_TOKEN = tokenJson?.ACCESS_TOKEN || tokenJson?.access_token;
-    if (!ACCESS_TOKEN) {
-      return { ok: false as const, error: tokenJson?.ERROR_DESC || "Failed to get PayFast token", raw: tokenJson };
-    }
-
-    // Build form fields the browser will POST to PayFast checkout
-    const fields = {
-      CURRENCY_CODE: "PKR",
-      MERCHANT_ID,
       MERCHANT_NAME: "Muhammad Waqas Murtaza",
-      TOKEN: ACCESS_TOKEN,
-      SUCCESS_URL: `${getOrigin()}/api/public/payfast-callback?status=success&basket=${encodeURIComponent(data.basketId)}`,
-      FAILURE_URL: `${getOrigin()}/api/public/payfast-callback?status=failed&basket=${encodeURIComponent(data.basketId)}`,
-      CHECKOUT_URL: `${getOrigin()}/api/public/payfast-callback?status=ipn&basket=${encodeURIComponent(data.basketId)}`,
+      TXNAMT: total,
+      CURRENCY_CODE: "PKR",
+      ORDER_ID: orderId,
+      BASKET_ID: orderId,
+      DESC: data.purpose,
+      TXNDESC: data.purpose,
+      SUCCESS_URL: `${getOrigin()}/api/public/payfast-callback?status=success&basket=${encodeURIComponent(orderId)}`,
+      FAILURE_URL: `${getOrigin()}/api/public/payfast-callback?status=failed&basket=${encodeURIComponent(orderId)}`,
+      CHECKOUT_URL: `${getOrigin()}/api/public/payfast-callback?status=ipn&basket=${encodeURIComponent(orderId)}`,
       CUSTOMER_EMAIL_ADDRESS: data.customerEmail,
       CUSTOMER_MOBILE_NO: data.customerMobile,
-      TXNAMT: total,
-      BASKET_ID: data.basketId,
-      ORDER_DATE: new Date().toISOString(),
-      SIGNATURE: "RANDOM-STRING",
-      VERSION: "MERCHANT-CART-0.1",
-      TXNDESC: data.purpose,
+      TXNTYPE: "SALE",
       PROCCODE: "00",
       TRAN_TYPE: "ECOMM_PURCHASE",
+      VERSION: "MERCHANT-CART-0.1",
+      ORDER_DATE: new Date().toISOString(),
+      SIGNATURE: "RANDOM-STRING",
       STORE_ID: "",
-    } as Record<string, string>;
+    };
 
     return {
       ok: true as const,
@@ -77,6 +60,5 @@ export const createPayfastCheckout = createServerFn({ method: "POST" })
   });
 
 function getOrigin() {
-  // Best-effort origin for callback; PayFast accepts any reachable URL.
   return process.env.PUBLIC_BASE_URL || "https://wikiservices.lovable.app";
 }
