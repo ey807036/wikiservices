@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
+
 import { Coins, Trophy, Clock, ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
 import { PayfastCheckout } from "@/components/site/payfast-checkout";
