@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Search, ShieldAlert, Skull, Database, Zap, AlertTriangle, Loader2, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { VerifiedBadge } from "@/components/site/verified-badge";
+import { PayfastCheckout } from "@/components/site/payfast-checkout";
 import e1 from "@/assets/emojis/e1.png";
 import e2 from "@/assets/emojis/e2.png";
 import e3 from "@/assets/emojis/e3.png";
@@ -270,14 +271,19 @@ function SimDatabasePage() {
                   </div>
                 </div>
 
-                <a
-                  href={`https://wa.me/923186376181?text=${encodeURIComponent("Salam! I want NEW SimData (2024-2026) for number, Rs. 500. Please share details.")}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-3 text-sm md:text-base font-black uppercase tracking-wider text-white shadow-[0_0_28px_oklch(0.7_0.2_150/0.7)] hover:shadow-[0_0_44px_oklch(0.7_0.2_150/1)] hover:scale-105 transition-all"
-                >
-                  💬 Buy Paid Data · Rs.500 🔥
-                </a>
+                <div className="mt-5 space-y-3">
+                  <div className="mx-auto max-w-md text-left">
+                    <PayfastCheckout amount={500} purpose="SIM Data 2024-2026" basketPrefix="SIM" buttonLabel="Pay Rs.501 · Unlock Data" />
+                  </div>
+                  <a
+                    href={`https://wa.me/923186376181?text=${encodeURIComponent("Salam! I want NEW SimData (2024-2026) for number, Rs. 500. Please share details.")}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 px-5 py-2 text-xs font-black uppercase tracking-wider text-white shadow-[0_0_18px_oklch(0.7_0.2_150/0.7)]"
+                  >
+                    💬 WhatsApp pe baat karein
+                  </a>
+                </div>
 
                 <div className="mt-3 flex items-center justify-center gap-1 text-[10px] uppercase tracking-widest text-red-300/60">
                   <img src={emojiSad} alt="" width={18} height={18} className="h-4 w-4 object-contain opacity-70" />
