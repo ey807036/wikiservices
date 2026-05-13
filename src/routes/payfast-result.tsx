@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
+
 export const Route = createFileRoute("/payfast-result")({
   validateSearch: (s: Record<string, unknown>) => ({
     status: typeof s.status === "string" ? s.status : "unknown",

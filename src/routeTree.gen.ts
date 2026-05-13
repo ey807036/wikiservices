@@ -37,6 +37,7 @@ import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as ApiPublicSimRouteImport } from './routes/api/public/sim'
+import { Route as ApiPublicPayfastCallbackRouteImport } from './routes/api/public/payfast-callback'
 
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
@@ -178,6 +179,12 @@ const ApiPublicSimRoute = ApiPublicSimRouteImport.update({
   path: '/api/public/sim',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPayfastCallbackRoute =
+  ApiPublicPayfastCallbackRouteImport.update({
+    id: '/api/public/payfast-callback',
+    path: '/api/public/payfast-callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -207,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
 export interface FileRoutesByTo {
@@ -236,6 +244,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
 export interface FileRoutesById {
@@ -267,6 +276,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
 export interface FileRouteTypes {
@@ -299,6 +309,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/products/$slug'
     | '/admin/'
+    | '/api/public/payfast-callback'
     | '/api/public/sim'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -328,6 +339,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/products/$slug'
     | '/admin'
+    | '/api/public/payfast-callback'
     | '/api/public/sim'
   id:
     | '__root__'
@@ -358,6 +370,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/products/$slug'
     | '/admin/'
+    | '/api/public/payfast-callback'
     | '/api/public/sim'
   fileRoutesById: FileRoutesById
 }
@@ -380,6 +393,7 @@ export interface RootRouteChildren {
   SimDatabaseRoute: typeof SimDatabaseRoute
   WishlistRoute: typeof WishlistRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
+  ApiPublicPayfastCallbackRoute: typeof ApiPublicPayfastCallbackRoute
   ApiPublicSimRoute: typeof ApiPublicSimRoute
 }
 
@@ -581,6 +595,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicSimRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/payfast-callback': {
+      id: '/api/public/payfast-callback'
+      path: '/api/public/payfast-callback'
+      fullPath: '/api/public/payfast-callback'
+      preLoaderRoute: typeof ApiPublicPayfastCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -629,6 +650,7 @@ const rootRouteChildren: RootRouteChildren = {
   SimDatabaseRoute: SimDatabaseRoute,
   WishlistRoute: WishlistRoute,
   ProductsSlugRoute: ProductsSlugRoute,
+  ApiPublicPayfastCallbackRoute: ApiPublicPayfastCallbackRoute,
   ApiPublicSimRoute: ApiPublicSimRoute,
 }
 export const routeTree = rootRouteImport
