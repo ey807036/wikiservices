@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, MessageCircle, RefreshCw, ShieldAlert } from "lucide-react";
+import { ArrowLeft, MessageCircle, RefreshCw, ShieldAlert, X } from "lucide-react";
+import { PayfastCheckout } from "@/components/site/payfast-checkout";
 
 export const Route = createFileRoute("/fake-whatsapp")({ component: FakeWhatsAppPage });
 
@@ -27,6 +27,7 @@ function genMaskedNumbers(seed: number) {
 function FakeWhatsAppPage() {
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 99999) + 1);
   const numbers = useMemo(() => genMaskedNumbers(seed), [seed]);
+  const [picked, setPicked] = useState<string | null>(null);
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-10">
@@ -46,8 +47,8 @@ function FakeWhatsAppPage() {
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Pick any half-shown Pakistani number below — each one is{" "}
-          <span className="font-black text-amber-400">Rs. 150</span>. Tap a number to confirm
-          your pick on WhatsApp instantly.
+          <span className="font-black text-amber-400">Rs. 150</span>. Tap a number to pay
+          via PayFast and we'll deliver instantly.
         </p>
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -64,12 +65,11 @@ function FakeWhatsAppPage() {
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {numbers.map((n, i) => (
-            <a
+            <button
               key={`${n.masked}-${i}`}
-              href={waLink(`Salam! I want to BUY this Fake WhatsApp Number: ${n.masked} (Rs. 150). Please confirm.`)}
-              target="_blank"
-              rel="noreferrer"
-              className="group flex items-center justify-between rounded-2xl border-2 border-emerald-500/40 bg-background/60 px-4 py-4 transition hover:border-emerald-400 hover:bg-emerald-500/10 hover:scale-[1.02]"
+              type="button"
+              onClick={() => setPicked(n.masked)}
+              className="group flex items-center justify-between rounded-2xl border-2 border-emerald-500/40 bg-background/60 px-4 py-4 transition hover:border-emerald-400 hover:bg-emerald-500/10 hover:scale-[1.02] text-left"
             >
               <span className="flex items-center gap-2.5">
                 <span className="grid h-9 w-9 place-items-center rounded-full bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/40">
@@ -87,7 +87,7 @@ function FakeWhatsAppPage() {
                   Buy →
                 </span>
               </span>
-            </a>
+            </button>
           ))}
         </div>
 
@@ -95,6 +95,27 @@ function FakeWhatsAppPage() {
           ⚡ All numbers are anonymous & untraceable · Delivery within minutes after payment confirmation
         </p>
       </div>
+
+      {picked && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4 backdrop-blur" onClick={() => setPicked(null)}>
+          <div className="w-full max-w-md rounded-2xl border-2 border-emerald-400/60 bg-black p-5 shadow-[0_0_40px_oklch(0.7_0.2_150/0.4)]" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <div className="text-sm font-black text-emerald-300 font-mono">{picked}</div>
+                <div className="text-[10px] uppercase tracking-widest text-emerald-400">Rs. 150 · Fake WhatsApp Number</div>
+              </div>
+              <button onClick={() => setPicked(null)} className="rounded-full p-1.5 hover:bg-white/10"><X className="h-4 w-4" /></button>
+            </div>
+            <PayfastCheckout
+              amount={150}
+              purpose={`Fake WhatsApp Number: ${picked}`}
+              basketPrefix="FWA"
+              buttonLabel={`Pay Rs.151 · Get Number`}
+              whatsappAfter={waLink(`Salam! Payment done for Fake WhatsApp Number: ${picked} (Rs. 150). Please deliver.`)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
