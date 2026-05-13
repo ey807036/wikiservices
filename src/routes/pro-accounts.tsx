@@ -122,6 +122,38 @@ function ProAccountsPage() {
           ⚡ All accounts come with warranty · Replacement guaranteed if any issue
         </p>
       </div>
+
+      {picked && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4 backdrop-blur" onClick={() => setPicked(null)}>
+          <div className="w-full max-w-md rounded-2xl border-2 border-amber-400/60 bg-black p-5 shadow-[0_0_40px_oklch(0.85_0.18_85/0.4)]" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className={`grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br ${picked.color} text-lg ring-1 ring-white/20`}>{picked.emoji}</span>
+                <div>
+                  <div className="text-sm font-black text-amber-300">{picked.name}</div>
+                  <div className="text-[10px] uppercase tracking-widest text-amber-400">Rs. 100 · Pro Account</div>
+                </div>
+              </div>
+              <button onClick={() => setPicked(null)} className="rounded-full p-1.5 hover:bg-white/10"><X className="h-4 w-4" /></button>
+            </div>
+            <PayfastCheckout
+              amount={100}
+              purpose={`Pro Account: ${picked.name}`}
+              basketPrefix="PRO"
+              buttonLabel={`Pay Rs.101 · ${picked.name}`}
+            />
+            <a
+              href={waLink(`Salam! I want to BUY: ${picked.name} (Pro Account · Rs. 100). Please confirm.`)}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 block text-center text-[11px] uppercase tracking-widest text-emerald-400 underline"
+            >
+              Ya WhatsApp par order karein
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
