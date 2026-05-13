@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckCircle2, XCircle, Clock } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CheckCircle2, XCircle, Clock, MessageCircle } from "lucide-react";
 
 export const Route = createFileRoute("/payfast-result")({
   head: () => ({ meta: [{ title: "Payment Result — Wiki Services" }] }),
@@ -19,6 +20,28 @@ function PayfastResult() {
   const success = status === "success";
   const pending = status === "pending" || status === "ipn" || status === "unknown";
 
+  const [waLink, setWaLink] = useState<string>("");
+  const [intent, setIntent] = useState<any>(null);
+
+  useEffect(() => {
+    if (!basket) return;
+    try {
+      const log = JSON.parse(localStorage.getItem("payfast_intents") || "[]");
+      const found = log.find((x: any) => x.basketId === basket);
+      if (found) {
+        setIntent(found);
+        if (success && found.whatsappAfter) {
+          setWaLink(found.whatsappAfter);
+          // Auto-open WhatsApp after 1.2s
+          const t = setTimeout(() => {
+            try { window.open(found.whatsappAfter, "_blank", "noopener"); } catch {}
+          }, 1200);
+          return () => clearTimeout(t);
+        }
+      }
+    } catch {}
+  }, [basket, success]);
+
   const tone = success
     ? { ring: "border-emerald-500/60 bg-emerald-950/30", icon: <CheckCircle2 className="h-14 w-14 text-emerald-400" />, label: "Payment Successful" }
     : pending
@@ -34,16 +57,34 @@ function PayfastResult() {
         <dl className="mt-4 space-y-1.5 text-sm text-white/80 text-left">
           {basket && <Row k="Order ID" v={basket} mono />}
           {txn && <Row k="Txn Ref" v={txn} mono />}
-          {amount && <Row k="Amount" v={`Rs. ${amount}`} />}
+          {(amount || intent?.total) && <Row k="Amount" v={`Rs. ${amount || intent?.total}`} />}
+          {intent?.purpose && <Row k="Item" v={intent.purpose} />}
+          {intent?.name && <Row k="Customer" v={intent.name} />}
           {err_code && <Row k="Code" v={err_code} mono />}
           {err_msg && <Row k="Message" v={err_msg} />}
         </dl>
+
+        {success && waLink && (
+          <a
+            href={waLink}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-black uppercase tracking-widest text-white shadow-[0_0_18px_oklch(0.7_0.2_150/0.7)]"
+          >
+            <MessageCircle className="h-4 w-4" /> WhatsApp par confirm karein
+          </a>
+        )}
 
         <div className="mt-6 flex flex-col sm:flex-row gap-2 justify-center">
           <Link to="/" className="rounded-full bg-white/10 hover:bg-white/20 px-5 py-2 text-sm font-bold uppercase tracking-widest">
             Back Home
           </Link>
-          {!success && (
+          {success && (
+            <Link to="/my-orders" className="rounded-full bg-emerald-600 hover:bg-emerald-500 px-5 py-2 text-sm font-bold uppercase tracking-widest">
+              My Orders
+            </Link>
+          )}
+          {!success && !pending && (
             <Link to="/lucky-draw" className="rounded-full bg-red-600 hover:bg-red-500 px-5 py-2 text-sm font-bold uppercase tracking-widest">
               Try Again
             </Link>
