@@ -107,9 +107,10 @@ function SimDatabasePage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-black text-white">
       {/* Danger animated background */}
       <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_oklch(0.55_0.25_25/0.35),_transparent_60%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(transparent_95%,oklch(0.65_0.25_25/0.25)_95%)] bg-[length:100%_8px] animate-pulse" />
         <div className="absolute -left-20 top-1/4 h-72 w-72 rounded-full bg-red-600/20 blur-3xl animate-pulse" />
