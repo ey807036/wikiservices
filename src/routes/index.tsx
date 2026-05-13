@@ -97,6 +97,33 @@ function Home() {
 
 
 
+      {/* 1 RUPEE OFFER */}
+      <section className="container mx-auto px-4 pt-8">
+        <Link to="/lucky-draw" className="block mx-auto max-w-3xl">
+          <div className="relative overflow-hidden rounded-3xl border-2 border-red-500/70 bg-gradient-to-br from-red-950/80 via-black to-red-950/60 p-6 md:p-8 shadow-[0_0_50px_oklch(0.65_0.25_25/0.7)] animate-pulse hover:scale-[1.01] transition-transform">
+            <div className="pointer-events-none absolute -inset-1 rounded-3xl bg-[radial-gradient(ellipse_at_top,_oklch(0.7_0.28_25/0.5),_transparent_70%)]" />
+            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-yellow-400/30 blur-3xl" />
+            <div className="relative grid gap-4 md:grid-cols-[auto_1fr_auto] md:items-center">
+              <div className="text-5xl md:text-6xl drop-shadow-[0_0_20px_oklch(0.85_0.18_85/0.8)]">💰</div>
+              <div className="min-w-0">
+                <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400/20 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-yellow-300 ring-1 ring-yellow-400/50">
+                  🔥 New Offer · Daily 10 PM
+                </div>
+                <h3 className="mt-2 text-2xl md:text-3xl font-black uppercase tracking-tight bg-gradient-to-r from-red-400 via-rose-400 to-yellow-300 bg-clip-text text-transparent drop-shadow-[0_0_14px_oklch(0.65_0.25_25/0.8)]">
+                  1 Rupee Lucky Draw 💰
+                </h3>
+                <p className="mt-1 text-sm md:text-base text-red-100/90">
+                  Sirf <b className="text-yellow-300">Rs.1</b> invest karein — har raat <b className="text-red-300">10 baje Quran-andazi</b>, aik lucky user ko <b>sara paisa</b> mil jaye ga (account mein withdraw).
+                </p>
+              </div>
+              <Button size="lg" className="h-12 px-6 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_25px_oklch(0.65_0.25_25/0.8)]">
+                Join Rs.1 <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </Link>
+      </section>
+
       {/* INTRO VIDEO */}
       <IntroVideo />
 
