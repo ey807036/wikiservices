@@ -8,10 +8,15 @@ import { toast } from "sonner";
 import { Banknote, Smartphone, Wallet, MapPin, Phone, User, ShieldAlert, ArrowRight, CreditCard } from "lucide-react";
 import { z } from "zod";
 import { saveOrder } from "@/lib/order-history";
+import { PayfastCheckout } from "@/components/site/payfast-checkout";
 
 export const Route = createFileRoute("/order")({
   component: OrderPage,
-  validateSearch: (s: Record<string, unknown>) => ({ item: typeof s.item === "string" ? s.item : "" }),
+  validateSearch: (s: Record<string, unknown>) => ({
+    item: typeof s.item === "string" ? s.item : "",
+    price: typeof s.price === "string" || typeof s.price === "number" ? Number(s.price) || 0 : 0,
+    wa: typeof s.wa === "string" ? s.wa : "",
+  }),
 });
 
 const PROVINCES: Record<string, string[]> = {
@@ -37,27 +42,35 @@ const schema = z.object({
   province: z.string().min(1, "Select province"),
   city: z.string().min(1, "Select city"),
   address: z.string().trim().min(10, "Full address required").max(300),
-  payment: z.string().min(1, "Select payment method"),
 });
 
 function OrderPage() {
-  const { item } = Route.useSearch();
+  const { item, price, wa } = Route.useSearch();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", phone: "", province: "", city: "", address: "", payment: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [step, setStep] = useState<"form" | "pay">("form");
   const update = (k: keyof typeof form, v: string) =>
     setForm((f) => ({ ...f, [k]: v, ...(k === "province" ? { city: "" } : {}) }));
 
-  const submit = async () => {
+  const continueToPay = () => {
+    const r = schema.safeParse(form);
+    if (!r.success) { toast.error(r.error.issues[0].message); return; }
+    setStep("pay");
+  };
+
+  const submitCOD = async () => {
     const r = schema.safeParse(form);
     if (!r.success) { toast.error(r.error.issues[0].message); return; }
     setSubmitting(true);
     await new Promise((r) => setTimeout(r, 600));
-    const order = saveOrder({ ...r.data, item: item || "Custom Order" });
+    const order = saveOrder({ ...r.data, payment: form.payment || "cod", item: item || "Custom Order" });
     setSubmitting(false);
     toast.success("Order placed 💀");
     navigate({ to: "/receipt", search: { id: order.id } });
   };
+
+  const hasPrice = price > 0;
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-10">
@@ -66,7 +79,12 @@ function OrderPage() {
           <ShieldAlert className="h-4 w-4 text-red-500" /> SECURE CHECKOUT
         </span>
         <h1 className="mt-3 text-3xl font-black uppercase md:text-4xl">Place your order</h1>
-        {item && <p className="mt-1 text-sm text-muted-foreground">Item: <span className="font-semibold text-foreground">{item}</span></p>}
+        {item && (
+          <p className="mt-1 text-sm text-muted-foreground">
+            Item: <span className="font-semibold text-foreground">{item}</span>
+            {hasPrice && <> · <span className="font-black text-amber-400">Rs. {price}</span></>}
+          </p>
+        )}
       </div>
 
       <div className="space-y-6 rounded-2xl border bg-card p-6 shadow-card">
@@ -111,50 +129,88 @@ function OrderPage() {
 
         {/* Address */}
         <div>
-          <Label>Full Address</Label>
+          <Label>Full Address / Details</Label>
           <Textarea
             className="mt-1.5 min-h-[100px]"
             value={form.address}
             onChange={(e) => update("address", e.target.value)}
-            placeholder="House #, Street, Area, Landmark…"
+            placeholder="House #, Street, Area, Landmark… (CNIC: also paste CNIC number)"
           />
         </div>
 
-        {/* Payment */}
-        <div>
-          <Label className="text-base font-bold">Payment Method</Label>
-          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {PAY.map((p) => {
-              const active = form.payment === p.id;
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => update("payment", p.id)}
-                  className={`card-hack group relative overflow-hidden rounded-xl border p-4 text-left transition ${
-                    active ? "border-primary ring-2 ring-primary bg-primary/10" : "bg-card hover:border-primary/60"
-                  }`}
-                >
-                  <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary/15 text-primary">
-                    <p.icon className="h-5 w-5" />
-                  </span>
-                  <div className="mt-3 font-bold">{p.label}</div>
-                  <div className="text-xs text-muted-foreground">{p.tag}</div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        {hasPrice ? (
+          step === "form" ? (
+            <Button onClick={continueToPay} size="lg" variant="cool" className="btn-neon w-full rounded-full text-base">
+              Continue to Payment <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          ) : (
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={() => setStep("form")}
+                className="text-xs uppercase tracking-widest text-muted-foreground underline"
+              >
+                ← Edit details
+              </button>
+              <PayfastCheckout
+                amount={price}
+                purpose={item || "Wiki Order"}
+                basketPrefix="ORD"
+                buttonLabel={`Pay Rs.${price + 1} · Confirm Order`}
+                hideContactFields
+                prefillName={form.name}
+                prefillPhone={form.phone}
+                orderAddress={form.address}
+                orderProvince={form.province}
+                orderCity={form.city}
+                whatsappAfter={
+                  wa ||
+                  `https://wa.me/923186376181?text=${encodeURIComponent(
+                    `Salam! Payment done for: ${item || "Wiki Order"} (Rs. ${price}). Name: ${form.name}, Phone: ${form.phone}, City: ${form.city}, Address: ${form.address}`
+                  )}`
+                }
+              />
+            </div>
+          )
+        ) : (
+          <>
+            {/* Payment */}
+            <div>
+              <Label className="text-base font-bold">Payment Method</Label>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {PAY.map((p) => {
+                  const active = form.payment === p.id;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => update("payment", p.id)}
+                      className={`card-hack group relative overflow-hidden rounded-xl border p-4 text-left transition ${
+                        active ? "border-primary ring-2 ring-primary bg-primary/10" : "bg-card hover:border-primary/60"
+                      }`}
+                    >
+                      <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary/15 text-primary">
+                        <p.icon className="h-5 w-5" />
+                      </span>
+                      <div className="mt-3 font-bold">{p.label}</div>
+                      <div className="text-xs text-muted-foreground">{p.tag}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-        <Button
-          onClick={submit}
-          disabled={submitting}
-          size="lg"
-          variant="cool"
-          className="btn-neon w-full rounded-full text-base"
-        >
-          {submitting ? "Placing order…" : <>Place Order <ArrowRight className="ml-2 h-4 w-4" /></>}
-        </Button>
+            <Button
+              onClick={submitCOD}
+              disabled={submitting}
+              size="lg"
+              variant="cool"
+              className="btn-neon w-full rounded-full text-base"
+            >
+              {submitting ? "Placing order…" : <>Place Order <ArrowRight className="ml-2 h-4 w-4" /></>}
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );
