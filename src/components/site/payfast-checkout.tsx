@@ -42,7 +42,7 @@ export function PayfastCheckout({ amount, purpose, basketPrefix = "ORD", buttonL
         },
       });
       if (!res.ok) {
-        toast.error(res.error || "PayFast token failed");
+        toast.error("PayFast init failed");
         setLoading(false);
         return;
       }
