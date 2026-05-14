@@ -133,10 +133,10 @@ function LuckyDrawPage() {
             basketPrefix="LUCKY"
             buttonLabel="Join Lucky Draw · Pay Rs.2"
             requireAuth
-            whatsappAfter={`https://wa.me/923186376181?text=${encodeURIComponent("Salam! I joined the Rs.1 Lucky Draw. Please confirm my entry.")}`}
+            intentType="lucky"
           />
           <p className="mt-2 text-center text-[10px] uppercase tracking-widest text-red-200/50">
-            Login → Pay → entry auto save · Order History mae record bhe save ho jaye gae
+            Login → Pay → naam turant Live Participants list mae add ho jaye ga
           </p>
         </div>
 
