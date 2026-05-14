@@ -135,7 +135,7 @@ export function PayfastCheckout({
         return;
       }
 
-      // Persist intent locally so result page can reconcile + open WhatsApp
+      // Persist intent locally so result page can reconcile, write DB row, & open WA
       try {
         const log = JSON.parse(localStorage.getItem("payfast_intents") || "[]");
         log.unshift({
@@ -146,7 +146,13 @@ export function PayfastCheckout({
           name: name.trim(),
           phone: phone.trim(),
           email: email.trim(),
-          whatsappAfter: whatsappAfter || "",
+          whatsappAfter: intentType === "lucky" ? "" : (whatsappAfter || ""),
+          intentType,
+          intentPayload: intentPayload || null,
+          userId: user?.id || null,
+          orderAddress: orderAddress || "",
+          orderCity: orderCity || "",
+          orderProvince: orderProvince || "",
           ts: Date.now(),
         });
         localStorage.setItem("payfast_intents", JSON.stringify(log.slice(0, 50)));
