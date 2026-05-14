@@ -113,13 +113,18 @@ function PayfastResult() {
           {err_msg && <Row k="Message" v={err_msg} />}
         </dl>
 
-        {success && waLink && (
-          <a
-            href={waLink}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-black uppercase tracking-widest text-white shadow-[0_0_18px_oklch(0.7_0.2_150/0.7)]"
-          >
+        {success && intent?.intentType === "lucky" && (
+          <div className="mt-5 rounded-xl border-2 border-yellow-400/60 bg-yellow-950/40 p-4 text-yellow-100">
+            <Trophy className="h-6 w-6 mx-auto text-yellow-300 mb-1" />
+            <p className="text-sm font-bold">Aap ka naam aaj ki Lucky Draw list mae shamil ho gaya hai!</p>
+            <p className="text-[11px] text-yellow-200/70 mt-1">Raat 10:00 PM ko Quran-andazi se winner select hoga.</p>
+            <Link to="/lucky-draw" className="mt-3 inline-block text-xs font-bold underline text-yellow-200">View Live Participants →</Link>
+          </div>
+        )}
+
+        {success && waLink && intent?.intentType !== "lucky" && (
+          <a href={waLink} target="_blank" rel="noreferrer"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-black uppercase tracking-widest text-white shadow-[0_0_18px_oklch(0.7_0.2_150/0.7)]">
             <MessageCircle className="h-4 w-4" /> WhatsApp par confirm karein
           </a>
         )}
