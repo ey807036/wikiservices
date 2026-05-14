@@ -112,6 +112,7 @@ function RootComponent() {
             <Layout><Outlet /></Layout>
             <WhatsAppButton />
             <FloatingMascots />
+            <SiteAnnouncementPopup />
             <Toaster richColors position="top-right" />
           </CartProvider>
         </WishlistProvider>
