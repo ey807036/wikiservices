@@ -16,6 +16,7 @@ import { ThemeProvider } from "@/components/site/theme-provider";
 import { ClickSound } from "@/components/site/click-sound";
 import { MobileHackerLogin } from "@/components/site/mobile-hacker-login";
 import { FloatingMascots } from "@/components/site/floating-mascots";
+import { SiteAnnouncementPopup } from "@/components/site/site-announcement-popup";
 
 function NotFoundComponent() {
   return (
