@@ -28,7 +28,7 @@ function AdminLayout() {
   const navigate = useNavigate();
   const path = useRouterState({ select: s => s.location.pathname });
 
-  const allowed = !!user && isAdmin && user.email?.toLowerCase() === ADMIN_EMAIL;
+  const allowed = !!user && isAdmin && ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? "");
 
   useEffect(() => {
     if (loading) return;
