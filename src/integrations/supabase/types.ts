@@ -83,6 +83,98 @@ export type Database = {
         }
         Relationships: []
       }
+      lucky_entries: {
+        Row: {
+          amount: number
+          basket_id: string
+          created_at: string
+          draw_date: string
+          email: string | null
+          id: string
+          name: string
+          phone: string
+          user_id: string | null
+        }
+        Insert: {
+          amount?: number
+          basket_id: string
+          created_at?: string
+          draw_date?: string
+          email?: string | null
+          id?: string
+          name: string
+          phone: string
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          basket_id?: string
+          created_at?: string
+          draw_date?: string
+          email?: string | null
+          id?: string
+          name?: string
+          phone?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      lucky_settings: {
+        Row: {
+          id: number
+          prize_amount: number
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          prize_amount?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          prize_amount?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      lucky_winners: {
+        Row: {
+          claimed: boolean
+          created_at: string
+          draw_date: string
+          entry_id: string
+          id: string
+          prize_amount: number
+          user_id: string | null
+        }
+        Insert: {
+          claimed?: boolean
+          created_at?: string
+          draw_date: string
+          entry_id: string
+          id?: string
+          prize_amount: number
+          user_id?: string | null
+        }
+        Update: {
+          claimed?: boolean
+          created_at?: string
+          draw_date?: string
+          entry_id?: string
+          id?: string
+          prize_amount?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lucky_winners_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "lucky_entries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_items: {
         Row: {
           created_at: string
@@ -409,6 +501,27 @@ export type Database = {
         }
         Relationships: []
       }
+      site_announcements: {
+        Row: {
+          active: boolean
+          id: number
+          message: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          id?: number
+          message?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          id?: number
+          message?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           address: string | null
@@ -444,6 +557,149 @@ export type Database = {
           whatsapp_number?: string | null
         }
         Relationships: []
+      }
+      store_categories: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      store_orders: {
+        Row: {
+          created_at: string
+          customer_email: string | null
+          customer_name: string
+          customer_phone: string
+          id: string
+          items: Json
+          notes: string | null
+          payment_basket: string | null
+          payment_status: string
+          shipping_address: string
+          shipping_city: string
+          status: string
+          subtotal: number
+          tax: number
+          total: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          customer_email?: string | null
+          customer_name: string
+          customer_phone: string
+          id?: string
+          items?: Json
+          notes?: string | null
+          payment_basket?: string | null
+          payment_status?: string
+          shipping_address: string
+          shipping_city: string
+          status?: string
+          subtotal?: number
+          tax?: number
+          total?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          customer_email?: string | null
+          customer_name?: string
+          customer_phone?: string
+          id?: string
+          items?: Json
+          notes?: string | null
+          payment_basket?: string | null
+          payment_status?: string
+          shipping_address?: string
+          shipping_city?: string
+          status?: string
+          subtotal?: number
+          tax?: number
+          total?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      store_products: {
+        Row: {
+          active: boolean
+          category_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          in_stock: boolean
+          old_price: number | null
+          price: number
+          sizes: string[] | null
+          slug: string
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          active?: boolean
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          in_stock?: boolean
+          old_price?: number | null
+          price?: number
+          sizes?: string[] | null
+          slug: string
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          active?: boolean
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          in_stock?: boolean
+          old_price?: number | null
+          price?: number
+          sizes?: string[] | null
+          slug?: string
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "store_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_balances: {
         Row: {
@@ -509,6 +765,59 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      withdrawal_requests: {
+        Row: {
+          account_name: string
+          account_number: string
+          admin_note: string | null
+          amount: number
+          bank_name: string | null
+          created_at: string
+          id: string
+          method: string
+          status: string
+          updated_at: string
+          user_id: string
+          winner_id: string | null
+        }
+        Insert: {
+          account_name: string
+          account_number: string
+          admin_note?: string | null
+          amount: number
+          bank_name?: string | null
+          created_at?: string
+          id?: string
+          method: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          winner_id?: string | null
+        }
+        Update: {
+          account_name?: string
+          account_number?: string
+          admin_note?: string | null
+          amount?: number
+          bank_name?: string | null
+          created_at?: string
+          id?: string
+          method?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          winner_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "withdrawal_requests_winner_id_fkey"
+            columns: ["winner_id"]
+            isOneToOne: false
+            referencedRelation: "lucky_winners"
             referencedColumns: ["id"]
           },
         ]

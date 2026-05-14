@@ -27,6 +27,10 @@ type Props = {
   orderAddress?: string;
   orderProvince?: string;
   orderCity?: string;
+  /** Persist intent type so result page knows where to record DB row. */
+  intentType?: "lucky" | "store" | "generic";
+  /** Extra payload (e.g. store cart items) included in the intent. */
+  intentPayload?: Record<string, any>;
 };
 
 export function PayfastCheckout({
@@ -43,6 +47,8 @@ export function PayfastCheckout({
   orderAddress,
   orderProvince,
   orderCity,
+  intentType = "generic",
+  intentPayload,
 }: Props) {
   const checkout = useServerFn(createPayfastCheckout);
   const { user } = useAuth();
@@ -129,7 +135,7 @@ export function PayfastCheckout({
         return;
       }
 
-      // Persist intent locally so result page can reconcile + open WhatsApp
+      // Persist intent locally so result page can reconcile, write DB row, & open WA
       try {
         const log = JSON.parse(localStorage.getItem("payfast_intents") || "[]");
         log.unshift({
@@ -140,7 +146,13 @@ export function PayfastCheckout({
           name: name.trim(),
           phone: phone.trim(),
           email: email.trim(),
-          whatsappAfter: whatsappAfter || "",
+          whatsappAfter: intentType === "lucky" ? "" : (whatsappAfter || ""),
+          intentType,
+          intentPayload: intentPayload || null,
+          userId: user?.id || null,
+          orderAddress: orderAddress || "",
+          orderCity: orderCity || "",
+          orderProvince: orderProvince || "",
           ts: Date.now(),
         });
         localStorage.setItem("payfast_intents", JSON.stringify(log.slice(0, 50)));

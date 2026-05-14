@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CheckCircle2, XCircle, Clock, MessageCircle } from "lucide-react";
+import { CheckCircle2, XCircle, Clock, MessageCircle, Trophy } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/payfast-result")({
   head: () => ({ meta: [{ title: "Payment Result — Wiki Services" }] }),
@@ -22,24 +23,72 @@ function PayfastResult() {
 
   const [waLink, setWaLink] = useState<string>("");
   const [intent, setIntent] = useState<any>(null);
+  const [dbWritten, setDbWritten] = useState<"lucky" | "store" | null>(null);
 
   useEffect(() => {
     if (!basket) return;
-    try {
-      const log = JSON.parse(localStorage.getItem("payfast_intents") || "[]");
-      const found = log.find((x: any) => x.basketId === basket);
-      if (found) {
+    let cancelled = false;
+    (async () => {
+      try {
+        const log = JSON.parse(localStorage.getItem("payfast_intents") || "[]");
+        const found = log.find((x: any) => x.basketId === basket);
+        if (!found) return;
+        if (cancelled) return;
         setIntent(found);
-        if (success && found.whatsappAfter) {
+
+        if (!success) return;
+
+        // ----- Persist to DB based on intent type -----
+        const writtenKey = `payfast_db_written_${basket}`;
+        const already = localStorage.getItem(writtenKey);
+
+        if (found.intentType === "lucky" && !already) {
+          const { error } = await supabase.from("lucky_entries").insert({
+            user_id: found.userId,
+            name: found.name,
+            phone: found.phone,
+            email: found.email || null,
+            amount: found.amount,
+            basket_id: basket,
+          });
+          if (!error) {
+            localStorage.setItem(writtenKey, "1");
+            setDbWritten("lucky");
+          }
+        } else if (found.intentType === "store" && !already) {
+          const items = found.intentPayload?.items || [];
+          const { error } = await supabase.from("store_orders").insert({
+            user_id: found.userId,
+            customer_name: found.name,
+            customer_phone: found.phone,
+            customer_email: found.email || null,
+            shipping_address: found.orderAddress,
+            shipping_city: found.orderCity,
+            items,
+            subtotal: found.amount,
+            tax: 1,
+            total: found.total,
+            payment_basket: basket,
+            payment_status: "paid",
+            status: "placed",
+          });
+          if (!error) {
+            localStorage.setItem(writtenKey, "1");
+            setDbWritten("store");
+          }
+        }
+
+        // WhatsApp redirect ONLY if not lucky-draw
+        if (found.intentType !== "lucky" && found.whatsappAfter) {
           setWaLink(found.whatsappAfter);
-          // Auto-open WhatsApp after 1.2s
           const t = setTimeout(() => {
             try { window.open(found.whatsappAfter, "_blank", "noopener"); } catch {}
-          }, 1200);
+          }, 1500);
           return () => clearTimeout(t);
         }
-      }
-    } catch {}
+      } catch (e) { console.error(e); }
+    })();
+    return () => { cancelled = true; };
   }, [basket, success]);
 
   const tone = success
@@ -64,13 +113,18 @@ function PayfastResult() {
           {err_msg && <Row k="Message" v={err_msg} />}
         </dl>
 
-        {success && waLink && (
-          <a
-            href={waLink}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-black uppercase tracking-widest text-white shadow-[0_0_18px_oklch(0.7_0.2_150/0.7)]"
-          >
+        {success && intent?.intentType === "lucky" && (
+          <div className="mt-5 rounded-xl border-2 border-yellow-400/60 bg-yellow-950/40 p-4 text-yellow-100">
+            <Trophy className="h-6 w-6 mx-auto text-yellow-300 mb-1" />
+            <p className="text-sm font-bold">Aap ka naam aaj ki Lucky Draw list mae shamil ho gaya hai!</p>
+            <p className="text-[11px] text-yellow-200/70 mt-1">Raat 10:00 PM ko Quran-andazi se winner select hoga.</p>
+            <Link to="/lucky-draw" className="mt-3 inline-block text-xs font-bold underline text-yellow-200">View Live Participants →</Link>
+          </div>
+        )}
+
+        {success && waLink && intent?.intentType !== "lucky" && (
+          <a href={waLink} target="_blank" rel="noreferrer"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-black uppercase tracking-widest text-white shadow-[0_0_18px_oklch(0.7_0.2_150/0.7)]">
             <MessageCircle className="h-4 w-4" /> WhatsApp par confirm karein
           </a>
         )}
