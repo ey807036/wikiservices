@@ -27,6 +27,10 @@ type Props = {
   orderAddress?: string;
   orderProvince?: string;
   orderCity?: string;
+  /** Persist intent type so result page knows where to record DB row. */
+  intentType?: "lucky" | "store" | "generic";
+  /** Extra payload (e.g. store cart items) included in the intent. */
+  intentPayload?: Record<string, any>;
 };
 
 export function PayfastCheckout({
