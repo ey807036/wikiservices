@@ -47,6 +47,8 @@ export function PayfastCheckout({
   orderAddress,
   orderProvince,
   orderCity,
+  intentType = "generic",
+  intentPayload,
 }: Props) {
   const checkout = useServerFn(createPayfastCheckout);
   const { user } = useAuth();
