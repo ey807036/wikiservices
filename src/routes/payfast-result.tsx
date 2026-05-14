@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CheckCircle2, XCircle, Clock, MessageCircle } from "lucide-react";
+import { CheckCircle2, XCircle, Clock, MessageCircle, Trophy } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/payfast-result")({
   head: () => ({ meta: [{ title: "Payment Result — Wiki Services" }] }),
@@ -22,24 +23,72 @@ function PayfastResult() {
 
   const [waLink, setWaLink] = useState<string>("");
   const [intent, setIntent] = useState<any>(null);
+  const [dbWritten, setDbWritten] = useState<"lucky" | "store" | null>(null);
 
   useEffect(() => {
     if (!basket) return;
-    try {
-      const log = JSON.parse(localStorage.getItem("payfast_intents") || "[]");
-      const found = log.find((x: any) => x.basketId === basket);
-      if (found) {
+    let cancelled = false;
+    (async () => {
+      try {
+        const log = JSON.parse(localStorage.getItem("payfast_intents") || "[]");
+        const found = log.find((x: any) => x.basketId === basket);
+        if (!found) return;
+        if (cancelled) return;
         setIntent(found);
-        if (success && found.whatsappAfter) {
+
+        if (!success) return;
+
+        // ----- Persist to DB based on intent type -----
+        const writtenKey = `payfast_db_written_${basket}`;
+        const already = localStorage.getItem(writtenKey);
+
+        if (found.intentType === "lucky" && !already) {
+          const { error } = await supabase.from("lucky_entries").insert({
+            user_id: found.userId,
+            name: found.name,
+            phone: found.phone,
+            email: found.email || null,
+            amount: found.amount,
+            basket_id: basket,
+          });
+          if (!error) {
+            localStorage.setItem(writtenKey, "1");
+            setDbWritten("lucky");
+          }
+        } else if (found.intentType === "store" && !already) {
+          const items = found.intentPayload?.items || [];
+          const { error } = await supabase.from("store_orders").insert({
+            user_id: found.userId,
+            customer_name: found.name,
+            customer_phone: found.phone,
+            customer_email: found.email || null,
+            shipping_address: found.orderAddress,
+            shipping_city: found.orderCity,
+            items,
+            subtotal: found.amount,
+            tax: 1,
+            total: found.total,
+            payment_basket: basket,
+            payment_status: "paid",
+            status: "placed",
+          });
+          if (!error) {
+            localStorage.setItem(writtenKey, "1");
+            setDbWritten("store");
+          }
+        }
+
+        // WhatsApp redirect ONLY if not lucky-draw
+        if (found.intentType !== "lucky" && found.whatsappAfter) {
           setWaLink(found.whatsappAfter);
-          // Auto-open WhatsApp after 1.2s
           const t = setTimeout(() => {
             try { window.open(found.whatsappAfter, "_blank", "noopener"); } catch {}
-          }, 1200);
+          }, 1500);
           return () => clearTimeout(t);
         }
-      }
-    } catch {}
+      } catch (e) { console.error(e); }
+    })();
+    return () => { cancelled = true; };
   }, [basket, success]);
 
   const tone = success
