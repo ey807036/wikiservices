@@ -42,7 +42,7 @@ function FakeWhatsAppPage() {
             Anonymous WhatsApp Numbers
           </span>
         </div>
-        <h1 className="glitch-text mt-2 text-3xl md:text-4xl font-black uppercase tracking-wider text-red-400">
+        <h1 className="mt-2 text-3xl md:text-4xl font-black uppercase tracking-wider text-red-400 drop-shadow-[0_0_18px_oklch(0.65_0.25_25/0.7)]">
           Choose Your Number 💀
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -111,6 +111,8 @@ function FakeWhatsAppPage() {
               purpose={`Fake WhatsApp Number: ${picked}`}
               basketPrefix="FWA"
               buttonLabel={`Pay Rs.151 · Get Number`}
+              requireAuth
+              intentType="generic"
               whatsappAfter={waLink(`Salam! Payment done for Fake WhatsApp Number: ${picked} (Rs. 150). Please deliver.`)}
             />
           </div>

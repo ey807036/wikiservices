@@ -33,9 +33,11 @@ import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminLuckyRouteImport } from './routes/admin.lucky'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
+import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as ApiPublicSimRouteImport } from './routes/api/public/sim'
 import { Route as ApiPublicPayfastCallbackRouteImport } from './routes/api/public/payfast-callback'
 
@@ -159,6 +161,11 @@ const AdminOrdersRoute = AdminOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLuckyRoute = AdminLuckyRouteImport.update({
+  id: '/lucky',
+  path: '/lucky',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCustomersRoute = AdminCustomersRouteImport.update({
   id: '/customers',
   path: '/customers',
@@ -172,6 +179,11 @@ const AdminCouponsRoute = AdminCouponsRouteImport.update({
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminActivityRoute = AdminActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
   getParentRoute: () => AdminRoute,
 } as any)
 const ApiPublicSimRoute = ApiPublicSimRouteImport.update({
@@ -204,9 +216,11 @@ export interface FileRoutesByFullPath {
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
   '/wishlist': typeof WishlistRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/lucky': typeof AdminLuckyRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -234,9 +248,11 @@ export interface FileRoutesByTo {
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
   '/wishlist': typeof WishlistRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/lucky': typeof AdminLuckyRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -266,9 +282,11 @@ export interface FileRoutesById {
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
   '/wishlist': typeof WishlistRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/lucky': typeof AdminLuckyRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -299,9 +317,11 @@ export interface FileRouteTypes {
     | '/shop'
     | '/sim-database'
     | '/wishlist'
+    | '/admin/activity'
     | '/admin/categories'
     | '/admin/coupons'
     | '/admin/customers'
+    | '/admin/lucky'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/referrals'
@@ -329,9 +349,11 @@ export interface FileRouteTypes {
     | '/shop'
     | '/sim-database'
     | '/wishlist'
+    | '/admin/activity'
     | '/admin/categories'
     | '/admin/coupons'
     | '/admin/customers'
+    | '/admin/lucky'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/referrals'
@@ -360,9 +382,11 @@ export interface FileRouteTypes {
     | '/shop'
     | '/sim-database'
     | '/wishlist'
+    | '/admin/activity'
     | '/admin/categories'
     | '/admin/coupons'
     | '/admin/customers'
+    | '/admin/lucky'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/referrals'
@@ -567,6 +591,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrdersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/lucky': {
+      id: '/admin/lucky'
+      path: '/lucky'
+      fullPath: '/admin/lucky'
+      preLoaderRoute: typeof AdminLuckyRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/customers': {
       id: '/admin/customers'
       path: '/customers'
@@ -588,6 +619,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/activity': {
+      id: '/admin/activity'
+      path: '/activity'
+      fullPath: '/admin/activity'
+      preLoaderRoute: typeof AdminActivityRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/api/public/sim': {
       id: '/api/public/sim'
       path: '/api/public/sim'
@@ -606,9 +644,11 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminActivityRoute: typeof AdminActivityRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminCustomersRoute: typeof AdminCustomersRoute
+  AdminLuckyRoute: typeof AdminLuckyRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminReferralsRoute: typeof AdminReferralsRoute
@@ -618,9 +658,11 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminActivityRoute: AdminActivityRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminCouponsRoute: AdminCouponsRoute,
   AdminCustomersRoute: AdminCustomersRoute,
+  AdminLuckyRoute: AdminLuckyRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminReferralsRoute: AdminReferralsRoute,
@@ -656,13 +698,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
