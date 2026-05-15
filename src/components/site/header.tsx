@@ -24,6 +24,8 @@ export function Header() {
   const { count: wishCount } = useWishlist();
   const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  const isStore = path.startsWith("/store");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
 
