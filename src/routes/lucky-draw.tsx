@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-
-
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Coins, Trophy, Clock, ShieldAlert } from "lucide-react";
-import { toast } from "sonner";
 import { PayfastCheckout } from "@/components/site/payfast-checkout";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth-context";
+import { toast } from "sonner";
 import e1 from "@/assets/emojis/e1.png";
 import e4 from "@/assets/emojis/e4.png";
 import e12 from "@/assets/emojis/e12.png";
@@ -20,8 +21,6 @@ export const Route = createFileRoute("/lucky-draw")({
   }),
   component: LuckyDrawPage,
 });
-
-type Entry = { id: string; name: string; phone: string; method: string; txn: string; ts: number };
 
 function next10pm(now = new Date()) {
   const t = new Date(now);
@@ -44,29 +43,76 @@ function useCountdown() {
   return { h, m, s };
 }
 
+function todayPK() {
+  // Asia/Karachi date string YYYY-MM-DD
+  const fmt = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Karachi", year: "numeric", month: "2-digit", day: "2-digit" });
+  return fmt.format(new Date());
+}
+
+function maskPhone(p?: string | null) {
+  if (!p) return "";
+  return p.length > 4 ? p.slice(0, 4) + "****" + p.slice(-2) : p;
+}
+
 function LuckyDrawPage() {
   const { h, m, s } = useCountdown();
-  const [entries, setEntries] = useState<Entry[]>([]);
-  const [winner, setWinner] = useState<Entry | null>(null);
+  const { user } = useAuth();
+  const qc = useQueryClient();
+  const today = todayPK();
 
+  const { data: settings } = useQuery({
+    queryKey: ["lucky-settings"],
+    queryFn: async () => {
+      const { data } = await supabase.from("lucky_settings").select("*").eq("id", 1).maybeSingle();
+      return data;
+    },
+  });
+
+  const { data: entries = [] } = useQuery({
+    queryKey: ["lucky-entries", today],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("lucky_entries")
+        .select("id, name, phone, amount, created_at, user_id")
+        .eq("draw_date", today)
+        .order("created_at", { ascending: false })
+        .limit(500);
+      if (error) console.error(error);
+      return data ?? [];
+    },
+  });
+
+  const { data: winner } = useQuery({
+    queryKey: ["lucky-winner-today", today],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("lucky_winners")
+        .select("*, lucky_entries(name, phone)")
+        .eq("draw_date", today)
+        .maybeSingle();
+      return data;
+    },
+  });
+
+  // Realtime: refetch when new entry / winner inserted
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem("lucky_entries");
-      if (raw) setEntries(JSON.parse(raw));
-      const w = localStorage.getItem("lucky_winner_today");
-      if (w) setWinner(JSON.parse(w));
-    } catch {}
-  }, []);
+    const ch = supabase
+      .channel("lucky-live")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "lucky_entries" }, () => {
+        qc.invalidateQueries({ queryKey: ["lucky-entries", today] });
+      })
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "lucky_winners" }, () => {
+        qc.invalidateQueries({ queryKey: ["lucky-winner-today", today] });
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [qc, today]);
 
-  const pickWinner = () => {
-    if (!entries.length) return;
-    const w = entries[Math.floor(Math.random() * entries.length)];
-    setWinner(w);
-    localStorage.setItem("lucky_winner_today", JSON.stringify(w));
-    toast.success(`Winner: ${w.name} 🏆`);
-  };
+  // I am winner?
+  const iAmWinner = !!user && winner && winner.user_id === user.id;
 
-  const mask = (p: string) => (p.length > 4 ? p.slice(0, 4) + "****" + p.slice(-2) : p);
+  const prize = settings?.prize_amount ?? 2;
+  const totalPot = entries.reduce((sum, e) => sum + Number(e.amount || 0), 0);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
@@ -88,8 +134,11 @@ function LuckyDrawPage() {
             <img src={e22} alt="" width={48} height={48} className="inline ml-2 h-10 w-10 object-contain" />
           </h1>
           <p className="mt-3 text-sm md:text-base text-red-100/80">
-            Sirf <span className="font-black text-yellow-300">Rs.1 💰</span> invest karein. Har raat <span className="font-black text-red-300">10:00 PM</span> ko Quran-andazi se aik lucky user ko <span className="font-black">sara collected paisa</span> mil jaye ga.
+            Sirf <span className="font-black text-yellow-300">Rs.1 💰</span> invest karein. Har raat <span className="font-black text-red-300">10:00 PM</span> ko Quran-andazi se aik lucky user ko <span className="font-black">prize</span> mil jaye ga.
           </p>
+          <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-yellow-500/15 px-4 py-1.5 text-xs md:text-sm font-black uppercase tracking-widest text-yellow-300 ring-1 ring-yellow-500/40">
+            🏆 Aaj ka Prize: Rs. {prize} · Pot: Rs. {totalPot}
+          </div>
         </div>
 
         {/* Countdown */}
@@ -113,10 +162,10 @@ function LuckyDrawPage() {
             <ShieldAlert className="h-4 w-4" /> Rules
           </div>
           {[
-            { e: e1, t: <>Aik user sirf <b>Rs.1</b> invest karta hai (Easypaisa, JazzCash, Bank ya Card).</> },
+            { e: e1, t: <>Pehle <b>Login</b> karein. Phir <b>Rs.1</b> invest karein (Easypaisa, JazzCash, Bank ya Card).</> },
             { e: e4, t: <>Daily raat <b>10:00 PM</b> Quran-andazi hoti hai — random method se winner select hota hai.</> },
-            { e: e12, t: <>Winner ko <b>sara collected balance</b> mil jata hai. Apne account mein withdraw kar sakte hain.</> },
-            { e: e15, t: <>Result website + WhatsApp group dono par live show hota hai sab k samne.</> },
+            { e: e12, t: <>Winner ko <b>prize amount</b> mil jata hai. Apne account mein withdraw kar sakte hain.</> },
+            { e: e15, t: <>Result website par live show hota hai sab ko visible.</> },
           ].map((r, i) => (
             <div key={i} className="flex items-start gap-3 rounded-lg bg-red-950/30 px-3 py-2 ring-1 ring-red-500/20">
               <img src={r.e} alt="" width={28} height={28} className="h-7 w-7 shrink-0 object-contain" loading="lazy" />
@@ -140,33 +189,44 @@ function LuckyDrawPage() {
           </p>
         </div>
 
-        {/* Winner / Entries */}
+        {/* Winner banner */}
         {winner && (
           <div className="mx-auto mt-6 max-w-xl rounded-2xl border-2 border-yellow-400/70 bg-gradient-to-br from-yellow-900/40 to-black p-5 text-center shadow-[0_0_36px_oklch(0.85_0.18_85/0.5)]">
             <div className="flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest text-yellow-300">
               <Trophy className="h-4 w-4" /> Today's Winner
             </div>
-            <div className="mt-2 text-2xl font-black text-yellow-200">{winner.name} 🏆</div>
-            <div className="text-xs text-yellow-100/70">{mask(winner.phone)} · {winner.method}</div>
+            <div className="mt-2 text-2xl font-black text-yellow-200">
+              {(winner as any).lucky_entries?.name || "Winner"} 🏆
+            </div>
+            <div className="text-xs text-yellow-100/70">{maskPhone((winner as any).lucky_entries?.phone)} · Prize Rs. {winner.prize_amount}</div>
+            {iAmWinner && (
+              <Link to="/account" className="mt-3 inline-block rounded-full bg-yellow-500 hover:bg-yellow-400 px-5 py-2 text-sm font-black uppercase text-black">
+                Claim / Withdraw Prize →
+              </Link>
+            )}
           </div>
         )}
 
+        {/* Live Participants (DB) */}
         <div className="mx-auto mt-6 max-w-2xl">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-black uppercase tracking-widest text-red-300">Live Participants ({entries.length})</h3>
-            <button onClick={pickWinner} className="text-[10px] font-bold uppercase tracking-widest text-yellow-300 underline">
-              Pick winner (admin)
-            </button>
+            <span className="text-[10px] uppercase tracking-widest text-red-200/60">Live · Auto refresh</span>
           </div>
-          <div className="rounded-2xl border border-red-500/30 bg-black/60 divide-y divide-red-500/10 max-h-72 overflow-auto">
+          <div className="rounded-2xl border border-red-500/30 bg-black/60 divide-y divide-red-500/10 max-h-80 overflow-auto">
             {entries.length === 0 && <div className="p-4 text-center text-xs text-red-200/60">Abhi koi participant nahi — pehle aap ban jayein!</div>}
-            {entries.map((e, i) => (
-              <div key={e.id} className="flex items-center justify-between gap-3 px-3 py-2 text-xs">
-                <span className="font-bold text-red-200">#{i + 1} {e.name}</span>
-                <span className="text-red-300/70">{mask(e.phone)}</span>
-                <span className="rounded bg-red-500/15 px-2 py-0.5 font-bold uppercase text-[10px] text-red-300">{e.method}</span>
-              </div>
-            ))}
+            {entries.map((e, i) => {
+              const mine = user?.id === e.user_id;
+              return (
+                <div key={e.id} className={`flex items-center justify-between gap-3 px-3 py-2 text-xs ${mine ? "bg-yellow-500/10" : ""}`}>
+                  <span className="font-bold text-red-200">
+                    #{i + 1} {e.name} {mine && <span className="text-yellow-300">· You</span>}
+                  </span>
+                  <span className="text-red-300/70">{maskPhone(e.phone)}</span>
+                  <span className="rounded bg-red-500/15 px-2 py-0.5 font-bold uppercase text-[10px] text-red-300">Rs. {e.amount}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
