@@ -15,6 +15,7 @@ import { useState } from "react";
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/shop", label: "Shop" },
+  { to: "/store", label: "Wiki Store" },
   { to: "/my-orders", label: "Order History" },
 ];
 
