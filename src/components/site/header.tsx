@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { ShoppingCart, User, Menu, Search, LogOut, LayoutDashboard, Package, Heart, MoreVertical, Zap, BatteryCharging } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
