@@ -111,6 +111,8 @@ function FakeWhatsAppPage() {
               purpose={`Fake WhatsApp Number: ${picked}`}
               basketPrefix="FWA"
               buttonLabel={`Pay Rs.151 · Get Number`}
+              requireAuth
+              intentType="generic"
               whatsappAfter={waLink(`Salam! Payment done for Fake WhatsApp Number: ${picked} (Rs. 150). Please deliver.`)}
             />
           </div>
