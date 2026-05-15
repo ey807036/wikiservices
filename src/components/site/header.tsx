@@ -105,6 +105,7 @@ export function Header() {
             </Button>
           </Link>
 
+          {!isStore && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" aria-label="More" className="text-red-500 hover:text-red-600 hover:bg-red-500/10">
@@ -150,6 +151,7 @@ export function Header() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          )}
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
