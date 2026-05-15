@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as StoreRouteImport } from './routes/store'
 import { Route as SimDatabaseRouteImport } from './routes/sim-database'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ReferRouteImport } from './routes/refer'
@@ -27,7 +28,9 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
+import { Route as AdminStoreRouteImport } from './routes/admin.store'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
@@ -44,6 +47,11 @@ import { Route as ApiPublicPayfastCallbackRouteImport } from './routes/api/publi
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
   path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoreRoute = StoreRouteImport.update({
+  id: '/store',
+  path: '/store',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SimDatabaseRoute = SimDatabaseRouteImport.update({
@@ -131,10 +139,20 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const StoreSlugRoute = StoreSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => StoreRoute,
+} as any)
 const ProductsSlugRoute = ProductsSlugRouteImport.update({
   id: '/products/$slug',
   path: '/products/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminStoreRoute = AdminStoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
@@ -215,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/refer': typeof ReferRoute
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
+  '/store': typeof StoreRouteWithChildren
   '/wishlist': typeof WishlistRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -226,7 +245,9 @@ export interface FileRoutesByFullPath {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/store': typeof AdminStoreRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/store/$slug': typeof StoreSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
@@ -247,6 +268,7 @@ export interface FileRoutesByTo {
   '/refer': typeof ReferRoute
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
+  '/store': typeof StoreRouteWithChildren
   '/wishlist': typeof WishlistRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -258,7 +280,9 @@ export interface FileRoutesByTo {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/store': typeof AdminStoreRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/store/$slug': typeof StoreSlugRoute
   '/admin': typeof AdminIndexRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
@@ -281,6 +305,7 @@ export interface FileRoutesById {
   '/refer': typeof ReferRoute
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
+  '/store': typeof StoreRouteWithChildren
   '/wishlist': typeof WishlistRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
@@ -292,7 +317,9 @@ export interface FileRoutesById {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/store': typeof AdminStoreRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/store/$slug': typeof StoreSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
@@ -316,6 +343,7 @@ export interface FileRouteTypes {
     | '/refer'
     | '/shop'
     | '/sim-database'
+    | '/store'
     | '/wishlist'
     | '/admin/activity'
     | '/admin/categories'
@@ -327,7 +355,9 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/reports'
     | '/admin/settings'
+    | '/admin/store'
     | '/products/$slug'
+    | '/store/$slug'
     | '/admin/'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
@@ -348,6 +378,7 @@ export interface FileRouteTypes {
     | '/refer'
     | '/shop'
     | '/sim-database'
+    | '/store'
     | '/wishlist'
     | '/admin/activity'
     | '/admin/categories'
@@ -359,7 +390,9 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/reports'
     | '/admin/settings'
+    | '/admin/store'
     | '/products/$slug'
+    | '/store/$slug'
     | '/admin'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
@@ -381,6 +414,7 @@ export interface FileRouteTypes {
     | '/refer'
     | '/shop'
     | '/sim-database'
+    | '/store'
     | '/wishlist'
     | '/admin/activity'
     | '/admin/categories'
@@ -392,7 +426,9 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/reports'
     | '/admin/settings'
+    | '/admin/store'
     | '/products/$slug'
+    | '/store/$slug'
     | '/admin/'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
@@ -415,6 +451,7 @@ export interface RootRouteChildren {
   ReferRoute: typeof ReferRoute
   ShopRoute: typeof ShopRoute
   SimDatabaseRoute: typeof SimDatabaseRoute
+  StoreRoute: typeof StoreRouteWithChildren
   WishlistRoute: typeof WishlistRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
   ApiPublicPayfastCallbackRoute: typeof ApiPublicPayfastCallbackRoute
@@ -428,6 +465,13 @@ declare module '@tanstack/react-router' {
       path: '/wishlist'
       fullPath: '/wishlist'
       preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/store': {
+      id: '/store'
+      path: '/store'
+      fullPath: '/store'
+      preLoaderRoute: typeof StoreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sim-database': {
@@ -549,12 +593,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/store/$slug': {
+      id: '/store/$slug'
+      path: '/$slug'
+      fullPath: '/store/$slug'
+      preLoaderRoute: typeof StoreSlugRouteImport
+      parentRoute: typeof StoreRoute
+    }
     '/products/$slug': {
       id: '/products/$slug'
       path: '/products/$slug'
       fullPath: '/products/$slug'
       preLoaderRoute: typeof ProductsSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/store': {
+      id: '/admin/store'
+      path: '/store'
+      fullPath: '/admin/store'
+      preLoaderRoute: typeof AdminStoreRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/settings': {
       id: '/admin/settings'
@@ -654,6 +712,7 @@ interface AdminRouteChildren {
   AdminReferralsRoute: typeof AdminReferralsRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminStoreRoute: typeof AdminStoreRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -668,10 +727,21 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminReferralsRoute: AdminReferralsRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminStoreRoute: AdminStoreRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface StoreRouteChildren {
+  StoreSlugRoute: typeof StoreSlugRoute
+}
+
+const StoreRouteChildren: StoreRouteChildren = {
+  StoreSlugRoute: StoreSlugRoute,
+}
+
+const StoreRouteWithChildren = StoreRoute._addFileChildren(StoreRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -690,6 +760,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReferRoute: ReferRoute,
   ShopRoute: ShopRoute,
   SimDatabaseRoute: SimDatabaseRoute,
+  StoreRoute: StoreRouteWithChildren,
   WishlistRoute: WishlistRoute,
   ProductsSlugRoute: ProductsSlugRoute,
   ApiPublicPayfastCallbackRoute: ApiPublicPayfastCallbackRoute,

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { ShoppingCart, User, Menu, Search, LogOut, LayoutDashboard, Package, Heart, MoreVertical, Zap, BatteryCharging } from "lucide-react";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
@@ -15,6 +15,7 @@ import { useState } from "react";
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/shop", label: "Shop" },
+  { to: "/store", label: "Wiki Store" },
   { to: "/my-orders", label: "Order History" },
 ];
 
@@ -23,6 +24,8 @@ export function Header() {
   const { count: wishCount } = useWishlist();
   const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  const isStore = path.startsWith("/store");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -102,6 +105,7 @@ export function Header() {
             </Button>
           </Link>
 
+          {!isStore && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" aria-label="More" className="text-red-500 hover:text-red-600 hover:bg-red-500/10">
@@ -147,6 +151,7 @@ export function Header() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          )}
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
