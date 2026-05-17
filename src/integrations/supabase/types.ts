@@ -529,6 +529,8 @@ export type Database = {
           contact_email: string | null
           contact_phone: string | null
           id: number
+          lucky_logo_url: string | null
+          store_logo_url: string | null
           store_name: string
           theme: string
           updated_at: string
@@ -540,6 +542,8 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           id?: number
+          lucky_logo_url?: string | null
+          store_logo_url?: string | null
           store_name?: string
           theme?: string
           updated_at?: string
@@ -551,6 +555,8 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           id?: number
+          lucky_logo_url?: string | null
+          store_logo_url?: string | null
           store_name?: string
           theme?: string
           updated_at?: string
