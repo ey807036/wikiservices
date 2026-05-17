@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { PayfastCheckout } from "@/components/site/payfast-checkout";
 import { useAuth } from "@/lib/auth-context";
+import { NeonLogo } from "@/components/site/neon-logo";
 
 export const Route = createFileRoute("/store/$slug")({
   component: StoreProduct,
@@ -16,6 +17,11 @@ function StoreProduct() {
   const { slug } = Route.useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  const { data: settings } = useQuery({
+    queryKey: ["site-settings-store"],
+    queryFn: async () => (await supabase.from("site_settings").select("store_logo_url").eq("id", 1).maybeSingle()).data,
+  });
 
   const { data: p, isLoading } = useQuery({
     queryKey: ["store-product", slug],
@@ -49,11 +55,26 @@ function StoreProduct() {
           <ArrowLeft className="h-4 w-4" /> Wiki Store
         </button>
 
+        {(settings as any)?.store_logo_url && (
+          <div className="mt-4 flex justify-center">
+            <NeonLogo src={(settings as any).store_logo_url} size={88} glow="var(--primary)" />
+          </div>
+        )}
+
         <div className="mt-4 grid gap-6 lg:grid-cols-2">
           {/* Image / video */}
           <div className="rounded-2xl overflow-hidden border bg-card">
             {p.video_url ? (
-              <video src={p.video_url} controls poster={p.image_url || undefined} className="w-full aspect-square object-cover" />
+              <video
+                src={p.video_url}
+                poster={p.image_url || undefined}
+                autoPlay
+                muted
+                loop
+                playsInline
+                controls
+                className="w-full aspect-square object-cover"
+              />
             ) : p.image_url ? (
               <img src={p.image_url} alt={p.title} className="w-full aspect-square object-cover" />
             ) : (
