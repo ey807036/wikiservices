@@ -2,9 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Trophy, Coins, RefreshCw, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/admin/lucky")({ component: AdminLucky });
 
@@ -16,6 +17,7 @@ function AdminLucky() {
   const today = todayPK();
   const qc = useQueryClient();
   const [picking, setPicking] = useState(false);
+  const [customAmount, setCustomAmount] = useState<string>("");
 
   const { data: settings } = useQuery({
     queryKey: ["adm-lucky-settings"],
@@ -24,6 +26,8 @@ function AdminLucky() {
       return data;
     },
   });
+
+  useEffect(() => { if (settings?.prize_amount != null) setCustomAmount(String(settings.prize_amount)); }, [settings?.prize_amount]);
 
   const { data: entries = [] } = useQuery({
     queryKey: ["adm-lucky-entries", today],
@@ -62,7 +66,7 @@ function AdminLucky() {
       const { error } = await supabase.from("lucky_settings").upsert({ id: 1, prize_amount: amount, updated_at: new Date().toISOString() });
       if (error) throw error;
     },
-    onSuccess: () => { toast.success("Prize amount updated"); qc.invalidateQueries({ queryKey: ["adm-lucky-settings"] }); },
+    onSuccess: () => { toast.success("Prize amount updated"); qc.invalidateQueries({ queryKey: ["adm-lucky-settings"] }); qc.invalidateQueries({ queryKey: ["lucky-settings"] }); },
     onError: (e: any) => toast.error(e.message),
   });
 
@@ -105,18 +109,35 @@ function AdminLucky() {
       {/* Prize amount */}
       <div className="rounded-xl border bg-card p-5">
         <div className="flex items-center gap-2 mb-3"><Coins className="h-5 w-5 text-yellow-500" /><h2 className="font-bold">Per-winner Prize Amount</h2></div>
-        <div className="flex flex-wrap gap-2">
-          {[2, 5, 10].map(v => (
+        <div className="flex flex-wrap gap-2 items-center">
+          {[1, 2, 5, 10, 20, 50, 100].map(v => (
             <Button
               key={v}
               variant={settings?.prize_amount === v ? "default" : "outline"}
               onClick={() => setPrize.mutate(v)}
               disabled={setPrize.isPending}
+              size="sm"
             >
               Rs. {v}
             </Button>
           ))}
-          <span className="text-sm text-muted-foreground self-center ml-2">Current: <b>Rs. {settings?.prize_amount ?? 2}</b></span>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-2 items-end">
+          <div className="flex-1 min-w-[160px]">
+            <label className="text-xs text-muted-foreground">Custom amount (Rs.)</label>
+            <Input type="number" min={1} value={customAmount} onChange={(e) => setCustomAmount(e.target.value)} placeholder="e.g. 25" />
+          </div>
+          <Button
+            onClick={() => {
+              const n = Number(customAmount);
+              if (!n || n < 1) return toast.error("Valid amount likhein");
+              setPrize.mutate(n);
+            }}
+            disabled={setPrize.isPending}
+          >
+            Save custom
+          </Button>
+          <span className="text-sm text-muted-foreground self-center">Current: <b>Rs. {settings?.prize_amount ?? 2}</b></span>
         </div>
       </div>
 

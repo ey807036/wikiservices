@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Save, Volume2, VolumeX, Check } from "lucide-react";
+import { Save, Volume2, VolumeX, Check, Upload, Image as ImageIcon } from "lucide-react";
 import { THEMES } from "@/components/site/theme-provider";
 
 export const Route = createFileRoute("/admin/settings")({ component: Settings });
@@ -24,6 +24,7 @@ function Settings() {
 
   const [form, setForm] = useState<any>({});
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState<"lucky" | "store" | null>(null);
 
   useEffect(() => { if (data) setForm(data); }, [data]);
 
@@ -33,6 +34,24 @@ function Settings() {
       setSoundOn(localStorage.getItem("wikiservices_click_sound") !== "off");
     }
   }, []);
+
+  const uploadLogo = async (file: File, kind: "lucky" | "store") => {
+    setUploading(kind);
+    try {
+      const ext = file.name.split(".").pop() || "png";
+      const path = `logos/${kind}-${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from("store-products").upload(path, file, { upsert: true, contentType: file.type });
+      if (error) throw error;
+      const { data } = supabase.storage.from("store-products").getPublicUrl(path);
+      const field = kind === "lucky" ? "lucky_logo_url" : "store_logo_url";
+      setForm((f: any) => ({ ...f, [field]: data.publicUrl }));
+      toast.success("Logo uploaded");
+    } catch (e: any) {
+      toast.error(e.message || "Upload failed");
+    } finally {
+      setUploading(null);
+    }
+  };
 
   const save = async () => {
     setSaving(true);
@@ -44,6 +63,8 @@ function Settings() {
       address: form.address,
       announcement: form.announcement,
       theme: form.theme ?? "matrix",
+      lucky_logo_url: form.lucky_logo_url || null,
+      store_logo_url: form.store_logo_url || null,
       updated_at: new Date().toISOString(),
     }).eq("id", 1);
     setSaving(false);
@@ -51,6 +72,8 @@ function Settings() {
     toast.success("Settings saved");
     qc.invalidateQueries({ queryKey: ["site-settings"] });
     qc.invalidateQueries({ queryKey: ["site-theme"] });
+    qc.invalidateQueries({ queryKey: ["site-settings-lucky"] });
+    qc.invalidateQueries({ queryKey: ["site-settings-store"] });
   };
 
   const toggleSound = () => {
@@ -63,7 +86,7 @@ function Settings() {
   return (
     <div>
       <h1 className="text-2xl font-bold">Store Settings</h1>
-      <p className="text-sm text-muted-foreground">Update store info shown across the site.</p>
+      <p className="text-sm text-muted-foreground">Update store info, branding logos, theme.</p>
 
       <div className="mt-6 max-w-2xl space-y-6 rounded-2xl border bg-card p-6">
         <Field label="Store name">
@@ -86,6 +109,27 @@ function Settings() {
         <Field label="Announcement bar" hint="Shown at top of site (leave empty to hide)">
           <Input value={form.announcement ?? ""} onChange={e => setForm({ ...form, announcement: e.target.value })} placeholder="🎉 Free shipping on orders above Rs. 5,000" />
         </Field>
+
+        {/* Branding logos */}
+        <div className="rounded-xl border bg-secondary/30 p-4 space-y-4">
+          <h3 className="font-bold flex items-center gap-2"><ImageIcon className="h-4 w-4" /> Branding Logos (Round + Neon Glow)</h3>
+
+          <LogoUpload
+            label="Lucky Draw page logo"
+            url={form.lucky_logo_url}
+            onChange={(url) => setForm({ ...form, lucky_logo_url: url })}
+            onUpload={(f) => uploadLogo(f, "lucky")}
+            uploading={uploading === "lucky"}
+          />
+
+          <LogoUpload
+            label="Wiki Store page logo"
+            url={form.store_logo_url}
+            onChange={(url) => setForm({ ...form, store_logo_url: url })}
+            onUpload={(f) => uploadLogo(f, "store")}
+            uploading={uploading === "store"}
+          />
+        </div>
 
         <Field label="Site theme" hint="Pick the color theme for the whole storefront">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -122,6 +166,36 @@ function Settings() {
         <Button onClick={save} disabled={saving} className="gap-2">
           <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save changes"}
         </Button>
+      </div>
+    </div>
+  );
+}
+
+function LogoUpload({ label, url, onChange, onUpload, uploading }: {
+  label: string; url?: string | null; onChange: (url: string) => void;
+  onUpload: (f: File) => void; uploading: boolean;
+}) {
+  return (
+    <div className="space-y-2">
+      <Label>{label}</Label>
+      <div className="flex items-center gap-3">
+        {url ? (
+          <div className="relative h-16 w-16 rounded-full overflow-hidden border-2 border-primary shadow-[0_0_20px_var(--primary)]">
+            <img src={url} alt="" className="w-full h-full object-cover" />
+          </div>
+        ) : (
+          <div className="h-16 w-16 rounded-full border-2 border-dashed grid place-items-center text-muted-foreground">
+            <ImageIcon className="h-6 w-6" />
+          </div>
+        )}
+        <div className="flex-1 space-y-2">
+          <Input value={url ?? ""} onChange={(e) => onChange(e.target.value)} placeholder="Image URL or upload" />
+          <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-dashed border-muted p-2 text-xs hover:bg-secondary/50">
+            <Upload className="h-3 w-3" />
+            {uploading ? "Uploading…" : "Upload logo"}
+            <input type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && onUpload(e.target.files[0])} />
+          </label>
+        </div>
       </div>
     </div>
   );

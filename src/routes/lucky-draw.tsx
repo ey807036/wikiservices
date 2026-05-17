@@ -1,11 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Coins, Trophy, Clock, ShieldAlert } from "lucide-react";
+import { Coins, Trophy, Clock, ShieldAlert, X, CheckCircle2 } from "lucide-react";
 import { PayfastCheckout } from "@/components/site/payfast-checkout";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { NeonLogo } from "@/components/site/neon-logo";
 import e1 from "@/assets/emojis/e1.png";
 import e4 from "@/assets/emojis/e4.png";
 import e12 from "@/assets/emojis/e12.png";
@@ -15,8 +18,8 @@ import e22 from "@/assets/emojis/e22.png";
 export const Route = createFileRoute("/lucky-draw")({
   head: () => ({
     meta: [
-      { title: "1 Rupee Lucky Draw — Daily 10 PM Quran-Andazi 💰" },
-      { name: "description", content: "Sirf Rs.1 invest karo, har raat 10 baje Quran-andazi mein winner ko sara paisa milega." },
+      { title: "Lucky Draw — Daily 10 PM Quran-Andazi 💰" },
+      { name: "description", content: "Daily lucky draw — invest karo, winner ko full prize milega." },
     ],
   }),
   component: LuckyDrawPage,
@@ -44,7 +47,6 @@ function useCountdown() {
 }
 
 function todayPK() {
-  // Asia/Karachi date string YYYY-MM-DD
   const fmt = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Karachi", year: "numeric", month: "2-digit", day: "2-digit" });
   return fmt.format(new Date());
 }
@@ -59,25 +61,28 @@ function LuckyDrawPage() {
   const { user } = useAuth();
   const qc = useQueryClient();
   const today = todayPK();
+  const [showClaim, setShowClaim] = useState(false);
+  const [claimSubmittedAt, setClaimSubmittedAt] = useState<number | null>(null);
+
+  const { data: branding } = useQuery({
+    queryKey: ["site-settings-lucky"],
+    queryFn: async () => (await supabase.from("site_settings").select("lucky_logo_url").eq("id", 1).maybeSingle()).data,
+  });
 
   const { data: settings } = useQuery({
     queryKey: ["lucky-settings"],
-    queryFn: async () => {
-      const { data } = await supabase.from("lucky_settings").select("*").eq("id", 1).maybeSingle();
-      return data;
-    },
+    queryFn: async () => (await supabase.from("lucky_settings").select("*").eq("id", 1).maybeSingle()).data,
   });
 
   const { data: entries = [] } = useQuery({
     queryKey: ["lucky-entries", today],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("lucky_entries")
         .select("id, name, phone, amount, created_at, user_id")
         .eq("draw_date", today)
         .order("created_at", { ascending: false })
         .limit(500);
-      if (error) console.error(error);
       return data ?? [];
     },
   });
@@ -94,7 +99,6 @@ function LuckyDrawPage() {
     },
   });
 
-  // Realtime: refetch when new entry / winner inserted
   useEffect(() => {
     const ch = supabase
       .channel("lucky-live")
@@ -108,11 +112,16 @@ function LuckyDrawPage() {
     return () => { supabase.removeChannel(ch); };
   }, [qc, today]);
 
-  // I am winner?
-  const iAmWinner = !!user && winner && winner.user_id === user.id;
-
+  const iAmWinner = !!user && winner && (winner as any).user_id === user.id;
   const prize = settings?.prize_amount ?? 2;
   const totalPot = entries.reduce((sum, e) => sum + Number(e.amount || 0), 0);
+
+  // ETA timer for "received within 30 mins"
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => { const id = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(id); }, []);
+  const etaLeft = claimSubmittedAt ? Math.max(0, 30 * 60 * 1000 - (now - claimSubmittedAt)) : 0;
+  const etaM = Math.floor(etaLeft / 60000);
+  const etaS = Math.floor((etaLeft % 60000) / 1000);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
@@ -124,12 +133,17 @@ function LuckyDrawPage() {
 
       <div className="container relative mx-auto px-4 py-10 md:py-14">
         <div className="mx-auto max-w-2xl text-center">
+          {(branding as any)?.lucky_logo_url && (
+            <div className="mb-5">
+              <NeonLogo src={(branding as any).lucky_logo_url} size={104} glow="oklch(0.7 0.25 25)" />
+            </div>
+          )}
           <span className="inline-flex items-center gap-2 rounded-full bg-red-600/20 px-4 py-1.5 text-xs md:text-sm font-black uppercase tracking-widest ring-1 ring-red-500/60 text-red-400 animate-pulse">
-            <Coins className="h-4 w-4" /> 1 Rupee · Daily Quran-Andazi
+            <Coins className="h-4 w-4" /> Daily Quran-Andazi
           </span>
           <h1 className="mt-4 text-4xl md:text-6xl font-black uppercase tracking-tight">
             <span className="bg-gradient-to-r from-red-500 via-rose-500 to-red-700 bg-clip-text text-transparent drop-shadow-[0_0_18px_oklch(0.65_0.25_25/0.7)]">
-              1 Rupee Lucky Draw
+              Lucky Draw
             </span>
             <img src={e22} alt="" width={48} height={48} className="inline ml-2 h-10 w-10 object-contain" />
           </h1>
@@ -198,16 +212,29 @@ function LuckyDrawPage() {
             <div className="mt-2 text-2xl font-black text-yellow-200">
               {(winner as any).lucky_entries?.name || "Winner"} 🏆
             </div>
-            <div className="text-xs text-yellow-100/70">{maskPhone((winner as any).lucky_entries?.phone)} · Prize Rs. {winner.prize_amount}</div>
-            {iAmWinner && (
-              <Link to="/account" className="mt-3 inline-block rounded-full bg-yellow-500 hover:bg-yellow-400 px-5 py-2 text-sm font-black uppercase text-black">
+            <div className="text-xs text-yellow-100/70">{maskPhone((winner as any).lucky_entries?.phone)} · Prize Rs. {(winner as any).prize_amount}</div>
+            {iAmWinner && !claimSubmittedAt && (
+              <button onClick={() => setShowClaim(true)} className="mt-3 inline-block rounded-full bg-yellow-500 hover:bg-yellow-400 px-5 py-2 text-sm font-black uppercase text-black">
                 Claim / Withdraw Prize →
-              </Link>
+              </button>
+            )}
+            {claimSubmittedAt && (
+              <div className="mt-3 rounded-xl bg-emerald-500/15 border border-emerald-500/40 p-3">
+                <div className="flex items-center justify-center gap-2 text-emerald-300 font-bold">
+                  <CheckCircle2 className="h-5 w-5" /> Claim Received
+                </div>
+                <div className="mt-1 text-xs text-emerald-200/80">
+                  Payment aap k account mein <b>30 minutes</b> mein receive ho jaye gi.
+                </div>
+                {etaLeft > 0 && (
+                  <div className="mt-2 font-mono text-lg text-emerald-200">⏳ {String(etaM).padStart(2,"0")}:{String(etaS).padStart(2,"0")} min</div>
+                )}
+              </div>
             )}
           </div>
         )}
 
-        {/* Live Participants (DB) */}
+        {/* Live Participants */}
         <div className="mx-auto mt-6 max-w-2xl">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-black uppercase tracking-widest text-red-300">Live Participants ({entries.length})</h3>
@@ -232,6 +259,93 @@ function LuckyDrawPage() {
 
         <div className="mt-8 text-center">
           <Link to="/" className="text-xs uppercase tracking-widest text-red-300/70 underline">← Back to Home</Link>
+        </div>
+      </div>
+
+      {/* Claim/Withdraw modal */}
+      {showClaim && winner && (
+        <ClaimModal
+          winnerId={(winner as any).id}
+          userId={user?.id}
+          amount={Number((winner as any).prize_amount || 0)}
+          onClose={() => setShowClaim(false)}
+          onSubmitted={() => { setShowClaim(false); setClaimSubmittedAt(Date.now()); toast.success("Withdrawal submit ho gae!"); }}
+        />
+      )}
+    </div>
+  );
+}
+
+function ClaimModal({ winnerId, userId, amount, onClose, onSubmitted }: {
+  winnerId: string; userId?: string; amount: number; onClose: () => void; onSubmitted: () => void;
+}) {
+  const [method, setMethod] = useState("easypaisa");
+  const [accountName, setAccountName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const submit = async () => {
+    if (!userId) return toast.error("Login required");
+    if (!accountName.trim() || !accountNumber.trim()) return toast.error("Account details zaroori");
+    setSaving(true);
+    try {
+      const { error } = await supabase.from("withdrawal_requests").insert({
+        user_id: userId,
+        winner_id: winnerId,
+        amount,
+        method,
+        account_name: accountName.trim(),
+        account_number: accountNumber.trim(),
+        bank_name: method === "bank" ? bankName.trim() : null,
+      });
+      if (error) throw error;
+      // Mark winner as claimed
+      await supabase.from("lucky_winners").update({ claimed: true }).eq("id", winnerId);
+      onSubmitted();
+    } catch (e: any) {
+      toast.error(e.message || "Submit failed");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[90] bg-black/80 backdrop-blur grid place-items-center p-4" onClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()} className="bg-card text-foreground border-2 border-yellow-500/50 rounded-2xl max-w-md w-full p-5 shadow-[0_0_40px_oklch(0.85_0.18_85/0.5)]">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-black">Withdraw Prize — Rs. {amount}</h3>
+          <button onClick={onClose}><X className="h-5 w-5" /></button>
+        </div>
+        <div className="space-y-3 text-sm">
+          <div>
+            <label className="text-xs font-bold">Method</label>
+            <select value={method} onChange={(e) => setMethod(e.target.value)} className="w-full mt-1 rounded-md border bg-background px-3 py-2 text-sm">
+              <option value="easypaisa">Easypaisa</option>
+              <option value="jazzcash">JazzCash</option>
+              <option value="bank">Bank Transfer</option>
+              <option value="sadapay">SadaPay</option>
+              <option value="nayapay">NayaPay</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-xs font-bold">Account Holder Name</label>
+            <Input value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Full name" />
+          </div>
+          <div>
+            <label className="text-xs font-bold">Account / Mobile Number</label>
+            <Input value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} placeholder="03XXXXXXXXX" />
+          </div>
+          {method === "bank" && (
+            <div>
+              <label className="text-xs font-bold">Bank Name</label>
+              <Input value={bankName} onChange={(e) => setBankName(e.target.value)} placeholder="HBL, Meezan, etc." />
+            </div>
+          )}
+          <Button onClick={submit} disabled={saving} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black">
+            {saving ? "Submitting…" : "Submit Withdrawal"}
+          </Button>
+          <p className="text-[11px] text-center text-muted-foreground">Payment 30 minutes mein process ho jaye gi.</p>
         </div>
       </div>
     </div>
