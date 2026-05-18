@@ -530,6 +530,7 @@ export type Database = {
           contact_phone: string | null
           id: number
           lucky_logo_url: string | null
+          shop_logo_url: string | null
           store_logo_url: string | null
           store_name: string
           theme: string
@@ -543,6 +544,7 @@ export type Database = {
           contact_phone?: string | null
           id?: number
           lucky_logo_url?: string | null
+          shop_logo_url?: string | null
           store_logo_url?: string | null
           store_name?: string
           theme?: string
@@ -556,6 +558,7 @@ export type Database = {
           contact_phone?: string | null
           id?: number
           lucky_logo_url?: string | null
+          shop_logo_url?: string | null
           store_logo_url?: string | null
           store_name?: string
           theme?: string
@@ -652,8 +655,10 @@ export type Database = {
         Row: {
           active: boolean
           category_id: string | null
+          colors: string[] | null
           created_at: string
           description: string | null
+          gallery: Json | null
           id: string
           image_url: string | null
           in_stock: boolean
@@ -668,8 +673,10 @@ export type Database = {
         Insert: {
           active?: boolean
           category_id?: string | null
+          colors?: string[] | null
           created_at?: string
           description?: string | null
+          gallery?: Json | null
           id?: string
           image_url?: string | null
           in_stock?: boolean
@@ -684,8 +691,10 @@ export type Database = {
         Update: {
           active?: boolean
           category_id?: string | null
+          colors?: string[] | null
           created_at?: string
           description?: string | null
+          gallery?: Json | null
           id?: string
           image_url?: string | null
           in_stock?: boolean
