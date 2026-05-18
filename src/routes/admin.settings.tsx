@@ -24,7 +24,7 @@ function Settings() {
 
   const [form, setForm] = useState<any>({});
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState<"lucky" | "store" | null>(null);
+  const [uploading, setUploading] = useState<"lucky" | "store" | "shop" | null>(null);
 
   useEffect(() => { if (data) setForm(data); }, [data]);
 
@@ -35,7 +35,7 @@ function Settings() {
     }
   }, []);
 
-  const uploadLogo = async (file: File, kind: "lucky" | "store") => {
+  const uploadLogo = async (file: File, kind: "lucky" | "store" | "shop") => {
     setUploading(kind);
     try {
       const ext = file.name.split(".").pop() || "png";
@@ -43,7 +43,7 @@ function Settings() {
       const { error } = await supabase.storage.from("store-products").upload(path, file, { upsert: true, contentType: file.type });
       if (error) throw error;
       const { data } = supabase.storage.from("store-products").getPublicUrl(path);
-      const field = kind === "lucky" ? "lucky_logo_url" : "store_logo_url";
+      const field = kind === "lucky" ? "lucky_logo_url" : kind === "store" ? "store_logo_url" : "shop_logo_url";
       setForm((f: any) => ({ ...f, [field]: data.publicUrl }));
       toast.success("Logo uploaded");
     } catch (e: any) {
@@ -65,6 +65,7 @@ function Settings() {
       theme: form.theme ?? "matrix",
       lucky_logo_url: form.lucky_logo_url || null,
       store_logo_url: form.store_logo_url || null,
+      shop_logo_url: form.shop_logo_url || null,
       updated_at: new Date().toISOString(),
     }).eq("id", 1);
     setSaving(false);
@@ -74,6 +75,7 @@ function Settings() {
     qc.invalidateQueries({ queryKey: ["site-theme"] });
     qc.invalidateQueries({ queryKey: ["site-settings-lucky"] });
     qc.invalidateQueries({ queryKey: ["site-settings-store"] });
+    qc.invalidateQueries({ queryKey: ["site-settings-shop"] });
   };
 
   const toggleSound = () => {
@@ -115,19 +117,27 @@ function Settings() {
           <h3 className="font-bold flex items-center gap-2"><ImageIcon className="h-4 w-4" /> Branding Logos (Round + Neon Glow)</h3>
 
           <LogoUpload
+            label="Main Shop / Home logo (Store 1)"
+            url={form.shop_logo_url}
+            onChange={(url) => setForm({ ...form, shop_logo_url: url })}
+            onUpload={(f) => uploadLogo(f, "shop")}
+            uploading={uploading === "shop"}
+          />
+
+          <LogoUpload
+            label="Wiki Store logo (Store 2)"
+            url={form.store_logo_url}
+            onChange={(url) => setForm({ ...form, store_logo_url: url })}
+            onUpload={(f) => uploadLogo(f, "store")}
+            uploading={uploading === "store"}
+          />
+
+          <LogoUpload
             label="Lucky Draw page logo"
             url={form.lucky_logo_url}
             onChange={(url) => setForm({ ...form, lucky_logo_url: url })}
             onUpload={(f) => uploadLogo(f, "lucky")}
             uploading={uploading === "lucky"}
-          />
-
-          <LogoUpload
-            label="Wiki Store page logo"
-            url={form.store_logo_url}
-            onChange={(url) => setForm({ ...form, store_logo_url: url })}
-            onUpload={(f) => uploadLogo(f, "store")}
-            uploading={uploading === "store"}
           />
         </div>
 
