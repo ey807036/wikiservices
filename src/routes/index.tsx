@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX, ShoppingBag, Sparkles } from "lucide-react";
+import { NeonLogo } from "@/components/site/neon-logo";
 import {
   ArrowRight, Wifi, Bluetooth, Car, Tv, Snowflake,
   Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star, Flame,
@@ -42,12 +45,25 @@ const HACKS: Hack[] = [
 
 
 function Home() {
+  const { data: settings } = useQuery({
+    queryKey: ["site-settings-shop"],
+    queryFn: async () =>
+      (await supabase.from("site_settings").select("shop_logo_url, store_logo_url").eq("id", 1).maybeSingle()).data,
+  });
+  const shopLogo = (settings as any)?.shop_logo_url;
+  const storeLogo = (settings as any)?.store_logo_url;
+
   return (
     <div>
       {/* HERO */}
       <section className="relative overflow-hidden border-b">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_color-mix(in_oklab,_var(--primary)_18%,_transparent),_transparent_60%)]" />
         <div className="container relative mx-auto px-4 py-24 md:py-32 text-center">
+          {shopLogo && (
+            <div className="mb-6 flex justify-center">
+              <NeonLogo src={shopLogo} size={96} glow="var(--primary)" />
+            </div>
+          )}
           <span className="inline-flex items-center gap-2 rounded-full bg-destructive/20 px-5 py-2 text-sm md:text-base font-bold backdrop-blur ring-1 ring-destructive/50">
             <ShieldAlert className="h-5 w-5 text-red-500" /> UNDERGROUND WIKI STORE 💀
           </span>
@@ -118,6 +134,38 @@ function Home() {
               </div>
               <Button size="lg" className="h-12 px-6 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_25px_oklch(0.65_0.25_25/0.8)]">
                 Join Rs.1 <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </Link>
+      </section>
+
+      {/* WIKI STORE (Store 2) CTA */}
+      <section className="container mx-auto px-4 pt-6">
+        <Link to="/store" className="block mx-auto max-w-3xl">
+          <div className="relative overflow-hidden rounded-3xl border-2 border-primary/60 bg-gradient-to-br from-card via-card to-primary/10 p-6 md:p-7 shadow-[0_0_40px_-8px_var(--primary)] hover:scale-[1.01] transition-transform">
+            <div className="pointer-events-none absolute -inset-1 rounded-3xl bg-[radial-gradient(ellipse_at_top,_color-mix(in_oklab,_var(--primary)_25%,_transparent),_transparent_70%)]" />
+            <div className="relative grid gap-4 md:grid-cols-[auto_1fr_auto] md:items-center">
+              {storeLogo ? (
+                <NeonLogo src={storeLogo} size={72} glow="var(--primary)" />
+              ) : (
+                <div className="grid h-16 w-16 place-items-center rounded-full bg-primary/15 text-primary ring-2 ring-primary/40">
+                  <ShoppingBag className="h-7 w-7" />
+                </div>
+              )}
+              <div className="min-w-0">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/15 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-primary ring-1 ring-primary/40">
+                  <Sparkles className="h-3 w-3" /> Wiki Store · Store 2
+                </div>
+                <h3 className="mt-2 text-2xl md:text-3xl font-black tracking-tight">
+                  Visit Wiki Store
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Premium verified items — clothing, gadgets & more at <b className="text-primary">-30% off</b>.
+                </p>
+              </div>
+              <Button size="lg" className="h-12 px-6 rounded-full font-black uppercase tracking-wider">
+                Open Store <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
             </div>
           </div>

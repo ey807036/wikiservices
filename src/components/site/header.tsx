@@ -34,6 +34,11 @@ export function Header() {
     if (q.trim()) navigate({ to: "/shop", search: { q: q.trim() } as any });
   };
 
+  // In Wiki Store (Store 2) we hide Home/Shop nav so user stays in store world.
+  const visibleNav = isStore
+    ? NAV.filter((n) => n.to === "/store" || n.to === "/my-orders")
+    : NAV;
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/85 backdrop-blur-lg">
       <div className="container mx-auto flex h-16 items-center gap-4 px-4">
@@ -45,7 +50,7 @@ export function Header() {
           </SheetTrigger>
           <SheetContent side="left" className="w-72">
             <div className="mt-8 flex flex-col gap-4">
-              {NAV.filter((n) => n.label !== "Shop").map((n) => (
+              {visibleNav.filter((n) => n.label !== "Shop").map((n) => (
                 <Link key={n.label} to={n.to as any} onClick={() => setOpen(false)} className="text-lg font-medium">
                   {n.label}
                 </Link>
@@ -54,13 +59,20 @@ export function Header() {
           </SheetContent>
         </Sheet>
 
-        <Link to="/" className="flex items-center gap-2 font-bold text-xl">
-          <img src={logo} alt="Wikiservices" className="h-9 w-9 drop-shadow-[0_0_12px_oklch(0.85_0.27_145/0.5)]" width={36} height={36} />
-          <span className="hidden sm:inline text-glow">Wikiservices</span>
-        </Link>
+        {isStore ? (
+          <Link to="/store" className="flex items-center gap-2 font-bold text-xl">
+            <img src={logo} alt="Wiki Store" className="h-9 w-9 drop-shadow-[0_0_12px_oklch(0.85_0.27_145/0.5)]" width={36} height={36} />
+            <span className="hidden sm:inline text-glow">Wiki Store</span>
+          </Link>
+        ) : (
+          <Link to="/" className="flex items-center gap-2 font-bold text-xl">
+            <img src={logo} alt="Wikiservices" className="h-9 w-9 drop-shadow-[0_0_12px_oklch(0.85_0.27_145/0.5)]" width={36} height={36} />
+            <span className="hidden sm:inline text-glow">Wikiservices</span>
+          </Link>
+        )}
 
         <nav className="ml-6 hidden items-center gap-6 md:flex">
-          {NAV.map((n) => (
+          {visibleNav.map((n) => (
             <Link
               key={n.label}
               to={n.to as any}
