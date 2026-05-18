@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX, ShoppingBag, Sparkles } from "lucide-react";
+import { NeonLogo } from "@/components/site/neon-logo";
 import {
   ArrowRight, Wifi, Bluetooth, Car, Tv, Snowflake,
   Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star, Flame,
@@ -42,12 +45,25 @@ const HACKS: Hack[] = [
 
 
 function Home() {
+  const { data: settings } = useQuery({
+    queryKey: ["site-settings-shop"],
+    queryFn: async () =>
+      (await supabase.from("site_settings").select("shop_logo_url, store_logo_url").eq("id", 1).maybeSingle()).data,
+  });
+  const shopLogo = (settings as any)?.shop_logo_url;
+  const storeLogo = (settings as any)?.store_logo_url;
+
   return (
     <div>
       {/* HERO */}
       <section className="relative overflow-hidden border-b">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_color-mix(in_oklab,_var(--primary)_18%,_transparent),_transparent_60%)]" />
         <div className="container relative mx-auto px-4 py-24 md:py-32 text-center">
+          {shopLogo && (
+            <div className="mb-6 flex justify-center">
+              <NeonLogo src={shopLogo} size={96} glow="var(--primary)" />
+            </div>
+          )}
           <span className="inline-flex items-center gap-2 rounded-full bg-destructive/20 px-5 py-2 text-sm md:text-base font-bold backdrop-blur ring-1 ring-destructive/50">
             <ShieldAlert className="h-5 w-5 text-red-500" /> UNDERGROUND WIKI STORE 💀
           </span>
