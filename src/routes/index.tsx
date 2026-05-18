@@ -140,6 +140,38 @@ function Home() {
         </Link>
       </section>
 
+      {/* WIKI STORE (Store 2) CTA */}
+      <section className="container mx-auto px-4 pt-6">
+        <Link to="/store" className="block mx-auto max-w-3xl">
+          <div className="relative overflow-hidden rounded-3xl border-2 border-primary/60 bg-gradient-to-br from-card via-card to-primary/10 p-6 md:p-7 shadow-[0_0_40px_-8px_var(--primary)] hover:scale-[1.01] transition-transform">
+            <div className="pointer-events-none absolute -inset-1 rounded-3xl bg-[radial-gradient(ellipse_at_top,_color-mix(in_oklab,_var(--primary)_25%,_transparent),_transparent_70%)]" />
+            <div className="relative grid gap-4 md:grid-cols-[auto_1fr_auto] md:items-center">
+              {storeLogo ? (
+                <NeonLogo src={storeLogo} size={72} glow="var(--primary)" />
+              ) : (
+                <div className="grid h-16 w-16 place-items-center rounded-full bg-primary/15 text-primary ring-2 ring-primary/40">
+                  <ShoppingBag className="h-7 w-7" />
+                </div>
+              )}
+              <div className="min-w-0">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/15 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-primary ring-1 ring-primary/40">
+                  <Sparkles className="h-3 w-3" /> Wiki Store · Store 2
+                </div>
+                <h3 className="mt-2 text-2xl md:text-3xl font-black tracking-tight">
+                  Visit Wiki Store
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Premium verified items — clothing, gadgets & more at <b className="text-primary">-30% off</b>.
+                </p>
+              </div>
+              <Button size="lg" className="h-12 px-6 rounded-full font-black uppercase tracking-wider">
+                Open Store <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </Link>
+      </section>
+
       {/* INTRO VIDEO */}
       <IntroVideo />
 
