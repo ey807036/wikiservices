@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ShoppingBag, Database, CheckCircle2, Sparkles, Star, X, Play } from "lucide-react";
@@ -18,7 +18,10 @@ export const Route = createFileRoute("/store")({
 
 function WikiStore() {
   const navigate = useNavigate();
+  const path = useRouterState({ select: (s) => s.location.pathname });
   const [preview, setPreview] = useState<any>(null);
+
+  if (path !== "/store") return <Outlet />;
 
   const { data: settings } = useQuery({
     queryKey: ["site-settings-store"],
@@ -124,14 +127,15 @@ function WikiStore() {
                       </span>
                     )}
                   </div>
-                  <div className="p-3">
+                    <div className="p-3">
                     <div className="font-bold text-sm line-clamp-1 flex items-center gap-1">
-                      <Database className="h-3 w-3 text-emerald-500 shrink-0" />
+                      <span className="shrink-0" aria-hidden="true">🗄️</span>
                       {p.title}
                     </div>
                     <div className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
                       <Star className="h-3 w-3 fill-accent text-accent" /> 4.{(p.id?.charCodeAt(0) ?? 5) % 9}
                     </div>
+                    <div className="mt-1 text-[11px] font-bold text-primary">Fake Sold Out 100+</div>
                     <div className="mt-2 flex items-baseline gap-2">
                       <span className="text-lg font-black text-primary">Rs. {price}</span>
                       {old > 0 && <span className="text-xs line-through text-muted-foreground">Rs. {old}</span>}
@@ -184,7 +188,7 @@ function WikiStore() {
               <div className="flex gap-2 pt-2">
                 <Button
                   className="flex-1 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold"
-                  onClick={() => { setPreview(null); navigate({ to: "/store/$slug", params: { slug: preview.slug } }); }}
+                  onClick={() => { setPreview(null); navigate({ to: "/store/$slug", params: { slug: preview.slug }, search: { buy: "1" } as any }); }}
                 >
                   Buy now →
                 </Button>
