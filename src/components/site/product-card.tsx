@@ -1,6 +1,6 @@
+```tsx
 import { Link } from "@tanstack/react-router";
 import { Star, ShoppingCart, Heart } from "lucide-react";
-import { useCart } from "@/lib/cart-store";
 import { useWishlist } from "@/lib/wishlist-store";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
@@ -22,30 +22,39 @@ export type ProductCardData = {
 };
 
 export function ProductCard({ p }: { p: ProductCardData }) {
-  const { add } = useCart();
   const { user } = useAuth();
   const { has, toggle } = useWishlist();
-  const wished = has(p.id);
-  const img = p.images?.[0] || "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=800";
-  const discount = p.compare_price ? Math.round(((p.compare_price - p.price) / p.compare_price) * 100) : 0;
 
-  // Stable per-card animation offset so floats are not all in sync
+  const wished = has(p.id);
+
+  const img =
+    p.images?.[0] ||
+    "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=800";
+
+  const discount = p.compare_price
+    ? Math.round(
+        ((p.compare_price - p.price) / p.compare_price) * 100
+      )
+    : 0;
+
   const delay = ((p.id?.charCodeAt(0) ?? 0) % 10) * 0.3;
 
   return (
     <div className="group relative rounded-2xl border bg-gradient-to-br from-card to-secondary/30 hover-lift flex flex-col pt-24 px-4 pb-4 mt-20">
+
       {/* Floating image + glowing circle */}
       <Link
         to="/products/$slug"
         params={{ slug: p.slug }}
         className="absolute left-1/2 -top-20 -translate-x-1/2 block w-[80%] aspect-square"
       >
-        {/* Glowing circle behind */}
+
         <div className="absolute inset-2 rounded-full bg-gradient-to-br from-primary/40 via-accent/30 to-primary/10 blur-xl opacity-80 group-hover:opacity-100 transition-opacity" />
+
         <div className="absolute inset-4 rounded-full border-2 border-dashed border-primary/30 animate-[spin_18s_linear_infinite]" />
+
         <div className="absolute inset-6 rounded-full bg-primary/10 backdrop-blur-sm" />
 
-        {/* Floating product image */}
         <img
           src={img}
           alt={p.name}
@@ -59,9 +68,10 @@ export function ProductCard({ p }: { p: ProductCardData }) {
             -{discount}%
           </span>
         )}
+
         {p.stock === 0 && (
           <span className="absolute -right-1 top-2 z-10 rounded-full bg-destructive px-2.5 py-1 text-[11px] font-bold text-destructive-foreground shadow-lg">
-            Sold out
+            Sold
           </span>
         )}
       </Link>
@@ -72,46 +82,85 @@ export function ProductCard({ p }: { p: ProductCardData }) {
         aria-label="Toggle wishlist"
         onClick={(e) => {
           e.preventDefault();
-          if (!user) { toast.error("Sign in to save favorites"); return; }
+
+          if (!user) {
+            toast.error("Sign in to save favorites");
+            return;
+          }
+
           toggle(p.id);
-          toast.success(wished ? "Removed from wishlist" : "Added to wishlist");
+
+          toast.success(
+            wished
+              ? "Removed from wishlist"
+              : "Added to wishlist"
+          );
         }}
         className="absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full bg-background/90 backdrop-blur border shadow-sm hover:scale-110 transition-transform"
       >
-        <Heart className={`h-4 w-4 ${wished ? "fill-accent text-accent" : "text-muted-foreground"}`} />
+        <Heart
+          className={`h-4 w-4 ${
+            wished
+              ? "fill-accent text-accent"
+              : "text-muted-foreground"
+          }`}
+        />
       </button>
 
       {/* Card body */}
       <div className="flex flex-1 flex-col text-center">
-        {p.brand && <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{p.brand}</div>}
-        <Link to="/products/$slug" params={{ slug: p.slug }} className="mt-1 line-clamp-2 font-bold leading-tight hover:text-primary">
-          {p.name}
+
+        {p.brand && (
+          <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+            {p.brand}
+          </div>
+        )}
+
+        <Link
+          to="/products/$slug"
+          params={{ slug: p.slug }}
+          className="mt-1 line-clamp-2 font-bold leading-tight hover:text-primary"
+        >
+          🔥 {p.name}
         </Link>
+
         <div className="mt-1 flex items-center justify-center gap-1 text-xs text-muted-foreground">
           <Star className="h-3.5 w-3.5 fill-accent text-accent" />
-          <span className="font-medium text-foreground">{Number(p.rating).toFixed(1)}</span>
+          <span className="font-medium text-foreground">
+            {Number(p.rating).toFixed(1)}
+          </span>
           <span>({p.review_count})</span>
         </div>
+
         <div className="mt-2">
-          <div className="text-xl font-extrabold text-primary">{money(p.price)}</div>
+          <div className="text-xl font-extrabold text-primary">
+            {money(p.price)}
+          </div>
+
           {p.compare_price && (
-            <div className="text-xs text-muted-foreground line-through">{money(p.compare_price)}</div>
+            <div className="text-xs text-muted-foreground line-through">
+              {money(p.compare_price)}
+            </div>
           )}
         </div>
+
         <Button
           size="sm"
           variant="cool"
           className="mt-3 w-full rounded-full"
-          disabled={p.stock === 0}
-          onClick={(e) => {
-            e.preventDefault();
-            add({ id: p.id, name: p.name, slug: p.slug, price: Number(p.price), image: img, stock: p.stock });
-            toast.success("Added to cart");
-          }}
         >
-          <ShoppingCart className="h-4 w-4 mr-1" /> Buy now
+          <Link
+            to="/products/$slug"
+            params={{ slug: p.slug }}
+            className="flex items-center justify-center w-full"
+          >
+            <ShoppingCart className="h-4 w-4 mr-1" />
+            Quick View
+          </Link>
         </Button>
+
       </div>
     </div>
   );
 }
+```
