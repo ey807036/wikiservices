@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ShoppingBag, Database, CheckCircle2, Sparkles, Star, X, Play } from "lucide-react";
@@ -18,7 +18,10 @@ export const Route = createFileRoute("/store")({
 
 function WikiStore() {
   const navigate = useNavigate();
+  const path = useRouterState({ select: (s) => s.location.pathname });
   const [preview, setPreview] = useState<any>(null);
+
+  if (path !== "/store") return <Outlet />;
 
   const { data: settings } = useQuery({
     queryKey: ["site-settings-store"],
