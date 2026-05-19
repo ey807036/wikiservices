@@ -2,13 +2,20 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { loadOrders, PAY_LABEL, type SavedOrder } from "@/lib/order-history";
 import { Button } from "@/components/ui/button";
-import { Package, ArrowRight, ScrollText, Inbox } from "lucide-react";
+import { Package, ArrowRight, ScrollText, Inbox, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/my-orders")({ component: MyOrders });
 
 function MyOrders() {
   const [orders, setOrders] = useState<SavedOrder[]>([]);
-  useEffect(() => { setOrders(loadOrders()); }, []);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setOrders(loadOrders());
+      setLoading(false);
+    }, 450);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-10">
@@ -19,12 +26,20 @@ function MyOrders() {
         <h1 className="mt-3 text-3xl font-black uppercase md:text-4xl">My Orders</h1>
       </div>
 
-      {orders.length === 0 ? (
+      {loading ? (
+        <div className="rounded-2xl border bg-card p-10 text-center shadow-card">
+          <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-primary/15 ring-1 ring-primary/40">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+          <p className="mt-4 text-sm font-bold uppercase tracking-widest text-primary">Loading orders…</p>
+          <p className="mt-1 text-xs text-muted-foreground">Please wait, order history open ho rahi hai.</p>
+        </div>
+      ) : orders.length === 0 ? (
         <div className="rounded-2xl border bg-card p-10 text-center shadow-card">
           <Inbox className="mx-auto h-12 w-12 text-muted-foreground" />
           <p className="mt-3 text-muted-foreground">No orders yet.</p>
-          <Link to="/" className="mt-5 inline-block">
-            <Button variant="cool" className="btn-neon rounded-full">Start Shopping <ArrowRight className="ml-2 h-4 w-4" /></Button>
+          <Link to="/store" className="mt-5 inline-block">
+            <Button variant="cool" className="btn-neon rounded-full">Open Wiki Store <ArrowRight className="ml-2 h-4 w-4" /></Button>
           </Link>
         </div>
       ) : (

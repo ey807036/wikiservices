@@ -26,6 +26,7 @@ export function Header() {
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
   const isStore = path.startsWith("/store");
+  const isOrderHistory = path.startsWith("/my-orders");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -35,7 +36,7 @@ export function Header() {
   };
 
   // In Wiki Store (Store 2) we hide Home/Shop nav so user stays in store world.
-  const visibleNav = isStore
+  const visibleNav = isStore || isOrderHistory
     ? NAV.filter((n) => n.to === "/store" || n.to === "/my-orders")
     : NAV;
 
