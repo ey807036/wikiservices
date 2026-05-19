@@ -1,221 +1,61 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Database,
-  ShieldCheck,
-  ShoppingBag,
-  Star,
-} from "lucide-react";
-
+import { ArrowLeft, CheckCircle2, CreditCard, Database, MapPin, Phone, ShieldAlert, ShieldCheck, ShoppingBag, Star, Truck, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useMemo } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
+import { PayfastCheckout } from "@/components/site/payfast-checkout";
+import { useAuth } from "@/lib/auth-context";
+import { NeonLogo } from "@/components/site/neon-logo";
 
 export const Route = createFileRoute("/store/$slug")({
-  validateSearch: () => ({}),
+  validateSearch: (s: Record<string, unknown>) => ({
+    buy: s.buy === "1" || s.buy === "true",
+  }),
   component: StoreProduct,
 });
 
 const DEFAULT_SIZES = ["S", "M", "L", "XL"];
 
+const PROVINCES: Record<string, string[]> = {
+  Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Sialkot", "Bahawalpur", "Sargodha", "Sheikhupura", "Jhelum", "Gujrat", "Kasur", "Okara", "Sahiwal", "Rahim Yar Khan", "Dera Ghazi Khan", "Mianwali", "Vehari", "Khanewal", "Chiniot", "Jhang", "Toba Tek Singh", "Hafizabad", "Mandi Bahauddin", "Narowal", "Pakpattan", "Layyah", "Bhakkar", "Attock", "Chakwal"],
+  Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana", "Nawabshah", "Mirpur Khas", "Jacobabad", "Shikarpur", "Khairpur", "Dadu", "Thatta", "Badin", "Tando Allahyar", "Tando Adam", "Ghotki", "Umerkot", "Kashmore"],
+  "Khyber Pakhtunkhwa": ["Peshawar", "Mardan", "Abbottabad", "Mingora", "Kohat", "Bannu", "Dera Ismail Khan", "Swabi", "Nowshera", "Charsadda", "Mansehra", "Haripur", "Chitral", "Timergara", "Tank", "Hangu", "Battagram"],
+  Balochistan: ["Quetta", "Gwadar", "Turbat", "Khuzdar", "Chaman", "Hub", "Sibi", "Zhob", "Loralai", "Mastung", "Pasni", "Dera Bugti", "Kalat", "Nushki"],
+  "Islamabad Capital Territory": ["Islamabad"],
+  "Azad Jammu & Kashmir": ["Muzaffarabad", "Mirpur", "Kotli", "Bhimber", "Rawalakot", "Bagh", "Hattian", "Pallandri"],
+  "Gilgit-Baltistan": ["Gilgit", "Skardu", "Hunza", "Chilas", "Ghizer", "Astore", "Khaplu", "Shigar"],
+};
+
 function StoreProduct() {
   const { slug } = Route.useParams();
+  const { buy } = Route.useSearch();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const checkoutRef = useRef<HTMLDivElement | null>(null);
+
+  const { data: settings } = useQuery({
+    queryKey: ["site-settings-store"],
+    queryFn: async () => (await supabase.from("site_settings").select("store_logo_url").eq("id", 1).maybeSingle()).data,
+  });
 
   const { data: p, isLoading } = useQuery({
     queryKey: ["store-product", slug],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("store_products")
-        .select("*")
-        .eq("slug", slug)
-        .eq("active", true)
-        .maybeSingle();
-
+      const { data } = await supabase.from("store_products").select("*").eq("slug", slug).eq("active", true).maybeSingle();
       return data;
     },
   });
 
-  const sizes: string[] =
-    (p as any)?.sizes?.length
-      ? (p as any).sizes
-      : DEFAULT_SIZES;
+  const sizes: string[] = (p as any)?.sizes?.length ? (p as any).sizes : DEFAULT_SIZES;
+  const colors: string[] = (p as any)?.colors ?? [];
+  const gallery: Record<string, string[]> = (p as any)?.gallery ?? {};
 
-  const colors: string[] =
-    (p as any)?.colors ?? [];
-
-  const gallery: Record<string, string[]> =
-    (p as any)?.gallery ?? {};
-
-  const images = useMemo(() => {
-    if (!p) return [];
-
-    const main = (p as any)?.images || [];
-
-    const extra = Object.values(gallery).flat();
-
-    return [...new Set([...main, ...extra])];
-  }, [p, gallery]);
-
-  if (isLoading) {
-    return (
-      <div className="container py-20 text-center">
-        Loading...
-      </div>
-    );
-  }
-
-  if (!p) {
-    return (
-      <div className="container py-20 text-center">
-        Product not found
-      </div>
-    );
-  }
-
-  return (
-    <div className="container py-10">
-
-      {/* Back Button */}
-      <Button
-        variant="outline"
-        className="mb-6"
-        onClick={() => navigate({ to: "/store" })}
-      >
-        <ArrowLeft className="h-4 w-4 mr-2" />
-        Back
-      </Button>
-
-      <div className="grid md:grid-cols-2 gap-10">
-
-        {/* Product Images */}
-        <div className="space-y-4">
-
-          <div className="rounded-3xl border overflow-hidden bg-card p-4">
-            <img
-              src={images?.[0]}
-              alt={(p as any)?.name}
-              className="w-full h-[450px] object-contain"
-            />
-          </div>
-
-          <div className="grid grid-cols-4 gap-3">
-            {images?.map((img, i) => (
-              <div
-                key={i}
-                className="rounded-xl border overflow-hidden bg-card p-2"
-              >
-                <img
-                  src={img}
-                  alt=""
-                  className="w-full h-24 object-contain"
-                />
-              </div>
-            ))}
-          </div>
-
-        </div>
-
-        {/* Product Details */}
-        <div>
-
-          <div className="flex items-center gap-2 text-sm text-green-500 font-semibold mb-2">
-            <ShieldCheck className="h-4 w-4" />
-            Verified Product
-          </div>
-
-          <h1 className="text-4xl font-extrabold mb-3">
-            🔥 {(p as any)?.name}
-          </h1>
-
-          <div className="flex items-center gap-2 text-muted-foreground mb-4">
-            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-            {(p as any)?.rating || 5} Rating
-          </div>
-
-          <div className="text-3xl font-bold text-primary mb-6">
-            PKR {(p as any)?.price}
-          </div>
-
-          {/* Sizes */}
-          <div className="mb-6">
-
-            <div className="font-semibold mb-3">
-              Select Size
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              {sizes.map((size) => (
-                <button
-                  key={size}
-                  className="px-5 py-2 rounded-xl border bg-card hover:bg-primary hover:text-white transition"
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
-
-          </div>
-
-          {/* Colors */}
-          {!!colors.length && (
-            <div className="mb-6">
-
-              <div className="font-semibold mb-3">
-                Colors
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                {colors.map((c) => (
-                  <div
-                    key={c}
-                    className="px-4 py-2 rounded-xl border"
-                  >
-                    {c}
-                  </div>
-                ))}
-              </div>
-
-            </div>
-          )}
-
-          {/* Features */}
-          <div className="space-y-3 mb-8">
-
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
-              Premium Quality
-            </div>
-
-            <div className="flex items-center gap-2">
-              <ShoppingBag className="h-4 w-4 text-primary" />
-              Fast Delivery
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Database className="h-4 w-4 text-blue-500" />
-              Secure Product
-            </div>
-
-          </div>
-
-          {/* Quick Buy Button */}
-          <Link to="/cart">
-            <Button
-              size="lg"
-              className="w-full rounded-2xl text-lg"
-            >
-              Continue
-            </Button>
-          </Link>
-
-        </div>
-      </div>
-    </div>
-  );
-            }  const [size, setSize] = useState<string>("");
+  const [size, setSize] = useState<string>("");
   const [color, setColor] = useState<string>("");
   const [activeImg, setActiveImg] = useState(0);
   const [checkoutOpen, setCheckoutOpen] = useState(Boolean(buy));
@@ -347,8 +187,8 @@ function StoreProduct() {
 
           <div className="space-y-4">
             <div>
-              <div className="Databaser gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-400">
-                <CheckCircle2 className="h-3 w-3" />
+              <div className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-400">
+                🗄️ Database Item <CheckCircle2 className="h-3 w-3" />
               </div>
               <h1 className="mt-2 text-3xl font-black">{p.title}</h1>
               <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
