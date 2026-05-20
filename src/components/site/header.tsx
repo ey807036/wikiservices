@@ -10,6 +10,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { VerifiedBadge } from "@/components/site/verified-badge";
 import { useState } from "react";
 
 const NAV = [
@@ -63,12 +64,16 @@ export function Header() {
         {isStore ? (
           <Link to="/store" className="flex items-center gap-2 font-bold text-xl">
             <img src={logo} alt="Wiki Store" className="h-9 w-9 drop-shadow-[0_0_12px_oklch(0.85_0.27_145/0.5)]" width={36} height={36} />
-            <span className="hidden sm:inline text-glow">Wiki Store</span>
+            <span className="hidden sm:inline-flex items-center gap-1 text-glow">
+              Wiki Store <VerifiedBadge color="green" size={16} />
+            </span>
           </Link>
         ) : (
           <Link to="/" className="flex items-center gap-2 font-bold text-xl">
             <img src={logo} alt="Wikiservices" className="h-9 w-9 drop-shadow-[0_0_12px_oklch(0.85_0.27_145/0.5)]" width={36} height={36} />
-            <span className="hidden sm:inline text-glow">Wikiservices</span>
+            <span className="hidden sm:inline-flex items-center gap-1 text-glow">
+              Wikiservices <VerifiedBadge color="green" size={16} />
+            </span>
           </Link>
         )}
 

@@ -531,6 +531,9 @@ export type Database = {
           id: number
           lucky_logo_url: string | null
           shop_logo_url: string | null
+          store_hero_subtitle: string | null
+          store_hero_tag: string | null
+          store_hero_title: string | null
           store_logo_url: string | null
           store_name: string
           theme: string
@@ -545,6 +548,9 @@ export type Database = {
           id?: number
           lucky_logo_url?: string | null
           shop_logo_url?: string | null
+          store_hero_subtitle?: string | null
+          store_hero_tag?: string | null
+          store_hero_title?: string | null
           store_logo_url?: string | null
           store_name?: string
           theme?: string
@@ -559,6 +565,9 @@ export type Database = {
           id?: number
           lucky_logo_url?: string | null
           shop_logo_url?: string | null
+          store_hero_subtitle?: string | null
+          store_hero_tag?: string | null
+          store_hero_title?: string | null
           store_logo_url?: string | null
           store_name?: string
           theme?: string
@@ -654,6 +663,7 @@ export type Database = {
       store_products: {
         Row: {
           active: boolean
+          category: string
           category_id: string | null
           colors: string[] | null
           created_at: string
@@ -666,12 +676,14 @@ export type Database = {
           price: number
           sizes: string[] | null
           slug: string
+          sort_order: number
           title: string
           updated_at: string
           video_url: string | null
         }
         Insert: {
           active?: boolean
+          category?: string
           category_id?: string | null
           colors?: string[] | null
           created_at?: string
@@ -684,12 +696,14 @@ export type Database = {
           price?: number
           sizes?: string[] | null
           slug: string
+          sort_order?: number
           title: string
           updated_at?: string
           video_url?: string | null
         }
         Update: {
           active?: boolean
+          category?: string
           category_id?: string | null
           colors?: string[] | null
           created_at?: string
@@ -702,6 +716,7 @@ export type Database = {
           price?: number
           sizes?: string[] | null
           slug?: string
+          sort_order?: number
           title?: string
           updated_at?: string
           video_url?: string | null

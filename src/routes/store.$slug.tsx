@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, CheckCircle2, CreditCard, Database, MapPin, Phone, ShieldAlert, ShieldCheck, ShoppingBag, Star, Truck, User } from "lucide-react";
+import { ArrowLeft, CreditCard, Database, MapPin, Phone, ShieldAlert, ShieldCheck, ShoppingBag, Star, Truck, User, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,30 @@ import { toast } from "sonner";
 import { PayfastCheckout } from "@/components/site/payfast-checkout";
 import { useAuth } from "@/lib/auth-context";
 import { NeonLogo } from "@/components/site/neon-logo";
+import { VerifiedBadge } from "@/components/site/verified-badge";
+import e1 from "@/assets/emojis/e1.png";
+import e3 from "@/assets/emojis/e3.png";
+import e5 from "@/assets/emojis/e5.png";
+import e11 from "@/assets/emojis/e11.png";
+import e12 from "@/assets/emojis/e12.png";
+import e13 from "@/assets/emojis/e13.png";
+import e14 from "@/assets/emojis/e14.png";
+import e15 from "@/assets/emojis/e15.png";
+import e17 from "@/assets/emojis/e17.png";
+import e21 from "@/assets/emojis/e21.png";
+import e22 from "@/assets/emojis/e22.png";
+
+const PRODUCT_EMOJIS = [e1, e3, e5, e11, e12, e13, e14, e15, e17, e21, e22];
+const emojiFor = (id: string) => {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return PRODUCT_EMOJIS[h % PRODUCT_EMOJIS.length];
+};
+const soldFor = (id: string) => {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 17 + id.charCodeAt(i)) >>> 0;
+  return 100 + (h % 900);
+};
 
 export const Route = createFileRoute("/store/$slug")({
   validateSearch: (s: Record<string, unknown>) => ({
@@ -134,6 +158,28 @@ function StoreProduct() {
     requestAnimationFrame(() => checkoutRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [muted, setMuted] = useState(true);
+  // Try to autoplay with sound on first user nav (often allowed if buy=1 came from a click)
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v || !p?.video_url) return;
+    v.muted = false;
+    v.play().then(() => setMuted(false)).catch(() => {
+      v.muted = true;
+      setMuted(true);
+      v.play().catch(() => {});
+    });
+  }, [p?.video_url]);
+
+  const toggleMute = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = !v.muted;
+    setMuted(v.muted);
+    v.play().catch(() => {});
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
       <div className="container mx-auto px-4 py-6">
@@ -149,25 +195,37 @@ function StoreProduct() {
 
         <div className="mt-4 grid gap-6 lg:grid-cols-2">
           <div className="space-y-3">
-            <div className="overflow-hidden rounded-2xl border bg-card">
+            <div className="relative overflow-hidden rounded-2xl border bg-card">
               {p.video_url ? (
-                <video
-                  src={p.video_url}
-                  poster={currentImg || undefined}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  controls
-                  controlsList="nodownload noplaybackrate noremoteplayback"
-                  disablePictureInPicture
-                  onContextMenu={(e) => e.preventDefault()}
-                  className="aspect-square w-full object-cover"
-                />
+                <>
+                  <video
+                    ref={videoRef}
+                    src={p.video_url}
+                    poster={currentImg || undefined}
+                    autoPlay
+                    loop
+                    playsInline
+                    preload="auto"
+                    controlsList="nodownload noplaybackrate noremoteplayback nofullscreen"
+                    disablePictureInPicture
+                    onContextMenu={(e) => e.preventDefault()}
+                    className="aspect-square w-full object-cover pointer-events-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={toggleMute}
+                    aria-label={muted ? "Unmute" : "Mute"}
+                    className="absolute bottom-3 right-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur ring-1 ring-white/30 hover:bg-black/80"
+                  >
+                    {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                  </button>
+                </>
               ) : currentImg ? (
                 <img src={currentImg} alt={p.title} className="aspect-square w-full object-cover" />
               ) : (
-                <div className="grid aspect-square place-items-center text-muted-foreground"><Database className="h-16 w-16" /></div>
+                <div className="grid aspect-square place-items-center">
+                  <img src={emojiFor(p.id)} alt="" className="h-24 w-24" />
+                </div>
               )}
             </div>
             {images.length > 1 && (
@@ -187,13 +245,14 @@ function StoreProduct() {
 
           <div className="space-y-4">
             <div>
-              <div className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-bold text-emerald-400">
-                🗄️ Database Item <CheckCircle2 className="h-3 w-3" />
-              </div>
-              <h1 className="mt-2 text-3xl font-black">{p.title}</h1>
+              <h1 className="mt-2 flex items-center gap-2 text-3xl font-black">
+                <img src={emojiFor(p.id)} alt="" className="h-8 w-8" />
+                {p.title}
+                <VerifiedBadge color="green" size={20} />
+              </h1>
               <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                 <span className="inline-flex items-center gap-1"><Star className="h-4 w-4 fill-accent text-accent" /> 4.8</span>
-                <span>· Fake Sold Out 100+</span>
+                <span className="text-emerald-400 font-bold">· ✅ Sold {soldFor(p.id)}+</span>
                 <span>· In stock</span>
               </div>
               <div className="mt-3 flex items-baseline gap-3">

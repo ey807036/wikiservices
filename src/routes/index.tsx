@@ -113,6 +113,9 @@ function Home() {
 
 
 
+      {/* INTRO VIDEO (moved to top per request) */}
+      <IntroVideo />
+
       {/* 1 RUPEE OFFER */}
       <section className="container mx-auto px-4 pt-8">
         <Link to="/lucky-draw" className="block mx-auto max-w-3xl">
@@ -172,8 +175,6 @@ function Home() {
         </Link>
       </section>
 
-      {/* INTRO VIDEO */}
-      <IntroVideo />
 
       {/* ARSENAL */}
       <section id="arsenal" className="container mx-auto px-4 py-16">
