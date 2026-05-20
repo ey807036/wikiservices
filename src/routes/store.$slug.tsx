@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, CheckCircle2, CreditCard, Database, MapPin, Phone, ShieldAlert, ShieldCheck, ShoppingBag, Star, Truck, User } from "lucide-react";
+import { ArrowLeft, CreditCard, Database, MapPin, Phone, ShieldAlert, ShieldCheck, ShoppingBag, Star, Truck, User, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,30 @@ import { toast } from "sonner";
 import { PayfastCheckout } from "@/components/site/payfast-checkout";
 import { useAuth } from "@/lib/auth-context";
 import { NeonLogo } from "@/components/site/neon-logo";
+import { VerifiedBadge } from "@/components/site/verified-badge";
+import e1 from "@/assets/emojis/e1.png";
+import e3 from "@/assets/emojis/e3.png";
+import e5 from "@/assets/emojis/e5.png";
+import e11 from "@/assets/emojis/e11.png";
+import e12 from "@/assets/emojis/e12.png";
+import e13 from "@/assets/emojis/e13.png";
+import e14 from "@/assets/emojis/e14.png";
+import e15 from "@/assets/emojis/e15.png";
+import e17 from "@/assets/emojis/e17.png";
+import e21 from "@/assets/emojis/e21.png";
+import e22 from "@/assets/emojis/e22.png";
+
+const PRODUCT_EMOJIS = [e1, e3, e5, e11, e12, e13, e14, e15, e17, e21, e22];
+const emojiFor = (id: string) => {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return PRODUCT_EMOJIS[h % PRODUCT_EMOJIS.length];
+};
+const soldFor = (id: string) => {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 17 + id.charCodeAt(i)) >>> 0;
+  return 100 + (h % 900);
+};
 
 export const Route = createFileRoute("/store/$slug")({
   validateSearch: (s: Record<string, unknown>) => ({
