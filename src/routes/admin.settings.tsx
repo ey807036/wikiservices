@@ -66,6 +66,9 @@ function Settings() {
       lucky_logo_url: form.lucky_logo_url || null,
       store_logo_url: form.store_logo_url || null,
       shop_logo_url: form.shop_logo_url || null,
+      store_hero_tag: form.store_hero_tag || null,
+      store_hero_title: form.store_hero_title || null,
+      store_hero_subtitle: form.store_hero_subtitle || null,
       updated_at: new Date().toISOString(),
     }).eq("id", 1);
     setSaving(false);
@@ -139,6 +142,20 @@ function Settings() {
             onUpload={(f) => uploadLogo(f, "lucky")}
             uploading={uploading === "lucky"}
           />
+        </div>
+
+        {/* Wiki Store hero text */}
+        <div className="rounded-xl border bg-secondary/30 p-4 space-y-3">
+          <h3 className="font-bold">Wiki Store (Store 2) hero text</h3>
+          <Field label="Top badge / tag">
+            <Input value={form.store_hero_tag ?? ""} onChange={e => setForm({ ...form, store_hero_tag: e.target.value })} placeholder="Wiki Store · Limited Drop" />
+          </Field>
+          <Field label="Main title">
+            <Input value={form.store_hero_title ?? ""} onChange={e => setForm({ ...form, store_hero_title: e.target.value })} placeholder="Premium Items, -30% Off" />
+          </Field>
+          <Field label="Subtitle / promise line">
+            <Textarea rows={2} value={form.store_hero_subtitle ?? ""} onChange={e => setForm({ ...form, store_hero_subtitle: e.target.value })} placeholder="Verified items ✅ — fast checkout, secure PayFast payment, instant order confirmation." />
+          </Field>
         </div>
 
         <Field label="Site theme" hint="Pick the color theme for the whole storefront">

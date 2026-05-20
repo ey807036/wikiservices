@@ -25,12 +25,15 @@ type Form = {
   sizes: string[];
   colors: string[];
   gallery: Record<string, string[]>;
+  category: string;
+  sort_order: string;
 };
 
 const blank: Form = {
   title: "", slug: "", description: "", price: "", old_price: "",
   image_url: "", video_url: "", in_stock: true, active: true,
   sizes: ["S", "M", "L", "XL"], colors: [], gallery: {},
+  category: "unisex", sort_order: "0",
 };
 
 function slugify(s: string) {
@@ -130,6 +133,8 @@ function AdminStore() {
       sizes: form.sizes,
       colors: form.colors,
       gallery: form.gallery,
+      category: form.category || "unisex",
+      sort_order: Number(form.sort_order) || 0,
       updated_at: new Date().toISOString(),
     };
     let error;
@@ -155,6 +160,8 @@ function AdminStore() {
       sizes: p.sizes?.length ? p.sizes : ["S", "M", "L", "XL"],
       colors: p.colors ?? [],
       gallery: p.gallery ?? {},
+      category: p.category ?? "unisex",
+      sort_order: String(p.sort_order ?? 0),
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -185,6 +192,22 @@ function AdminStore() {
           <div><Label>Slug</Label><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: slugify(e.target.value) })} /></div>
           <div><Label>Price (Rs.)</Label><Input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} /></div>
           <div><Label>Old Price (optional)</Label><Input type="number" value={form.old_price} onChange={(e) => setForm({ ...form, old_price: e.target.value })} /></div>
+          <div>
+            <Label>Category (top filter)</Label>
+            <select
+              className="mt-1 flex h-10 w-full rounded-md border bg-background px-3 text-sm"
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+            >
+              <option value="unisex">✨ Unisex</option>
+              <option value="boy">👦 Boys</option>
+              <option value="girl">👧 Girls</option>
+            </select>
+          </div>
+          <div>
+            <Label>Sort order (lower = shown first)</Label>
+            <Input type="number" value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: e.target.value })} />
+          </div>
         </div>
 
         <div><Label>Description</Label><Textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
