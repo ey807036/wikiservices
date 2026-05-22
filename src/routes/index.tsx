@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Volume2, VolumeX, ShoppingBag, Sparkles } from "lucide-react";
 import { NeonLogo } from "@/components/site/neon-logo";
+import { VerifiedBadge } from "@/components/site/verified-badge";
 import {
   ArrowRight, Wifi, Bluetooth, Car, Tv, Snowflake,
   Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star, Flame,
@@ -19,6 +20,8 @@ type Hack = {
   desc: string;
   priceNum: number;
   sold: number;
+  tone: string;
+  logo?: "whatsapp" | "crown" | "database" | "danger" | "signal" | "drone";
   hot?: boolean;
   href?: string;       // external link (opens new tab)
   to?: string;         // internal route
@@ -32,15 +35,15 @@ const ADMIN_WA = "923186376181";
 const waLink = (msg: string) => `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`;
 
 const HACKS: Hack[] = [
-  { icon: MessageCircle, name: "Fake WhatsApp Number", desc: "Anonymous WhatsApp numbers — pick & chat instantly", priceNum: 150, sold: 2000, hot: true, action: "fakewa" },
-  { icon: Crown,         name: "Pro Accounts by Wiki", desc: "Netflix, CapCut Pro, Remini, Spotify, ChatGPT+, Canva & 20+ premium accounts", priceNum: 100, sold: 8200, hot: true, action: "pro" },
-  { icon: Database,      name: "New SimData by Wiki",   desc: "Fresh 2024–2026 SIM owner data lookup (paid)", priceNum: 500, sold: 4500, hot: true },
-  { icon: Wifi,          name: "WiFi Jammer",           desc: "Block any WiFi signal in range", priceNum: 5000, sold: 87, hot: true },
-  { icon: Skull,         name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Bulb & more", priceNum: 5000, sold: 42 },
-  { icon: IdCard,        name: "CNIC Colour Copy + Family Details", desc: "Full colour CNIC copy plus complete family record", priceNum: 5000, sold: 500 },
-  { icon: Bluetooth,     name: "Bluetooth Jammer",      desc: "Kill nearby Bluetooth devices", priceNum: 10000, sold: 64 },
-  { icon: Smartphone,    name: "SIM Signal Jammer",     desc: "Block all SIM / mobile network signals in range", priceNum: 50000, sold: 1 },
-  { icon: Camera,        name: "Drone Jammer & Controller", desc: "Jam, hijack & take control of nearby camera drones", priceNum: 50000, sold: 3 },
+  { icon: MessageCircle, name: "Fake WhatsApp Number", desc: "Anonymous WhatsApp numbers — pick & chat instantly", priceNum: 150, sold: 2000, tone: "whatsapp", logo: "whatsapp", hot: true, action: "fakewa" },
+  { icon: Crown,         name: "Pro Accounts by Wiki", desc: "Netflix, CapCut Pro, Remini, Spotify, ChatGPT+, Canva & 20+ premium accounts", priceNum: 100, sold: 8200, tone: "premium", logo: "crown", hot: true, action: "pro" },
+  { icon: Database,      name: "New SimData by Wiki",   desc: "Fresh 2024–2026 SIM owner data lookup (paid)", priceNum: 500, sold: 4500, tone: "data", logo: "database", hot: true },
+  { icon: Wifi,          name: "WiFi Jammer",           desc: "Block any WiFi signal in range", priceNum: 5000, sold: 87, tone: "signal", logo: "signal", hot: true },
+  { icon: Skull,         name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Bulb & more", priceNum: 5000, sold: 42, tone: "danger", logo: "danger" },
+  { icon: IdCard,        name: "CNIC Colour Copy + Family Details", desc: "Full colour CNIC copy plus complete family record", priceNum: 5000, sold: 500, tone: "id", logo: "database" },
+  { icon: Bluetooth,     name: "Bluetooth Jammer",      desc: "Kill nearby Bluetooth devices", priceNum: 10000, sold: 64, tone: "bluetooth", logo: "signal" },
+  { icon: Smartphone,    name: "SIM Signal Jammer",     desc: "Block all SIM / mobile network signals in range", priceNum: 50000, sold: 1, tone: "sim", logo: "signal" },
+  { icon: Camera,        name: "Drone Jammer & Controller", desc: "Jam, hijack & take control of nearby camera drones", priceNum: 50000, sold: 3, tone: "drone", logo: "drone" },
 ];
 
 
