@@ -218,3 +218,38 @@ function WikiStore() {
     </div>
   );
 }
+
+function LazyStoreVideo({ src, poster }: { src: string; poster?: string }) {
+  const ref = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      },
+      { rootMargin: "180px" },
+    );
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={ref}
+      src={src}
+      poster={poster}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      disablePictureInPicture
+      controlsList="nodownload noplaybackrate noremoteplayback"
+      onContextMenu={(e) => e.preventDefault()}
+      className="h-full w-full object-cover pointer-events-none"
+    />
+  );
+}
