@@ -202,6 +202,8 @@ function AdminStore() {
               <option value="unisex">✨ Unisex</option>
               <option value="boy">👦 Boys</option>
               <option value="girl">👧 Girls</option>
+              <option value="shoes">👟 Shoes</option>
+              <option value="electronics">⚡ Electronics</option>
             </select>
           </div>
           <div>
