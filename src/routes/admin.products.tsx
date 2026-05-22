@@ -133,7 +133,24 @@ function AdminProducts() {
               <div><Label>Price *</Label><Input type="number" step="0.01" required value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} /></div>
               <div><Label>Compare-at price</Label><Input type="number" step="0.01" value={form.compare_price} onChange={e => setForm({ ...form, compare_price: e.target.value })} /></div>
               <div><Label>Stock</Label><Input type="number" value={form.stock} onChange={e => setForm({ ...form, stock: e.target.value })} /></div>
-              <div className="sm:col-span-2"><Label>Image URLs (comma-separated)</Label><Textarea value={form.images} onChange={e => setForm({ ...form, images: e.target.value })} /></div>
+              <div className="sm:col-span-2 space-y-3">
+                <Label>Images (multiple upload + manual URLs)</Label>
+                <div className="grid grid-cols-4 gap-2">
+                  {imageList().map((src: string, i: number) => (
+                    <div key={src + i} className="relative aspect-square overflow-hidden rounded-lg border bg-secondary/40">
+                      <img src={src} alt="" className="h-full w-full object-cover" />
+                      <button type="button" onClick={() => setImages(imageList().filter((_: string, idx: number) => idx !== i))} className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full bg-background/85 text-foreground">
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  <label className="grid aspect-square cursor-pointer place-items-center rounded-lg border-2 border-dashed bg-secondary/30 text-xs text-muted-foreground hover:bg-secondary/60">
+                    {uploading ? "Uploading…" : <><Upload className="h-5 w-5" />Upload</>}
+                    <input type="file" accept="image/*" multiple hidden onChange={(e) => uploadImages(e.target.files)} />
+                  </label>
+                </div>
+                <Textarea value={form.images} onChange={e => setForm({ ...form, images: e.target.value })} placeholder="Image URLs, comma-separated" />
+              </div>
               <div className="sm:col-span-2"><Label>Short description</Label><Input value={form.short_description} onChange={e => setForm({ ...form, short_description: e.target.value })} /></div>
               <div className="sm:col-span-2"><Label>Description</Label><Textarea rows={4} value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} /></div>
               <label className="flex items-center gap-2 text-sm"><Switch checked={form.featured} onCheckedChange={v => setForm({ ...form, featured: v })} /> Featured</label>
@@ -165,7 +182,9 @@ function AdminProducts() {
               <tr key={p.id} className="border-t">
                 <td className="p-3">
                   <div className="flex items-center gap-3">
-                    {p.images?.[0] && <img src={p.images[0]} alt="" className="h-10 w-10 rounded object-cover" />}
+                    {p.images?.[0]
+                      ? <img src={p.images[0]} alt="" className="h-10 w-10 rounded object-cover" />
+                      : <div className="grid h-10 w-10 place-items-center rounded bg-secondary"><ImageIcon className="h-4 w-4 opacity-60" /></div>}
                     <div>
                       <div className="font-medium">{p.name}</div>
                       <div className="text-xs text-muted-foreground">{p.brand}</div>
