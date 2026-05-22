@@ -71,7 +71,9 @@ function Home() {
             <ShieldAlert className="h-5 w-5 text-red-500" /> UNDERGROUND WIKI STORE 💀
           </span>
           <h1 className="mt-5 text-5xl font-black uppercase leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
-            <span className="block text-gradient text-3xl md:text-5xl">Jammers & Hacking Devices</span>
+            <span className="inline-flex items-center justify-center gap-2 text-gradient text-3xl md:text-5xl">
+              Jammers & Hacking Devices <VerifiedBadge color="green" size={24} />
+            </span>
           </h1>
           <p className="mx-auto mt-5 flex max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 text-lg font-black uppercase tracking-wider md:text-2xl">
             <span className="bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_oklch(0.65_0.25_25/0.5)]">Jam</span>
@@ -93,17 +95,12 @@ function Home() {
             ))}
           </div>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <a href="#arsenal">
-              <Button size="lg" variant="cool" className="btn-neon h-12 px-7 text-base rounded-full">
-                Shop Now <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </a>
             <Link to="/sim-database">
               <Button
                 size="lg"
                 className="h-12 px-7 text-base rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_25px_oklch(0.65_0.25_25/0.7)] hover:opacity-90 animate-pulse"
               >
-                <Skull className="mr-2 h-4 w-4" /> Free SimData
+                <Skull className="mr-2 h-4 w-4" /> Free SimData <VerifiedBadge color="green" size={16} />
               </Button>
             </Link>
           </div>
