@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tan
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ShoppingBag, CheckCircle2, Sparkles, Star, Play } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { NeonLogo } from "@/components/site/neon-logo";
 import { VerifiedBadge } from "@/components/site/verified-badge";
 import e1 from "@/assets/emojis/e1.png";
@@ -44,14 +44,15 @@ const CATS = [
   { id: "boy", label: "👦 Boys" },
   { id: "girl", label: "👧 Girls" },
   { id: "unisex", label: "✨ Unisex" },
+  { id: "shoes", label: "👟 Shoes" },
+  { id: "electronics", label: "⚡ Electronics" },
 ];
 
 function WikiStore() {
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
   const [cat, setCat] = useState("all");
-
-  if (path !== "/store") return <Outlet />;
+  const isStoreIndex = path === "/store";
 
   const { data: settings } = useQuery({
     queryKey: ["site-settings-store"],
@@ -61,6 +62,7 @@ function WikiStore() {
         .select("store_logo_url, store_name, store_hero_tag, store_hero_title, store_hero_subtitle")
         .eq("id", 1)
         .maybeSingle()).data,
+    enabled: isStoreIndex,
   });
 
   const { data: products = [], isLoading } = useQuery({
@@ -74,6 +76,7 @@ function WikiStore() {
         .order("created_at", { ascending: false });
       return data ?? [];
     },
+    enabled: isStoreIndex,
   });
 
   const filtered = useMemo(
@@ -85,6 +88,8 @@ function WikiStore() {
   const heroTag = s.store_hero_tag || `${s.store_name || "Wiki Store"} · Limited Drop`;
   const heroTitle = s.store_hero_title || "Premium Items, -30% Off";
   const heroSubtitle = s.store_hero_subtitle || "Verified items ✅ — fast checkout, secure PayFast payment, instant order confirmation.";
+
+  if (!isStoreIndex) return <Outlet />;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/20">
@@ -162,18 +167,9 @@ function WikiStore() {
                 >
                   <div className="relative aspect-square bg-gradient-to-br from-secondary to-background overflow-hidden">
                     {p.video_url ? (
-                      <video
+                      <LazyStoreVideo
                         src={p.video_url}
                         poster={p.image_url || undefined}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="auto"
-                        disablePictureInPicture
-                        controlsList="nodownload noplaybackrate noremoteplayback"
-                        onContextMenu={(e) => e.preventDefault()}
-                        className="h-full w-full object-cover pointer-events-none"
                       />
                     ) : p.image_url ? (
                       <img src={p.image_url} alt={p.title} loading="lazy" className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500" />
