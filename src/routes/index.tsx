@@ -193,7 +193,7 @@ function Home() {
             return (
               <div
                 key={h.name}
-                className={`card-hack group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card ${isHot ? "ring-2 ring-red-500/70" : ""}`}
+                className={`group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card transition-transform duration-300 hover:-translate-y-1 ${isHot ? "ring-2 ring-red-500/70" : ""}`}
               >
                 {isHot && (
                   <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)] animate-pulse">
@@ -205,10 +205,10 @@ function Home() {
                 </span>
                 <div className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition ${isHot ? "bg-red-500/30 group-hover:bg-red-500/50" : "bg-primary/10 group-hover:bg-primary/30"}`} />
                 <div className="relative">
-                  <span className="grid h-12 w-12 place-items-center rounded-xl bg-red-500/20 text-red-500 ring-1 ring-red-500/40 shadow-[0_0_14px_oklch(0.65_0.25_25/0.55)]">
-                    <Icon className="h-6 w-6" />
-                  </span>
-                  <h3 className={`mt-4 text-lg font-bold ${isHot ? "text-red-500" : ""}`}>{h.name}</h3>
+                  <ProductMark logo={h.logo} Icon={Icon} tone={h.tone} />
+                  <h3 className={`mt-4 flex items-center gap-1.5 text-lg font-bold ${isHot ? "text-red-500" : ""}`}>
+                    {h.name} <VerifiedBadge color="green" size={16} />
+                  </h3>
                   <p className="mt-1 text-sm text-muted-foreground">{h.desc}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-2">
                     <div className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-3 py-1 text-sm font-black text-black shadow-[0_0_14px_oklch(0.85_0.18_85/0.55)]">
