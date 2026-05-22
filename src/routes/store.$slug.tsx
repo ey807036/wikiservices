@@ -107,6 +107,19 @@ function StoreProduct() {
     return [];
   }, [color, gallery, p?.image_url]);
 
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [muted, setMuted] = useState(true);
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v || !p?.video_url) return;
+    v.muted = false;
+    v.play().then(() => setMuted(false)).catch(() => {
+      v.muted = true;
+      setMuted(true);
+      v.play().catch(() => {});
+    });
+  }, [p?.video_url]);
+
   if (isLoading) return <div className="container mx-auto p-8 text-muted-foreground">Loading…</div>;
   if (!p) return (
     <div className="container mx-auto p-8 text-center">
@@ -158,19 +171,6 @@ function StoreProduct() {
     requestAnimationFrame(() => checkoutRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [muted, setMuted] = useState(true);
-  // Try to autoplay with sound on first user nav (often allowed if buy=1 came from a click)
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v || !p?.video_url) return;
-    v.muted = false;
-    v.play().then(() => setMuted(false)).catch(() => {
-      v.muted = true;
-      setMuted(true);
-      v.play().catch(() => {});
-    });
-  }, [p?.video_url]);
 
   const toggleMute = () => {
     const v = videoRef.current;
