@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Volume2, VolumeX, ShoppingBag, Sparkles } from "lucide-react";
 import { NeonLogo } from "@/components/site/neon-logo";
+import { VerifiedBadge } from "@/components/site/verified-badge";
 import {
   ArrowRight, Wifi, Bluetooth, Car, Tv, Snowflake,
   Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star, Flame,
@@ -19,6 +20,8 @@ type Hack = {
   desc: string;
   priceNum: number;
   sold: number;
+  tone: string;
+  logo?: "whatsapp" | "crown" | "database" | "danger" | "signal" | "drone";
   hot?: boolean;
   href?: string;       // external link (opens new tab)
   to?: string;         // internal route
@@ -32,15 +35,15 @@ const ADMIN_WA = "923186376181";
 const waLink = (msg: string) => `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`;
 
 const HACKS: Hack[] = [
-  { icon: MessageCircle, name: "Fake WhatsApp Number", desc: "Anonymous WhatsApp numbers — pick & chat instantly", priceNum: 150, sold: 2000, hot: true, action: "fakewa" },
-  { icon: Crown,         name: "Pro Accounts by Wiki", desc: "Netflix, CapCut Pro, Remini, Spotify, ChatGPT+, Canva & 20+ premium accounts", priceNum: 100, sold: 8200, hot: true, action: "pro" },
-  { icon: Database,      name: "New SimData by Wiki",   desc: "Fresh 2024–2026 SIM owner data lookup (paid)", priceNum: 500, sold: 4500, hot: true },
-  { icon: Wifi,          name: "WiFi Jammer",           desc: "Block any WiFi signal in range", priceNum: 5000, sold: 87, hot: true },
-  { icon: Skull,         name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Bulb & more", priceNum: 5000, sold: 42 },
-  { icon: IdCard,        name: "CNIC Colour Copy + Family Details", desc: "Full colour CNIC copy plus complete family record", priceNum: 5000, sold: 500 },
-  { icon: Bluetooth,     name: "Bluetooth Jammer",      desc: "Kill nearby Bluetooth devices", priceNum: 10000, sold: 64 },
-  { icon: Smartphone,    name: "SIM Signal Jammer",     desc: "Block all SIM / mobile network signals in range", priceNum: 50000, sold: 1 },
-  { icon: Camera,        name: "Drone Jammer & Controller", desc: "Jam, hijack & take control of nearby camera drones", priceNum: 50000, sold: 3 },
+  { icon: MessageCircle, name: "Fake WhatsApp Number", desc: "Anonymous WhatsApp numbers — pick & chat instantly", priceNum: 150, sold: 2000, tone: "whatsapp", logo: "whatsapp", hot: true, action: "fakewa" },
+  { icon: Crown,         name: "Pro Accounts by Wiki", desc: "Netflix, CapCut Pro, Remini, Spotify, ChatGPT+, Canva & 20+ premium accounts", priceNum: 100, sold: 8200, tone: "premium", logo: "crown", hot: true, action: "pro" },
+  { icon: Database,      name: "New SimData by Wiki",   desc: "Fresh 2024–2026 SIM owner data lookup (paid)", priceNum: 500, sold: 4500, tone: "data", logo: "database", hot: true },
+  { icon: Wifi,          name: "WiFi Jammer",           desc: "Block any WiFi signal in range", priceNum: 5000, sold: 87, tone: "signal", logo: "signal", hot: true },
+  { icon: Skull,         name: "All-in-One Device Hack 💀", desc: "Single device to control Car, TV, AC, Projector, Laptop, PC, Mobile, MP3/Sound, Camera, Bulb & more", priceNum: 5000, sold: 42, tone: "danger", logo: "danger" },
+  { icon: IdCard,        name: "CNIC Colour Copy + Family Details", desc: "Full colour CNIC copy plus complete family record", priceNum: 5000, sold: 500, tone: "id", logo: "database" },
+  { icon: Bluetooth,     name: "Bluetooth Jammer",      desc: "Kill nearby Bluetooth devices", priceNum: 10000, sold: 64, tone: "bluetooth", logo: "signal" },
+  { icon: Smartphone,    name: "SIM Signal Jammer",     desc: "Block all SIM / mobile network signals in range", priceNum: 50000, sold: 1, tone: "sim", logo: "signal" },
+  { icon: Camera,        name: "Drone Jammer & Controller", desc: "Jam, hijack & take control of nearby camera drones", priceNum: 50000, sold: 3, tone: "drone", logo: "drone" },
 ];
 
 
@@ -68,7 +71,9 @@ function Home() {
             <ShieldAlert className="h-5 w-5 text-red-500" /> UNDERGROUND WIKI STORE 💀
           </span>
           <h1 className="mt-5 text-5xl font-black uppercase leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
-            <span className="block text-gradient text-3xl md:text-5xl">Jammers & Hacking Devices</span>
+            <span className="inline-flex items-center justify-center gap-2 text-gradient text-3xl md:text-5xl">
+              Jammers & Hacking Devices <VerifiedBadge color="green" size={24} />
+            </span>
           </h1>
           <p className="mx-auto mt-5 flex max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 text-lg font-black uppercase tracking-wider md:text-2xl">
             <span className="bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_oklch(0.65_0.25_25/0.5)]">Jam</span>
@@ -90,17 +95,12 @@ function Home() {
             ))}
           </div>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <a href="#arsenal">
-              <Button size="lg" variant="cool" className="btn-neon h-12 px-7 text-base rounded-full">
-                Shop Now <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </a>
             <Link to="/sim-database">
               <Button
                 size="lg"
                 className="h-12 px-7 text-base rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_25px_oklch(0.65_0.25_25/0.7)] hover:opacity-90 animate-pulse"
               >
-                <Skull className="mr-2 h-4 w-4" /> Free SimData
+                <Skull className="mr-2 h-4 w-4" /> Free SimData <VerifiedBadge color="green" size={16} />
               </Button>
             </Link>
           </div>
@@ -193,7 +193,7 @@ function Home() {
             return (
               <div
                 key={h.name}
-                className={`card-hack group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card ${isHot ? "ring-2 ring-red-500/70" : ""}`}
+                className={`group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card transition-transform duration-300 hover:-translate-y-1 ${isHot ? "ring-2 ring-red-500/70" : ""}`}
               >
                 {isHot && (
                   <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)] animate-pulse">
@@ -205,10 +205,10 @@ function Home() {
                 </span>
                 <div className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition ${isHot ? "bg-red-500/30 group-hover:bg-red-500/50" : "bg-primary/10 group-hover:bg-primary/30"}`} />
                 <div className="relative">
-                  <span className="grid h-12 w-12 place-items-center rounded-xl bg-red-500/20 text-red-500 ring-1 ring-red-500/40 shadow-[0_0_14px_oklch(0.65_0.25_25/0.55)]">
-                    <Icon className="h-6 w-6" />
-                  </span>
-                  <h3 className={`mt-4 text-lg font-bold ${isHot ? "text-red-500" : ""}`}>{h.name}</h3>
+                  <ProductMark logo={h.logo} Icon={Icon} tone={h.tone} />
+                  <h3 className={`mt-4 flex items-center gap-1.5 text-lg font-bold ${isHot ? "text-red-500" : ""}`}>
+                    {h.name} <VerifiedBadge color="green" size={16} />
+                  </h3>
                   <p className="mt-1 text-sm text-muted-foreground">{h.desc}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-2">
                     <div className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-3 py-1 text-sm font-black text-black shadow-[0_0_14px_oklch(0.85_0.18_85/0.55)]">
@@ -313,5 +313,32 @@ function IntroVideo() {
         </div>
       </div>
     </section>
+  );
+}
+
+function ProductMark({ logo, Icon, tone }: { logo?: Hack["logo"]; Icon: any; tone: string }) {
+  if (logo === "whatsapp") {
+    return (
+      <span className="grid h-14 w-14 place-items-center rounded-2xl bg-[#25D366] text-white shadow-[0_0_22px_rgba(37,211,102,0.55)] ring-2 ring-white/20 transition-transform group-hover:scale-110 group-hover:-rotate-6">
+        <svg viewBox="0 0 32 32" className="h-8 w-8" fill="currentColor"><path d="M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.888 2.722.888.817 0 2.15-.515 2.478-1.318.13-.33.244-.73.244-1.09 0-.058 0-.144-.03-.215-.1-.172-2.434-1.39-2.678-1.39zm-2.908 7.593c-1.747 0-3.48-.53-4.942-1.49L7.793 24.41l1.132-3.337a8.955 8.955 0 0 1-1.72-5.272c0-4.955 4.04-8.995 8.997-8.995S25.2 10.845 25.2 15.8c0 4.958-4.04 8.998-8.998 8.998zm0-19.798c-5.96 0-10.8 4.842-10.8 10.8 0 1.964.53 3.898 1.546 5.574L5 27.176l5.974-1.92a10.807 10.807 0 0 0 16.03-9.455c0-5.958-4.842-10.8-10.802-10.8z" /></svg>
+      </span>
+    );
+  }
+
+  const toneClass: Record<string, string> = {
+    premium: "from-yellow-300 via-amber-500 to-orange-600 text-black",
+    data: "from-emerald-300 via-cyan-500 to-blue-700 text-white",
+    signal: "from-sky-300 via-blue-500 to-indigo-700 text-white",
+    danger: "from-red-500 via-rose-600 to-black text-white",
+    id: "from-lime-300 via-emerald-500 to-teal-700 text-white",
+    bluetooth: "from-blue-300 via-blue-600 to-violet-700 text-white",
+    sim: "from-fuchsia-400 via-rose-500 to-orange-500 text-white",
+    drone: "from-slate-200 via-cyan-400 to-slate-800 text-white",
+  };
+
+  return (
+    <span className={`grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br ${toneClass[tone] ?? toneClass.danger} shadow-[0_0_22px_color-mix(in_oklab,var(--primary)_45%,transparent)] ring-2 ring-white/20 transition-transform group-hover:scale-110 group-hover:rotate-6`}>
+      <Icon className="h-7 w-7 drop-shadow" />
+    </span>
   );
 }

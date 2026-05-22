@@ -153,7 +153,6 @@ function StoreProduct() {
   };
 
   const openCheckout = () => {
-    if (!selectedOptionsOk()) return;
     setCheckoutOpen(true);
     setPayStep("form");
     requestAnimationFrame(() => checkoutRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
