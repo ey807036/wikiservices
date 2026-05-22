@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Upload, X, Image as ImageIcon } from "lucide-react";
 import { money } from "@/lib/format";
 
 export const Route = createFileRoute("/admin/products")({ component: AdminProducts });
@@ -26,6 +26,7 @@ function AdminProducts() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any | null>(null);
   const [form, setForm] = useState<any>(empty);
+  const [uploading, setUploading] = useState(false);
 
   const { data: products = [] } = useQuery({
     queryKey: ["admin-products"],
@@ -37,6 +38,29 @@ function AdminProducts() {
   });
 
   const openNew = () => { setEditing(null); setForm(empty); setOpen(true); };
+  const imageList = () => String(form.images || "").split(",").map((s: string) => s.trim()).filter(Boolean);
+  const setImages = (urls: string[]) => setForm((f: any) => ({ ...f, images: urls.join(", ") }));
+  const uploadImages = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setUploading(true);
+    try {
+      const urls: string[] = [];
+      for (const file of Array.from(files)) {
+        const ext = file.name.split(".").pop() || "jpg";
+        const path = `store-one/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+        const { error } = await supabase.storage.from("store-products").upload(path, file, { upsert: false, contentType: file.type });
+        if (error) throw error;
+        const { data } = supabase.storage.from("store-products").getPublicUrl(path);
+        urls.push(data.publicUrl);
+      }
+      setImages([...imageList(), ...urls]);
+      toast.success(`${urls.length} image${urls.length > 1 ? "s" : ""} uploaded`);
+    } catch (e: any) {
+      toast.error(e.message || "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
   const openEdit = (p: any) => {
     setEditing(p);
     setForm({
