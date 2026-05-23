@@ -18,7 +18,7 @@ export const Route = createFileRoute("/admin/products")({ component: AdminProduc
 const empty = {
   name: "", slug: "", description: "", short_description: "",
   price: "0", compare_price: "", stock: "0", sku: "", brand: "",
-  images: "", category_id: "", featured: false, trending: false, active: true,
+  images: "", video_url: "", category_id: "", featured: false, trending: false, active: true,
 };
 
 function AdminProducts() {
