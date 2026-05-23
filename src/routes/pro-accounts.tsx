@@ -97,9 +97,7 @@ function ProAccountsPage() {
                     className="group flex items-center justify-between rounded-2xl border-2 border-amber-500/30 bg-background/60 p-3 transition hover:border-amber-400 hover:bg-amber-500/10 hover:scale-[1.03] text-left"
                   >
                     <span className="flex items-center gap-2.5">
-                      <span className={`grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br ${a.color} text-lg shadow-md ring-1 ring-white/20`}>
-                        {a.emoji}
-                      </span>
+                      <a.Logo className="h-10 w-10" />
                       <span className="flex flex-col leading-tight">
                         <span className="text-sm font-bold text-foreground">{a.name}</span>
                         <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">
