@@ -125,7 +125,7 @@ function ProAccountsPage() {
           <div className="w-full max-w-md rounded-2xl border-2 border-amber-400/60 bg-black p-5 shadow-[0_0_40px_oklch(0.85_0.18_85/0.4)]" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <span className={`grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br ${picked.color} text-lg ring-1 ring-white/20`}>{picked.emoji}</span>
+                <picked.Logo className="h-9 w-9" />
                 <div>
                   <div className="text-sm font-black text-amber-300">{picked.name}</div>
                   <div className="text-[10px] uppercase tracking-widest text-amber-400">Rs. 100 · Pro Account</div>
