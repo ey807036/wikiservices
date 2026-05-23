@@ -174,12 +174,11 @@ function Home() {
 
       {/* ARSENAL */}
       <section id="arsenal" className="container mx-auto px-4 py-16">
-        <div className="mb-10 text-center">
+        <div className="mb-8 text-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary">
             <Zap className="h-3.5 w-3.5" /> Hack Arsenal
           </span>
           <h2 className="mt-3 text-3xl font-bold md:text-4xl">Pick your weapon</h2>
-          <p className="mt-2 text-muted-foreground">Sorted low → high · grab the cheap ones first</p>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
