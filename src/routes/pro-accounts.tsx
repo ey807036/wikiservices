@@ -40,9 +40,6 @@ const ACCOUNTS: Acc[] = [
   { name: "Twitter / X Blue",     Logo: TwitterLogo,   cat: "Social" },
   // Other
   { name: "VPN Premium",          Logo: VPNLogo,       cat: "Other" },
-  // Other
-  { name: "VPN Premium",        emoji: "🛡️", cat: "Other",      color: "from-indigo-600 to-violet-800" },
-  { name: "Crunchyroll Mega",   emoji: "🍙", cat: "Other",      color: "from-orange-500 to-red-600" },
 ];
 
 const CATEGORIES = ["Streaming", "Editing", "AI Tools", "Social", "Other"];
