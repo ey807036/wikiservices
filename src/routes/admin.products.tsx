@@ -90,6 +90,7 @@ function AdminProducts() {
       brand: form.brand || null,
       category_id: form.category_id || null,
       images: form.images.split(",").map((s: string) => s.trim()).filter(Boolean),
+      video_url: form.video_url || null,
       featured: !!form.featured, trending: !!form.trending, active: !!form.active,
     };
     const res = editing
