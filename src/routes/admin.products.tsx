@@ -69,6 +69,7 @@ function AdminProducts() {
       compare_price: p.compare_price ? String(p.compare_price) : "",
       stock: String(p.stock),
       images: (p.images ?? []).join(", "),
+      video_url: p.video_url ?? "",
       category_id: p.category_id ?? "",
       sku: p.sku ?? "", brand: p.brand ?? "", description: p.description ?? "", short_description: p.short_description ?? "",
     });
