@@ -104,10 +104,6 @@ function Home() {
               </Button>
             </Link>
           </div>
-          <div className="mt-10 flex items-center justify-center gap-1">
-            {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-accent text-accent" />)}
-            <span className="ml-2 text-sm text-muted-foreground">Trusted by 12,000+ underground users</span>
-          </div>
         </div>
       </section>
 
