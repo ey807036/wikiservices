@@ -155,6 +155,39 @@ function AdminProducts() {
               </div>
               <div className="sm:col-span-2"><Label>Short description</Label><Input value={form.short_description} onChange={e => setForm({ ...form, short_description: e.target.value })} /></div>
               <div className="sm:col-span-2"><Label>Description</Label><Textarea rows={4} value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} /></div>
+              <div className="sm:col-span-2 space-y-2">
+                <Label>Video (URL — mp4/webm)</Label>
+                <Input value={form.video_url} onChange={e => setForm({ ...form, video_url: e.target.value })} placeholder="https://… .mp4" />
+                <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer">
+                  <input
+                    type="file"
+                    accept="video/*"
+                    hidden
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      setUploading(true);
+                      try {
+                        const ext = file.name.split(".").pop() || "mp4";
+                        const path = `store-one/videos/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+                        const { error } = await supabase.storage.from("store-products").upload(path, file, { upsert: false, contentType: file.type });
+                        if (error) throw error;
+                        const { data } = supabase.storage.from("store-products").getPublicUrl(path);
+                        setForm((f: any) => ({ ...f, video_url: data.publicUrl }));
+                        toast.success("Video uploaded");
+                      } catch (err: any) {
+                        toast.error(err.message || "Upload failed");
+                      } finally {
+                        setUploading(false);
+                      }
+                    }}
+                  />
+                  <span className="rounded-md border px-3 py-1.5 hover:bg-secondary/60">
+                    {uploading ? "Uploading…" : "📹 Upload video"}
+                  </span>
+                  {form.video_url && <span className="truncate text-emerald-500">✓ video set</span>}
+                </label>
+              </div>
               <label className="flex items-center gap-2 text-sm"><Switch checked={form.featured} onCheckedChange={v => setForm({ ...form, featured: v })} /> Featured</label>
               <label className="flex items-center gap-2 text-sm"><Switch checked={form.trending} onCheckedChange={v => setForm({ ...form, trending: v })} /> Trending</label>
               <label className="flex items-center gap-2 text-sm"><Switch checked={form.active} onCheckedChange={v => setForm({ ...form, active: v })} /> Active</label>
