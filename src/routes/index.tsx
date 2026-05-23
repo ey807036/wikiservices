@@ -8,7 +8,7 @@ import { NeonLogo } from "@/components/site/neon-logo";
 import { VerifiedBadge } from "@/components/site/verified-badge";
 import {
   ArrowRight, Wifi, Bluetooth, Car, Tv, Snowflake,
-  Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Star, Flame,
+  Laptop, Monitor, Smartphone, Music, Camera, Lightbulb, Skull, Zap, ShieldAlert, Flame,
   Database, IdCard, MessageCircle, Crown,
 } from "lucide-react";
 
