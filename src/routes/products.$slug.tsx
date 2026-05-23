@@ -40,6 +40,18 @@ function ProductPage() {
 
       <div className="grid gap-10 md:grid-cols-2">
         <div>
+          {p.video_url && (
+            <div className="mb-4 overflow-hidden rounded-3xl border bg-black">
+              <video
+                src={p.video_url}
+                autoPlay muted loop playsInline preload="metadata"
+                controlsList="nodownload noplaybackrate"
+                disablePictureInPicture
+                onContextMenu={(e) => e.preventDefault()}
+                className="w-full"
+              />
+            </div>
+          )}
           <div className="aspect-square overflow-hidden rounded-3xl border bg-secondary/30">
             <img src={images[imgIdx]} alt={p.name} className="h-full w-full object-cover" />
           </div>

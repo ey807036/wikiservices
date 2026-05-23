@@ -319,6 +319,7 @@ export type Database = {
           stock: number
           trending: boolean
           updated_at: string
+          video_url: string | null
         }
         Insert: {
           active?: boolean
@@ -340,6 +341,7 @@ export type Database = {
           stock?: number
           trending?: boolean
           updated_at?: string
+          video_url?: string | null
         }
         Update: {
           active?: boolean
@@ -361,6 +363,7 @@ export type Database = {
           stock?: number
           trending?: boolean
           updated_at?: string
+          video_url?: string | null
         }
         Relationships: [
           {

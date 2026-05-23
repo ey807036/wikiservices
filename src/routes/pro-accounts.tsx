@@ -2,6 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, Crown, ShieldAlert, X } from "lucide-react";
 import { PayfastCheckout } from "@/components/site/payfast-checkout";
+import {
+  NetflixLogo, YouTubeLogo, SpotifyLogo, InstagramLogo, TikTokLogo,
+  FacebookLogo, SnapchatLogo, TelegramLogo, TwitterLogo, ChatGPTLogo,
+  CanvaLogo, CapCutLogo, AmazonLogo, DisneyLogo, AdobeLogo, VPNLogo,
+  WhatsAppLogo,
+} from "@/components/site/brand-logos";
 
 export const Route = createFileRoute("/pro-accounts")({ component: ProAccountsPage });
 
@@ -9,38 +15,31 @@ const ADMIN_WA = "923186376181";
 const waLink = (msg: string) =>
   `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`;
 
-type Acc = { name: string; emoji: string; cat: string; color: string };
+type Acc = { name: string; Logo: React.FC<{ className?: string }>; cat: string };
 
 const ACCOUNTS: Acc[] = [
   // Streaming
-  { name: "Netflix Premium",    emoji: "🎬", cat: "Streaming",  color: "from-red-600 to-rose-700" },
-  { name: "Amazon Prime",       emoji: "📦", cat: "Streaming",  color: "from-sky-500 to-blue-700" },
-  { name: "Disney+ Hotstar",    emoji: "🏰", cat: "Streaming",  color: "from-blue-500 to-indigo-700" },
-  { name: "YouTube Premium",    emoji: "▶️", cat: "Streaming",  color: "from-red-500 to-red-700" },
-  { name: "Spotify Premium",    emoji: "🎵", cat: "Streaming",  color: "from-emerald-500 to-green-700" },
+  { name: "Netflix Premium",      Logo: NetflixLogo,   cat: "Streaming" },
+  { name: "Amazon Prime",         Logo: AmazonLogo,    cat: "Streaming" },
+  { name: "Disney+ Hotstar",      Logo: DisneyLogo,    cat: "Streaming" },
+  { name: "YouTube Premium",      Logo: YouTubeLogo,   cat: "Streaming" },
+  { name: "Spotify Premium",      Logo: SpotifyLogo,   cat: "Streaming" },
   // Editing
-  { name: "CapCut Pro",         emoji: "✂️", cat: "Editing",    color: "from-slate-700 to-zinc-900" },
-  { name: "Remini Pro",         emoji: "🪄", cat: "Editing",    color: "from-fuchsia-500 to-purple-700" },
-  { name: "Picsart Gold",       emoji: "🎨", cat: "Editing",    color: "from-pink-500 to-rose-600" },
-  { name: "VN Editor Pro",      emoji: "🎞️", cat: "Editing",    color: "from-amber-500 to-orange-600" },
-  { name: "Lightroom Premium",  emoji: "📸", cat: "Editing",    color: "from-blue-500 to-cyan-700" },
-  { name: "Canva Pro",          emoji: "🖌️", cat: "Editing",    color: "from-cyan-500 to-blue-600" },
-  { name: "Adobe Creative Cloud", emoji: "🅰️", cat: "Editing",  color: "from-red-600 to-rose-800" },
+  { name: "CapCut Pro",           Logo: CapCutLogo,    cat: "Editing" },
+  { name: "Canva Pro",            Logo: CanvaLogo,     cat: "Editing" },
+  { name: "Adobe Creative Cloud", Logo: AdobeLogo,     cat: "Editing" },
   // AI Tools
-  { name: "ChatGPT Plus",       emoji: "🤖", cat: "AI Tools",   color: "from-emerald-600 to-teal-700" },
-  { name: "Midjourney",         emoji: "🌌", cat: "AI Tools",   color: "from-violet-600 to-indigo-800" },
-  { name: "Grammarly Premium",  emoji: "✍️", cat: "AI Tools",   color: "from-green-500 to-emerald-700" },
+  { name: "ChatGPT Plus",         Logo: ChatGPTLogo,   cat: "AI Tools" },
   // Social Media
-  { name: "Instagram (Verified)", emoji: "📷", cat: "Social",   color: "from-pink-500 via-fuchsia-500 to-orange-500" },
-  { name: "Facebook (Aged)",    emoji: "📘", cat: "Social",     color: "from-blue-600 to-indigo-700" },
-  { name: "TikTok (Bot Boost)", emoji: "🎶", cat: "Social",     color: "from-zinc-800 to-black" },
-  { name: "Snapchat Plus",      emoji: "👻", cat: "Social",     color: "from-yellow-400 to-amber-500" },
-  { name: "Telegram Premium",   emoji: "✈️", cat: "Social",     color: "from-sky-500 to-blue-700" },
-  { name: "WhatsApp Business",  emoji: "💬", cat: "Social",     color: "from-emerald-500 to-green-700" },
-  { name: "Twitter / X Blue",   emoji: "𝕏",  cat: "Social",     color: "from-zinc-700 to-black" },
+  { name: "Instagram (Verified)", Logo: InstagramLogo, cat: "Social" },
+  { name: "Facebook (Aged)",      Logo: FacebookLogo,  cat: "Social" },
+  { name: "TikTok (Bot Boost)",   Logo: TikTokLogo,    cat: "Social" },
+  { name: "Snapchat Plus",        Logo: SnapchatLogo,  cat: "Social" },
+  { name: "Telegram Premium",     Logo: TelegramLogo,  cat: "Social" },
+  { name: "WhatsApp Business",    Logo: WhatsAppLogo,  cat: "Social" },
+  { name: "Twitter / X Blue",     Logo: TwitterLogo,   cat: "Social" },
   // Other
-  { name: "VPN Premium",        emoji: "🛡️", cat: "Other",      color: "from-indigo-600 to-violet-800" },
-  { name: "Crunchyroll Mega",   emoji: "🍙", cat: "Other",      color: "from-orange-500 to-red-600" },
+  { name: "VPN Premium",          Logo: VPNLogo,       cat: "Other" },
 ];
 
 const CATEGORIES = ["Streaming", "Editing", "AI Tools", "Social", "Other"];
@@ -98,9 +97,7 @@ function ProAccountsPage() {
                     className="group flex items-center justify-between rounded-2xl border-2 border-amber-500/30 bg-background/60 p-3 transition hover:border-amber-400 hover:bg-amber-500/10 hover:scale-[1.03] text-left"
                   >
                     <span className="flex items-center gap-2.5">
-                      <span className={`grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br ${a.color} text-lg shadow-md ring-1 ring-white/20`}>
-                        {a.emoji}
-                      </span>
+                      <a.Logo className="h-10 w-10" />
                       <span className="flex flex-col leading-tight">
                         <span className="text-sm font-bold text-foreground">{a.name}</span>
                         <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">
@@ -128,7 +125,7 @@ function ProAccountsPage() {
           <div className="w-full max-w-md rounded-2xl border-2 border-amber-400/60 bg-black p-5 shadow-[0_0_40px_oklch(0.85_0.18_85/0.4)]" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <span className={`grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br ${picked.color} text-lg ring-1 ring-white/20`}>{picked.emoji}</span>
+                <picked.Logo className="h-9 w-9" />
                 <div>
                   <div className="text-sm font-black text-amber-300">{picked.name}</div>
                   <div className="text-[10px] uppercase tracking-widest text-amber-400">Rs. 100 · Pro Account</div>
