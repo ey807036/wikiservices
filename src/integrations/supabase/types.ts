@@ -83,6 +83,57 @@ export type Database = {
         }
         Relationships: []
       }
+      home_items: {
+        Row: {
+          action: string | null
+          active: boolean
+          created_at: string
+          description: string
+          hot: boolean
+          href: string | null
+          icon_tone: string
+          id: string
+          logo_url: string | null
+          name: string
+          price: number
+          sold_count: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          action?: string | null
+          active?: boolean
+          created_at?: string
+          description?: string
+          hot?: boolean
+          href?: string | null
+          icon_tone?: string
+          id?: string
+          logo_url?: string | null
+          name: string
+          price?: number
+          sold_count?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          action?: string | null
+          active?: boolean
+          created_at?: string
+          description?: string
+          hot?: boolean
+          href?: string | null
+          icon_tone?: string
+          id?: string
+          logo_url?: string | null
+          name?: string
+          price?: number
+          sold_count?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lucky_entries: {
         Row: {
           amount: number
