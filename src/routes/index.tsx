@@ -51,10 +51,20 @@ function Home() {
   const { data: settings } = useQuery({
     queryKey: ["site-settings-shop"],
     queryFn: async () =>
-      (await supabase.from("site_settings").select("shop_logo_url, store_logo_url").eq("id", 1).maybeSingle()).data,
+      (await supabase
+        .from("site_settings")
+        .select("shop_logo_url, store_logo_url, shop_hero_tag, shop_hero_title, shop_hero_subtitle, lucky_title, lucky_subtitle")
+        .eq("id", 1)
+        .maybeSingle()).data,
   });
-  const shopLogo = (settings as any)?.shop_logo_url;
-  const storeLogo = (settings as any)?.store_logo_url;
+  const s = (settings as any) ?? {};
+  const shopLogo = s.shop_logo_url;
+  const storeLogo = s.store_logo_url;
+  const heroTag = s.shop_hero_tag || "UNDERGROUND WIKI STORE 💀";
+  const heroTitle = s.shop_hero_title || "Jammers & Hacking Devices";
+  const heroSubtitle = s.shop_hero_subtitle || "Jam · Hijack · Control Anything";
+  const luckyTitle = s.lucky_title || "1 Rupee Lucky Draw 💰";
+  const luckySubtitle = s.lucky_subtitle || "Sirf Rs.1 invest karein — har raat 10 baje Quran-andazi, aik lucky user ko sara paisa mil jaye ga.";
 
   return (
     <div>
@@ -68,20 +78,15 @@ function Home() {
             </div>
           )}
           <span className="inline-flex items-center gap-2 rounded-full bg-destructive/20 px-5 py-2 text-sm md:text-base font-bold backdrop-blur ring-1 ring-destructive/50">
-            <ShieldAlert className="h-5 w-5 text-red-500" /> UNDERGROUND WIKI STORE 💀
+            <ShieldAlert className="h-5 w-5 text-red-500" /> {heroTag}
           </span>
           <h1 className="mt-5 text-5xl font-black uppercase leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
             <span className="inline-flex items-center justify-center gap-2 text-gradient text-3xl md:text-5xl">
-              Jammers & Hacking Devices <VerifiedBadge color="green" size={24} />
+              {heroTitle} <VerifiedBadge color="green" size={24} />
             </span>
           </h1>
-          <p className="mx-auto mt-5 flex max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-1 text-lg font-black uppercase tracking-wider md:text-2xl">
-            <span className="bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_oklch(0.65_0.25_25/0.5)]">Jam</span>
-            <span className="text-red-500/60">·</span>
-            <span className="bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_oklch(0.65_0.25_25/0.5)]">Hijack</span>
-            <span className="text-red-500/60">·</span>
-            <span className="bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_oklch(0.65_0.25_25/0.5)]">Control Anything</span>
-            <ShieldAlert className="h-5 w-5 text-red-500 animate-pulse" />
+          <p className="mx-auto mt-5 max-w-xl text-lg font-black uppercase tracking-wider md:text-2xl bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_oklch(0.65_0.25_25/0.5)]">
+            {heroSubtitle}
           </p>
           <div className="mx-auto mt-5 flex max-w-2xl flex-wrap items-center justify-center gap-2">
             {[
@@ -98,7 +103,7 @@ function Home() {
             <Link to="/sim-database">
               <Button
                 size="lg"
-                className="h-12 px-7 text-base rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_25px_oklch(0.65_0.25_25/0.7)] hover:opacity-90 animate-pulse"
+                className="h-12 px-7 text-base rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_25px_oklch(0.65_0.25_25/0.7)] hover:opacity-90"
               >
                 <Skull className="mr-2 h-4 w-4" /> Free SimData <VerifiedBadge color="green" size={16} />
               </Button>
@@ -107,69 +112,50 @@ function Home() {
         </div>
       </section>
 
-
-
-      {/* INTRO VIDEO (moved to top per request) */}
+      {/* INTRO VIDEO */}
       <IntroVideo />
 
-      {/* 1 RUPEE OFFER */}
-      <section className="container mx-auto px-4 pt-8">
-        <Link to="/lucky-draw" className="block mx-auto max-w-3xl">
-          <div className="relative overflow-hidden rounded-3xl border-2 border-red-500/70 bg-gradient-to-br from-red-950/80 via-black to-red-950/60 p-6 md:p-8 shadow-[0_0_50px_oklch(0.65_0.25_25/0.7)] animate-pulse hover:scale-[1.01] transition-transform">
-            <div className="pointer-events-none absolute -inset-1 rounded-3xl bg-[radial-gradient(ellipse_at_top,_oklch(0.7_0.28_25/0.5),_transparent_70%)]" />
-            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-yellow-400/30 blur-3xl" />
-            <div className="relative grid gap-4 md:grid-cols-[auto_1fr_auto] md:items-center">
-              <div className="text-5xl md:text-6xl drop-shadow-[0_0_20px_oklch(0.85_0.18_85/0.8)]">💰</div>
-              <div className="min-w-0">
-                <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400/20 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-yellow-300 ring-1 ring-yellow-400/50">
-                  🔥 New Offer · Daily 10 PM
-                </div>
-                <h3 className="mt-2 text-2xl md:text-3xl font-black uppercase tracking-tight bg-gradient-to-r from-red-400 via-rose-400 to-yellow-300 bg-clip-text text-transparent drop-shadow-[0_0_14px_oklch(0.65_0.25_25/0.8)]">
-                  1 Rupee Lucky Draw 💰
-                </h3>
-                <p className="mt-1 text-sm md:text-base text-red-100/90">
-                  Sirf <b className="text-yellow-300">Rs.1</b> invest karein — har raat <b className="text-red-300">10 baje Quran-andazi</b>, aik lucky user ko <b>sara paisa</b> mil jaye ga (account mein withdraw).
-                </p>
-              </div>
-              <Button size="lg" className="h-12 px-6 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_25px_oklch(0.65_0.25_25/0.8)]">
-                Join Rs.1 <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </Link>
-      </section>
-
-      {/* WIKI STORE (Store 2) CTA */}
+      {/* COMPACT CTA ROW — Lucky Draw + Wiki Store */}
       <section className="container mx-auto px-4 pt-6">
-        <Link to="/store" className="block mx-auto max-w-3xl">
-          <div className="relative overflow-hidden rounded-3xl border-2 border-primary/60 bg-gradient-to-br from-card via-card to-primary/10 p-6 md:p-7 shadow-[0_0_40px_-8px_var(--primary)] hover:scale-[1.01] transition-transform">
-            <div className="pointer-events-none absolute -inset-1 rounded-3xl bg-[radial-gradient(ellipse_at_top,_color-mix(in_oklab,_var(--primary)_25%,_transparent),_transparent_70%)]" />
-            <div className="relative grid gap-4 md:grid-cols-[auto_1fr_auto] md:items-center">
+        <div className="mx-auto grid max-w-3xl gap-3 sm:grid-cols-2">
+          <Link to="/lucky-draw" className="group relative overflow-hidden rounded-2xl border border-red-500/60 bg-gradient-to-br from-red-950/80 via-black to-red-900/50 p-3 shadow-[0_0_25px_-8px_oklch(0.65_0.25_25/0.8)] hover:scale-[1.02] transition-transform">
+            <div className="flex items-center gap-3">
+              <div className="text-3xl drop-shadow-[0_0_10px_oklch(0.85_0.18_85/0.8)]">💰</div>
+              <div className="min-w-0 flex-1">
+                <div className="text-[10px] font-black uppercase tracking-wider text-yellow-300">🔥 Daily 10 PM</div>
+                <h3 className="text-sm font-black leading-tight bg-gradient-to-r from-red-400 to-yellow-300 bg-clip-text text-transparent truncate">
+                  {luckyTitle}
+                </h3>
+                <p className="text-[11px] text-red-100/80 truncate">{luckySubtitle}</p>
+              </div>
+              <ArrowRight className="h-4 w-4 text-red-300 shrink-0 group-hover:translate-x-0.5 transition" />
+            </div>
+          </Link>
+
+          <Link to="/store" className="group relative overflow-hidden rounded-2xl border border-primary/60 bg-gradient-to-br from-card via-card to-primary/10 p-3 shadow-[0_0_25px_-8px_var(--primary)] hover:scale-[1.02] transition-transform">
+            <div className="flex items-center gap-3">
               {storeLogo ? (
-                <NeonLogo src={storeLogo} size={72} glow="var(--primary)" />
+                <NeonLogo src={storeLogo} size={40} glow="var(--primary)" />
               ) : (
-                <div className="grid h-16 w-16 place-items-center rounded-full bg-primary/15 text-primary ring-2 ring-primary/40">
-                  <ShoppingBag className="h-7 w-7" />
+                <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/15 text-primary ring-2 ring-primary/40 shrink-0">
+                  <ShoppingBag className="h-5 w-5" />
                 </div>
               )}
-              <div className="min-w-0">
-                <div className="inline-flex items-center gap-2 rounded-full bg-primary/15 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-primary ring-1 ring-primary/40">
-                  <Sparkles className="h-3 w-3" /> Wiki Store · Store 2
+              <div className="min-w-0 flex-1">
+                <div className="text-[10px] font-black uppercase tracking-wider text-primary inline-flex items-center gap-1">
+                  <Sparkles className="h-2.5 w-2.5" /> Wiki Store · -30%
                 </div>
-                <h3 className="mt-2 text-2xl md:text-3xl font-black tracking-tight">
-                  Visit Wiki Store
+                <h3 className="text-sm font-black leading-tight truncate flex items-center gap-1">
+                  Visit Wiki Store <VerifiedBadge color="green" size={12} />
                 </h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Premium verified items — clothing, gadgets & more at <b className="text-primary">-30% off</b>.
-                </p>
+                <p className="text-[11px] text-muted-foreground truncate">Premium verified items, fast checkout.</p>
               </div>
-              <Button size="lg" className="h-12 px-6 rounded-full font-black uppercase tracking-wider">
-                Open Store <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
+              <ArrowRight className="h-4 w-4 text-primary shrink-0 group-hover:translate-x-0.5 transition" />
             </div>
-          </div>
-        </Link>
+          </Link>
+        </div>
       </section>
+
 
 
       {/* ARSENAL */}
