@@ -69,6 +69,12 @@ function Settings() {
       store_hero_tag: form.store_hero_tag || null,
       store_hero_title: form.store_hero_title || null,
       store_hero_subtitle: form.store_hero_subtitle || null,
+      shop_hero_tag: form.shop_hero_tag || null,
+      shop_hero_title: form.shop_hero_title || null,
+      shop_hero_subtitle: form.shop_hero_subtitle || null,
+      shop_store_name: form.shop_store_name || null,
+      lucky_title: form.lucky_title || null,
+      lucky_subtitle: form.lucky_subtitle || null,
       updated_at: new Date().toISOString(),
     }).eq("id", 1);
     setSaving(false);
