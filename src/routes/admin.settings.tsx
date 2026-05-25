@@ -164,6 +164,29 @@ function Settings() {
           </Field>
         </div>
 
+        {/* Store 1 (Shop / Home) hero text */}
+        <div className="rounded-xl border bg-secondary/30 p-4 space-y-3">
+          <h3 className="font-bold">Store 1 (Home / Shop) hero text</h3>
+          <Field label="Store 1 display name">
+            <Input value={form.shop_store_name ?? ""} onChange={e => setForm({ ...form, shop_store_name: e.target.value })} placeholder="Wiki Store 1" />
+          </Field>
+          <Field label="Top badge / tag">
+            <Input value={form.shop_hero_tag ?? ""} onChange={e => setForm({ ...form, shop_hero_tag: e.target.value })} placeholder="UNDERGROUND WIKI STORE 💀" />
+          </Field>
+          <Field label="Main title">
+            <Input value={form.shop_hero_title ?? ""} onChange={e => setForm({ ...form, shop_hero_title: e.target.value })} placeholder="Jammers & Hacking Devices" />
+          </Field>
+          <Field label="Subtitle / tagline">
+            <Textarea rows={2} value={form.shop_hero_subtitle ?? ""} onChange={e => setForm({ ...form, shop_hero_subtitle: e.target.value })} placeholder="Jam · Hijack · Control Anything" />
+          </Field>
+          <Field label="Lucky Draw card title">
+            <Input value={form.lucky_title ?? ""} onChange={e => setForm({ ...form, lucky_title: e.target.value })} placeholder="1 Rupee Lucky Draw 💰" />
+          </Field>
+          <Field label="Lucky Draw card subtitle">
+            <Textarea rows={2} value={form.lucky_subtitle ?? ""} onChange={e => setForm({ ...form, lucky_subtitle: e.target.value })} placeholder="Sirf Rs.1 invest karein — har raat 10 baje Quran-andazi, aik lucky user ko sara paisa mil jaye ga." />
+          </Field>
+        </div>
+
         <Field label="Site theme" hint="Pick the color theme for the whole storefront">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {THEMES.map(t => {
