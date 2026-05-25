@@ -533,7 +533,13 @@ export type Database = {
           contact_phone: string | null
           id: number
           lucky_logo_url: string | null
+          lucky_subtitle: string | null
+          lucky_title: string | null
+          shop_hero_subtitle: string | null
+          shop_hero_tag: string | null
+          shop_hero_title: string | null
           shop_logo_url: string | null
+          shop_store_name: string | null
           store_hero_subtitle: string | null
           store_hero_tag: string | null
           store_hero_title: string | null
@@ -550,7 +556,13 @@ export type Database = {
           contact_phone?: string | null
           id?: number
           lucky_logo_url?: string | null
+          lucky_subtitle?: string | null
+          lucky_title?: string | null
+          shop_hero_subtitle?: string | null
+          shop_hero_tag?: string | null
+          shop_hero_title?: string | null
           shop_logo_url?: string | null
+          shop_store_name?: string | null
           store_hero_subtitle?: string | null
           store_hero_tag?: string | null
           store_hero_title?: string | null
@@ -567,7 +579,13 @@ export type Database = {
           contact_phone?: string | null
           id?: number
           lucky_logo_url?: string | null
+          lucky_subtitle?: string | null
+          lucky_title?: string | null
+          shop_hero_subtitle?: string | null
+          shop_hero_tag?: string | null
+          shop_hero_title?: string | null
           shop_logo_url?: string | null
+          shop_store_name?: string | null
           store_hero_subtitle?: string | null
           store_hero_tag?: string | null
           store_hero_title?: string | null
