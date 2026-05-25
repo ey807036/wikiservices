@@ -114,6 +114,7 @@ function RootComponent() {
             <WhatsAppButton />
             <FloatingMascots />
             <SiteAnnouncementPopup />
+            <PageLoader />
             <Toaster richColors position="top-right" />
           </CartProvider>
         </WishlistProvider>
