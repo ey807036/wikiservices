@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { useEffect } from "react";
-import { LayoutDashboard, Package, ShoppingBag, Tags, Users, ArrowLeft, Ticket, BarChart3, Settings as SettingsIcon, Gift, Activity, Coins, Store } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Tags, Users, ArrowLeft, Ticket, BarChart3, Settings as SettingsIcon, Gift, Activity, Coins, Store, Home } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/admin")({ component: AdminLayout });
@@ -13,6 +13,7 @@ const NAV = [
   { to: "/admin/activity", label: "User Activity", icon: Activity },
   { to: "/admin/lucky", label: "Lucky Draw", icon: Coins },
   { to: "/admin/store", label: "Wiki Store", icon: Store },
+  { to: "/admin/home-items", label: "Home Items", icon: Home },
   { to: "/admin/products", label: "Products", icon: Package },
   { to: "/admin/orders", label: "Orders", icon: ShoppingBag },
   { to: "/admin/categories", label: "Categories", icon: Tags },

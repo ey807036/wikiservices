@@ -37,6 +37,7 @@ import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminLuckyRouteImport } from './routes/admin.lucky'
+import { Route as AdminHomeItemsRouteImport } from './routes/admin.home-items'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
@@ -184,6 +185,11 @@ const AdminLuckyRoute = AdminLuckyRouteImport.update({
   path: '/lucky',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminHomeItemsRoute = AdminHomeItemsRouteImport.update({
+  id: '/home-items',
+  path: '/home-items',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCustomersRoute = AdminCustomersRouteImport.update({
   id: '/customers',
   path: '/customers',
@@ -239,6 +245,7 @@ export interface FileRoutesByFullPath {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -274,6 +281,7 @@ export interface FileRoutesByTo {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -311,6 +319,7 @@ export interface FileRoutesById {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -349,6 +358,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/coupons'
     | '/admin/customers'
+    | '/admin/home-items'
     | '/admin/lucky'
     | '/admin/orders'
     | '/admin/products'
@@ -384,6 +394,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/coupons'
     | '/admin/customers'
+    | '/admin/home-items'
     | '/admin/lucky'
     | '/admin/orders'
     | '/admin/products'
@@ -420,6 +431,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/coupons'
     | '/admin/customers'
+    | '/admin/home-items'
     | '/admin/lucky'
     | '/admin/orders'
     | '/admin/products'
@@ -656,6 +668,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLuckyRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/home-items': {
+      id: '/admin/home-items'
+      path: '/home-items'
+      fullPath: '/admin/home-items'
+      preLoaderRoute: typeof AdminHomeItemsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/customers': {
       id: '/admin/customers'
       path: '/customers'
@@ -706,6 +725,7 @@ interface AdminRouteChildren {
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminCustomersRoute: typeof AdminCustomersRoute
+  AdminHomeItemsRoute: typeof AdminHomeItemsRoute
   AdminLuckyRoute: typeof AdminLuckyRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
@@ -721,6 +741,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminCouponsRoute: AdminCouponsRoute,
   AdminCustomersRoute: AdminCustomersRoute,
+  AdminHomeItemsRoute: AdminHomeItemsRoute,
   AdminLuckyRoute: AdminLuckyRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,
