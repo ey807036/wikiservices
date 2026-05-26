@@ -104,19 +104,17 @@ export function Header() {
           </div>
         </form>
 
-        <div className="ml-auto flex items-center gap-1 md:ml-0">
-          <Link to="/wishlist">
-            <Button variant="ghost" size="icon" className="relative">
-              <Heart className="h-5 w-5" />
-              {wishCount > 0 && (
-                <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">
-                  {wishCount}
-                </span>
-              )}
-            </Button>
-          </Link>
+        <div className="ml-auto flex items-center gap-1.5 md:ml-0">
           <Link to="/cart">
-            <Button variant="ghost" size="icon" className="relative">
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`relative rounded-full ring-1 transition-all ${
+                path.startsWith("/cart")
+                  ? "ring-emerald-400/80 text-emerald-300 bg-emerald-500/15 shadow-[0_0_18px_oklch(0.78_0.22_145/0.7)]"
+                  : "ring-red-500/50 text-red-400 hover:text-red-300 shadow-[0_0_12px_-2px_oklch(0.65_0.25_25/0.7)]"
+              }`}
+            >
               <ShoppingCart className="h-5 w-5" />
               {count > 0 && (
                 <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">
@@ -129,7 +127,12 @@ export function Header() {
           {!isStore && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="More" className="text-red-500 hover:text-red-600 hover:bg-red-500/10">
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="More"
+                className="rounded-full ring-1 ring-red-500/50 text-red-400 hover:text-red-300 hover:bg-red-500/10 shadow-[0_0_12px_-2px_oklch(0.65_0.25_25/0.7)] data-[state=open]:ring-emerald-400/80 data-[state=open]:text-emerald-300 data-[state=open]:bg-emerald-500/15 data-[state=open]:shadow-[0_0_18px_oklch(0.78_0.22_145/0.7)]"
+              >
                 <MoreVertical className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
@@ -176,7 +179,13 @@ export function Header() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon"><User className="h-5 w-5" /></Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full ring-1 ring-red-500/50 text-red-400 hover:text-red-300 hover:bg-red-500/10 shadow-[0_0_12px_-2px_oklch(0.65_0.25_25/0.7)] data-[state=open]:ring-emerald-400/80 data-[state=open]:text-emerald-300 data-[state=open]:bg-emerald-500/15 data-[state=open]:shadow-[0_0_18px_oklch(0.78_0.22_145/0.7)]"
+              >
+                <User className="h-5 w-5" />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
               {user ? (
