@@ -22,7 +22,7 @@ const NAV = [
 
 export function Header() {
   const { count } = useCart();
-  const { count: wishCount } = useWishlist();
+  // wishlist no longer shown in header
   const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
