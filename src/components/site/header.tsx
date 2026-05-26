@@ -69,10 +69,13 @@ export function Header() {
             </span>
           </Link>
         ) : (
-          <Link to="/" className="flex items-center gap-2 font-bold text-xl">
+          <Link to="/" className="flex items-center gap-1.5 font-bold">
             <img src={logo} alt="Wikiservices" className="h-9 w-9 drop-shadow-[0_0_12px_oklch(0.85_0.27_145/0.5)]" width={36} height={36} />
-            <span className="hidden sm:inline-flex items-center gap-1 text-glow">
+            <span className="hidden sm:inline-flex items-center gap-1 text-glow text-xl">
               Wikiservices <VerifiedBadge color="green" size={16} />
+            </span>
+            <span className="inline-flex sm:hidden items-center gap-1 text-[13px] font-black uppercase tracking-tight leading-none bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent">
+              Wiki Cyber Store <VerifiedBadge color="red" size={12} />
             </span>
           </Link>
         )}
