@@ -1,38 +1,33 @@
 import { useRouterState } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { VerifiedBadge } from "@/components/site/verified-badge";
 
-const MIN_MS = 3000;
+const MAX_MS = 2000;
 
 /**
- * Global page loader. Shows for at LEAST 3 seconds on every navigation/page
- * load, and keeps showing past that if the route is still loading. As soon as
- * both conditions are met (min time elapsed AND route ready), it disappears.
+ * Global page loader. Shows on every pathname change for up to 2s, and hides
+ * as soon as the router is no longer loading (or the 2s cap is reached —
+ * whichever comes first). Never blocks navigation.
  */
 export function PageLoader() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
   const isRouterLoading = useRouterState({ select: (s) => s.isLoading || s.isTransitioning });
   const [show, setShow] = useState(true);
-  const [minDone, setMinDone] = useState(false);
-  const firstMount = useRef(true);
 
+  // Reset on every route change
   useEffect(() => {
-    const t = setTimeout(() => setMinDone(true), MIN_MS);
+    setShow(true);
+    const t = setTimeout(() => setShow(false), MAX_MS);
     return () => clearTimeout(t);
-  }, []);
+  }, [path]);
 
+  // Hide early once route is ready
   useEffect(() => {
-    if (firstMount.current) { firstMount.current = false; return; }
-    if (isRouterLoading) {
-      setShow(true);
-      setMinDone(false);
-      const t = setTimeout(() => setMinDone(true), MIN_MS);
+    if (!isRouterLoading && show) {
+      const t = setTimeout(() => setShow(false), 250);
       return () => clearTimeout(t);
     }
-  }, [isRouterLoading]);
-
-  useEffect(() => {
-    if (minDone && !isRouterLoading) setShow(false);
-  }, [minDone, isRouterLoading]);
+  }, [isRouterLoading, show]);
 
   if (!show) return null;
 
