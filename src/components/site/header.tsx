@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-store";
-import { useWishlist } from "@/lib/wishlist-store";
+// wishlist removed from header per request
 import { useAuth } from "@/lib/auth-context";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
