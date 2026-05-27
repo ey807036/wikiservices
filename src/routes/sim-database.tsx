@@ -123,11 +123,12 @@ function SimDatabasePage() {
           <span className="inline-flex items-center gap-2 rounded-full bg-red-600/20 px-4 py-1.5 text-xs md:text-sm font-black uppercase tracking-widest ring-1 ring-red-500/60 text-red-400 animate-pulse">
             <ShieldAlert className="h-4 w-4" /> Danger Zone · Underground
           </span>
-          <h1 className="mt-4 text-4xl md:text-6xl font-black uppercase tracking-tight">
+          <h1 className="mt-4 flex items-center justify-center gap-2 text-4xl font-black uppercase tracking-tight md:text-6xl">
             <span className="bg-gradient-to-r from-red-500 via-rose-500 to-red-700 bg-clip-text text-transparent drop-shadow-[0_0_18px_oklch(0.65_0.25_25/0.7)]">
               Wiki SimDatabase
             </span>
-            <Skull className="inline ml-2 h-8 w-8 text-red-500 animate-bounce" />
+            <VerifiedBadge color="green" size={26} className="translate-y-[1px]" />
+            <Skull className="inline h-8 w-8 text-red-500 animate-bounce" />
           </h1>
           <p className="mt-3 text-sm md:text-base text-muted-foreground">
             Enter any phone number to fetch full SIM owner details — CNIC, Name, Address & more.
