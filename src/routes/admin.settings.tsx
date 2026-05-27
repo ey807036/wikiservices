@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -7,8 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Save, Volume2, VolumeX, Check, Upload, Image as ImageIcon } from "lucide-react";
+import { Save, Volume2, VolumeX, Check, Upload, Image as ImageIcon, Database } from "lucide-react";
 import { THEMES } from "@/components/site/theme-provider";
+import { HomeItemsManager } from "@/components/admin/home-items-manager";
+
 
 export const Route = createFileRoute("/admin/settings")({ component: Settings });
 
