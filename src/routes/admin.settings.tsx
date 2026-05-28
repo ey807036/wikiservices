@@ -88,6 +88,7 @@ function Settings() {
     qc.invalidateQueries({ queryKey: ["site-settings-lucky"] });
     qc.invalidateQueries({ queryKey: ["site-settings-store"] });
     qc.invalidateQueries({ queryKey: ["site-settings-shop"] });
+    qc.invalidateQueries({ queryKey: ["site-settings-sim-database"] });
   };
 
   const toggleSound = () => {
