@@ -1,8 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Star, ShoppingCart, Heart } from "lucide-react";
+import { Star, ShoppingCart } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
-import { useWishlist } from "@/lib/wishlist-store";
-import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { money } from "@/lib/format";
@@ -23,9 +21,6 @@ export type ProductCardData = {
 
 export function ProductCard({ p }: { p: ProductCardData }) {
   const { add } = useCart();
-  const { user } = useAuth();
-  const { has, toggle } = useWishlist();
-  const wished = has(p.id);
   const img = p.images?.[0] || "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=800";
   const discount = p.compare_price ? Math.round(((p.compare_price - p.price) / p.compare_price) * 100) : 0;
 
@@ -33,24 +28,21 @@ export function ProductCard({ p }: { p: ProductCardData }) {
   const delay = ((p.id?.charCodeAt(0) ?? 0) % 10) * 0.3;
 
   return (
-    <div className="group relative rounded-2xl border bg-gradient-to-br from-card to-secondary/30 hover-lift flex flex-col pt-24 px-4 pb-4 mt-20">
-      {/* Floating image + glowing circle */}
+    <div className="group relative rounded-2xl border border-primary/30 bg-black/80 hover-lift flex flex-col pt-24 px-4 pb-4 mt-20 shadow-card">
+      {/* Floating round neon product image */}
       <Link
         to="/products/$slug"
         params={{ slug: p.slug }}
-        className="absolute left-1/2 -top-20 -translate-x-1/2 block w-[80%] aspect-square"
+        className="absolute left-1/2 -top-20 grid h-40 w-40 -translate-x-1/2 place-items-center"
       >
-        {/* Glowing circle behind */}
-        <div className="absolute inset-2 rounded-full bg-gradient-to-br from-primary/40 via-accent/30 to-primary/10 blur-xl opacity-80 group-hover:opacity-100 transition-opacity" />
-        <div className="absolute inset-4 rounded-full border-2 border-dashed border-primary/30 animate-[spin_18s_linear_infinite]" />
-        <div className="absolute inset-6 rounded-full bg-primary/10 backdrop-blur-sm" />
-
-        {/* Floating product image */}
+        <div className="absolute inset-0 rounded-full bg-primary/25 blur-2xl opacity-90 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute inset-3 rounded-full bg-[conic-gradient(from_0deg,transparent,var(--primary),transparent_50%,var(--primary),transparent)] blur-[2px] animate-[spin_4s_linear_infinite]" />
+        <div className="absolute inset-5 rounded-full bg-black ring-2 ring-primary/60 shadow-[0_0_28px_var(--primary),inset_0_0_20px_var(--primary)]" />
         <img
           src={img}
           alt={p.name}
           loading="lazy"
-          className="relative h-full w-full object-contain drop-shadow-[0_18px_25px_rgba(0,0,0,0.45)] animate-[float_4s_ease-in-out_infinite] group-hover:scale-110 transition-transform duration-500"
+          className="relative h-28 w-28 rounded-full object-cover ring-2 ring-primary/50 drop-shadow-[0_18px_25px_rgba(0,0,0,0.45)] animate-[float_4s_ease-in-out_infinite] group-hover:scale-110 transition-transform duration-500"
           style={{ animationDelay: `${delay}s` }}
         />
 
@@ -65,21 +57,6 @@ export function ProductCard({ p }: { p: ProductCardData }) {
           </span>
         )}
       </Link>
-
-      {/* Wishlist */}
-      <button
-        type="button"
-        aria-label="Toggle wishlist"
-        onClick={(e) => {
-          e.preventDefault();
-          if (!user) { toast.error("Sign in to save favorites"); return; }
-          toggle(p.id);
-          toast.success(wished ? "Removed from wishlist" : "Added to wishlist");
-        }}
-        className="absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full bg-background/90 backdrop-blur border shadow-sm hover:scale-110 transition-transform"
-      >
-        <Heart className={`h-4 w-4 ${wished ? "fill-accent text-accent" : "text-muted-foreground"}`} />
-      </button>
 
       {/* Card body */}
       <div className="flex flex-1 flex-col text-center">
