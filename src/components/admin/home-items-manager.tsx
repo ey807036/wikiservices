@@ -232,8 +232,41 @@ export function HomeItemsManager({ embedded = false }: { embedded?: boolean }) {
         </Dialog>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border bg-card">
-        <table className="w-full text-sm">
+      <div className="grid gap-3 md:hidden">
+        {items.map((p: any) => (
+          <div key={p.id} className="rounded-2xl border bg-card p-3">
+            <div className="flex items-start gap-3">
+              {p.logo_url ? (
+                <img src={p.logo_url} alt="" className="h-14 w-14 rounded-full object-cover ring-2 ring-primary/50" />
+              ) : (
+                <div className="grid h-14 w-14 place-items-center rounded-full bg-secondary ring-2 ring-primary/30">
+                  <ImageIcon className="h-5 w-5 opacity-60" />
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <div className="font-bold leading-tight">{p.name} {p.hot && <span className="text-red-500">🔥</span>}</div>
+                <div className="mt-1 text-xs text-muted-foreground line-clamp-2">{p.description}</div>
+                <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                  <span className="rounded-full bg-primary/15 px-2 py-0.5 font-bold text-primary">Rs. {Number(p.price).toLocaleString()}</span>
+                  <span className="rounded-full bg-secondary px-2 py-0.5">{p.sold_count} sold</span>
+                  <span className={`rounded-full px-2 py-0.5 ${p.active ? "bg-success/15 text-success" : "bg-muted text-muted-foreground"}`}>{p.active ? "Active" : "Hidden"}</span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <Button type="button" variant="outline" size="sm" onClick={() => openEdit(p)}>
+                <Pencil className="mr-2 h-4 w-4" /> Edit
+              </Button>
+              <Button type="button" variant="destructive" size="sm" onClick={() => del(p.id)}>
+                <Trash2 className="mr-2 h-4 w-4" /> Delete
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden overflow-x-auto rounded-2xl border bg-card md:block">
+        <table className="w-full min-w-[760px] text-sm">
           <thead className="bg-secondary/50 text-left">
             <tr>
               <th className="p-3">Item</th>
@@ -283,11 +316,11 @@ export function HomeItemsManager({ embedded = false }: { embedded?: boolean }) {
                         </Button>
                       </a>
                     )}
-                    <Button variant="ghost" size="icon" onClick={() => openEdit(p)}>
-                      <Pencil className="h-4 w-4" />
+                    <Button variant="outline" size="sm" onClick={() => openEdit(p)}>
+                      <Pencil className="mr-1.5 h-4 w-4" /> Edit
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => del(p.id)}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                    <Button variant="destructive" size="sm" onClick={() => del(p.id)}>
+                      <Trash2 className="mr-1.5 h-4 w-4" /> Delete
                     </Button>
                   </div>
                 </td>
