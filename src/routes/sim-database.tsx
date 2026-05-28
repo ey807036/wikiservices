@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, ShieldAlert, Skull, Database, Zap, AlertTriangle, Loader2, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { VerifiedBadge } from "@/components/site/verified-badge";
 import { PayfastCheckout } from "@/components/site/payfast-checkout";
+import { NeonLogo } from "@/components/site/neon-logo";
 import e1 from "@/assets/emojis/e1.png";
 import e2 from "@/assets/emojis/e2.png";
 import e3 from "@/assets/emojis/e3.png";
@@ -39,6 +42,11 @@ export const Route = createFileRoute("/sim-database")({
 type SimRecord = Record<string, any>;
 
 function SimDatabasePage() {
+  const { data: settings } = useQuery({
+    queryKey: ["site-settings-sim-database"],
+    queryFn: async () =>
+      (await supabase.from("site_settings" as any).select("sim_database_logo_url").eq("id", 1).maybeSingle()).data,
+  });
   const [number, setNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -120,6 +128,11 @@ function SimDatabasePage() {
 
       <div className="container relative mx-auto px-4 py-10 md:py-16">
         <div className="mx-auto max-w-2xl text-center">
+          {(settings as any)?.sim_database_logo_url && (
+            <div className="mb-4 flex justify-center">
+              <NeonLogo src={(settings as any).sim_database_logo_url} alt="Wiki SimDatabase" size={92} glow="var(--primary)" />
+            </div>
+          )}
           <span className="inline-flex items-center gap-2 rounded-full bg-red-600/20 px-4 py-1.5 text-xs md:text-sm font-black uppercase tracking-widest ring-1 ring-red-500/60 text-red-400 animate-pulse">
             <ShieldAlert className="h-4 w-4" /> Danger Zone · Underground
           </span>

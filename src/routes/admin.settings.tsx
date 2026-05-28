@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Save, Volume2, VolumeX, Check, Upload, Image as ImageIcon, Database } from "lucide-react";
+import { Save, Volume2, VolumeX, Check, Upload, Image as ImageIcon } from "lucide-react";
 import { THEMES } from "@/components/site/theme-provider";
 import { HomeItemsManager } from "@/components/admin/home-items-manager";
 
@@ -26,7 +26,7 @@ function Settings() {
 
   const [form, setForm] = useState<any>({});
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState<"lucky" | "store" | "shop" | null>(null);
+  const [uploading, setUploading] = useState<"lucky" | "store" | "shop" | "sim" | null>(null);
 
   useEffect(() => { if (data) setForm(data); }, [data]);
 
@@ -37,7 +37,7 @@ function Settings() {
     }
   }, []);
 
-  const uploadLogo = async (file: File, kind: "lucky" | "store" | "shop") => {
+  const uploadLogo = async (file: File, kind: "lucky" | "store" | "shop" | "sim") => {
     setUploading(kind);
     try {
       const ext = file.name.split(".").pop() || "png";
@@ -45,7 +45,7 @@ function Settings() {
       const { error } = await supabase.storage.from("store-products").upload(path, file, { upsert: true, contentType: file.type });
       if (error) throw error;
       const { data } = supabase.storage.from("store-products").getPublicUrl(path);
-      const field = kind === "lucky" ? "lucky_logo_url" : kind === "store" ? "store_logo_url" : "shop_logo_url";
+      const field = kind === "lucky" ? "lucky_logo_url" : kind === "store" ? "store_logo_url" : kind === "sim" ? "sim_database_logo_url" : "shop_logo_url";
       setForm((f: any) => ({ ...f, [field]: data.publicUrl }));
       toast.success("Logo uploaded");
     } catch (e: any) {
@@ -68,6 +68,7 @@ function Settings() {
       lucky_logo_url: form.lucky_logo_url || null,
       store_logo_url: form.store_logo_url || null,
       shop_logo_url: form.shop_logo_url || null,
+      sim_database_logo_url: form.sim_database_logo_url || null,
       store_hero_tag: form.store_hero_tag || null,
       store_hero_title: form.store_hero_title || null,
       store_hero_subtitle: form.store_hero_subtitle || null,
@@ -87,6 +88,7 @@ function Settings() {
     qc.invalidateQueries({ queryKey: ["site-settings-lucky"] });
     qc.invalidateQueries({ queryKey: ["site-settings-store"] });
     qc.invalidateQueries({ queryKey: ["site-settings-shop"] });
+    qc.invalidateQueries({ queryKey: ["site-settings-sim-database"] });
   };
 
   const toggleSound = () => {
@@ -158,6 +160,14 @@ function Settings() {
             onChange={(url) => setForm({ ...form, lucky_logo_url: url })}
             onUpload={(f) => uploadLogo(f, "lucky")}
             uploading={uploading === "lucky"}
+          />
+
+          <LogoUpload
+            label="Wiki SimDatabase logo"
+            url={form.sim_database_logo_url}
+            onChange={(url) => setForm({ ...form, sim_database_logo_url: url })}
+            onUpload={(f) => uploadLogo(f, "sim")}
+            uploading={uploading === "sim"}
           />
         </div>
 
