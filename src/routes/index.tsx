@@ -155,25 +155,25 @@ function Home() {
             return (
               <div
                 key={h.id}
-                className={`group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:[transform:translateY(-6px)_rotateX(4deg)_rotateY(-4deg)] [transform-style:preserve-3d] ${isHot ? "ring-2 ring-red-500/70" : ""}`}
+                className={`group relative overflow-hidden rounded-2xl border border-primary/30 bg-black/80 p-5 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/70 hover:[transform:translateY(-6px)_rotateX(4deg)_rotateY(-4deg)] [transform-style:preserve-3d] ${isHot ? "ring-2 ring-primary/70" : ""}`}
               >
                 {isHot && (
-                  <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)] animate-pulse">
+                  <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-primary-foreground shadow-[0_0_12px_oklch(0.85_0.27_145/0.8)] animate-pulse">
                     <Flame className="h-3 w-3" /> Hot
                   </span>
                 )}
-                <span className="absolute right-3 top-3 z-10 rotate-6 rounded-lg bg-gradient-to-br from-fuchsia-500 via-pink-500 to-red-500 px-2.5 py-1 text-[11px] font-black uppercase tracking-wider text-white shadow-[0_0_18px_oklch(0.7_0.27_350/0.7)] ring-2 ring-white/30">
+                <span className="absolute right-3 top-3 z-10 rotate-6 rounded-lg bg-gradient-to-br from-primary via-success to-primary px-2.5 py-1 text-[11px] font-black uppercase tracking-wider text-primary-foreground shadow-[0_0_18px_oklch(0.85_0.27_145/0.7)] ring-2 ring-white/30">
                   50% OFF 🔥
                 </span>
-                <div className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition ${isHot ? "bg-red-500/30 group-hover:bg-red-500/50" : "bg-primary/10 group-hover:bg-primary/30"}`} />
+                <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/20 blur-2xl transition group-hover:bg-primary/40" />
                 <div className="relative">
                   <NeonOrbitMark logoUrl={h.logo_url} tone={h.icon_tone} />
-                  <h3 className={`mt-4 flex items-center gap-1.5 text-lg font-bold ${isHot ? "text-red-500" : ""}`}>
+                  <h3 className={`mt-4 flex items-center gap-1.5 text-lg font-bold ${isHot ? "text-primary" : ""}`}>
                     {h.name} <VerifiedBadge color="green" size={16} />
                   </h3>
                   <p className="mt-1 text-sm text-muted-foreground">{h.description}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <div className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-3 py-1 text-sm font-black text-black shadow-[0_0_14px_oklch(0.85_0.18_85/0.55)]">
+                    <div className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-primary via-success to-primary px-3 py-1 text-sm font-black text-primary-foreground shadow-[0_0_14px_oklch(0.85_0.27_145/0.55)]">
                       {fmt(Number(h.price))}
                     </div>
                     <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/15 px-2 py-0.5 text-[11px] font-bold text-emerald-400 ring-1 ring-emerald-500/40">
