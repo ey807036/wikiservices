@@ -74,8 +74,8 @@ export function Header() {
             <span className="hidden sm:inline-flex items-center gap-1 text-glow text-xl">
               Wikiservices <VerifiedBadge color="green" size={16} />
             </span>
-            <span className="inline-flex sm:hidden items-center gap-1 text-[13px] font-black uppercase tracking-tight leading-none bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent">
-              Wiki Cyber Store <VerifiedBadge color="red" size={12} />
+            <span className="inline-flex sm:hidden items-center gap-1.5 text-[15px] font-black uppercase tracking-tight leading-none bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent">
+              Wiki Cyber Store <VerifiedBadge color="red" size={18} className="-ml-0.5" />
             </span>
           </Link>
         )}

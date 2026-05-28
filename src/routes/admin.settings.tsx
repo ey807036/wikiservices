@@ -97,9 +97,18 @@ function Settings() {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Store Settings</h1>
-      <p className="text-sm text-muted-foreground">Update store info, branding logos, theme.</p>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold">Store Settings</h1>
+        <p className="text-sm text-muted-foreground">Update store info, branding logos, theme.</p>
+      </div>
+
+      {/* Store 1 home items management — full CRUD in-place */}
+      <div className="rounded-2xl border bg-card p-6">
+        <HomeItemsManager embedded />
+      </div>
+
+
 
       <div className="mt-6 max-w-2xl space-y-6 rounded-2xl border bg-card p-6">
         <Field label="Store name">
