@@ -301,6 +301,26 @@
   }
   .neon-border { box-shadow: inset 0 0 0 1px oklch(0.85 0.27 145 / 0.5), 0 0 18px -4px oklch(0.85 0.27 145 / 0.4); }
   .text-glow { text-shadow: 0 0 12px currentColor; }
+  .store-one-shell {
+    background:
+      radial-gradient(circle at 82% 24%, oklch(0.85 0.27 145 / 0.16), transparent 28rem),
+      linear-gradient(180deg, oklch(0.025 0.01 145), var(--background) 42rem);
+  }
+  .store-one-hero {
+    background:
+      linear-gradient(90deg, oklch(0.02 0.01 145 / 0.96), oklch(0.03 0.02 145 / 0.86)),
+      radial-gradient(circle at 78% 45%, oklch(0.85 0.27 145 / 0.22), transparent 24rem);
+    box-shadow: inset 0 -1px 0 oklch(0.85 0.27 145 / 0.45), 0 18px 70px -45px oklch(0.85 0.27 145 / 0.75);
+  }
+  .store-one-circuit {
+    opacity: .58;
+    background-image:
+      linear-gradient(90deg, transparent 0 18%, oklch(0.85 0.27 145 / 0.23) 18.2% 18.7%, transparent 18.9% 100%),
+      linear-gradient(0deg, transparent 0 30%, oklch(0.85 0.27 145 / 0.18) 30.2% 30.7%, transparent 30.9% 100%),
+      radial-gradient(circle at 28% 42%, oklch(0.85 0.27 145 / 0.28) 0 2px, transparent 3px),
+      radial-gradient(circle at 72% 28%, oklch(0.85 0.27 145 / 0.23) 0 2px, transparent 3px);
+    background-size: 190px 120px, 160px 140px, 140px 140px, 180px 180px;
+  }
   /* Animated terminal cursor */
   .cursor-blink::after {
     content: "▋";
