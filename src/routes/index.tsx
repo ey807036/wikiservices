@@ -49,47 +49,56 @@ function Home() {
   const luckySubtitle = s.lucky_subtitle || "Sirf Rs.1 invest karein — har raat 10 baje Quran-andazi, aik lucky user ko sara paisa mil jaye ga.";
 
   return (
-    <div>
+    <div className="store-one-shell">
       {/* HERO — compact */}
-      <section className="relative overflow-hidden border-b">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_color-mix(in_oklab,_var(--primary)_18%,_transparent),_transparent_60%)]" />
-        <div className="container relative mx-auto px-4 pt-6 pb-8 md:pt-10 md:pb-12 text-center">
+      <section className="store-one-hero relative overflow-hidden border-b border-primary/60">
+        <div className="store-one-circuit absolute inset-0" />
+        <div className="container relative mx-auto grid gap-6 px-4 pt-6 pb-8 md:grid-cols-[1.1fr_0.9fr] md:items-center md:pt-10 md:pb-12">
+          <div className="text-center md:text-left">
           {shopLogo && (
-            <div className="mb-3 flex justify-center">
-              <NeonLogo src={shopLogo} size={80} glow="var(--primary)" />
+            <div className="mb-3 flex justify-center md:justify-start">
+              <NeonLogo src={shopLogo} size={96} glow="var(--primary)" />
             </div>
           )}
-          <span className="inline-flex items-center gap-2 rounded-full bg-destructive/20 px-4 py-1.5 text-xs md:text-sm font-bold backdrop-blur ring-1 ring-destructive/50">
-            <ShieldAlert className="h-4 w-4 text-red-500" /> {heroTag}
+          <span className="inline-flex items-center gap-2 rounded-full bg-black/60 px-4 py-1.5 text-xs md:text-sm font-black uppercase backdrop-blur ring-1 ring-primary/70 shadow-[0_0_22px_oklch(0.85_0.27_145/0.35)]">
+            <ShieldAlert className="h-4 w-4 text-primary" /> {heroTag}
           </span>
-          <h1 className="mt-3 text-3xl font-black uppercase leading-[0.95] tracking-tight md:text-5xl">
-            <span className="inline-flex items-center justify-center gap-2 text-gradient">
+          <h1 className="mt-3 text-4xl font-black uppercase leading-[0.92] md:text-6xl">
+            <span className="inline-flex items-center justify-center gap-2 text-gradient md:justify-start">
               {heroTitle} <VerifiedBadge color="green" size={22} />
             </span>
           </h1>
-          <p className="mx-auto mt-2 max-w-xl text-base font-black uppercase tracking-wider md:text-xl bg-gradient-to-r from-red-500 via-rose-500 to-red-600 bg-clip-text text-transparent">
+          <p className="mx-auto mt-2 max-w-xl text-base font-black uppercase tracking-wider md:mx-0 md:text-xl bg-gradient-to-r from-red-400 via-rose-400 to-red-500 bg-clip-text text-transparent">
             {heroSubtitle}
           </p>
-          <div className="mx-auto mt-3 flex max-w-2xl flex-wrap items-center justify-center gap-1.5">
+          <div className="mx-auto mt-3 flex max-w-2xl flex-wrap items-center justify-center gap-1.5 md:mx-0 md:justify-start">
             {[
               [Wifi, "WiFi"], [Bluetooth, "Bluetooth"], [Smartphone, "SIM"], [Camera, "Drone Cam"],
               [Car, "Car"], [Tv, "TV"], [Snowflake, "AC"], [Laptop, "Laptop"],
               [Monitor, "PC"], [Music, "Sound"], [Lightbulb, "Bulb"], [Skull, "& More"],
             ].map(([Icon, label]: any) => (
-              <span key={label} className="inline-flex items-center gap-1 rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-semibold text-red-400 ring-1 ring-red-500/30">
+              <span key={label} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-bold text-primary ring-1 ring-primary/45 shadow-[0_0_10px_oklch(0.85_0.27_145/0.18)]">
                 <Icon className="h-3 w-3" /> {label}
               </span>
             ))}
           </div>
-          <div className="mt-4 flex flex-wrap justify-center gap-3">
+          <div className="mt-5 flex flex-wrap justify-center gap-3 md:justify-start">
             <Link to="/sim-database">
               <Button
                 size="lg"
-                className="h-11 px-6 text-sm rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_25px_oklch(0.65_0.25_25/0.7)] hover:opacity-90"
+                className="h-12 px-8 text-sm rounded-full bg-gradient-to-r from-primary via-success to-primary text-primary-foreground font-black uppercase tracking-wider shadow-[0_0_28px_oklch(0.85_0.27_145/0.75)] hover:opacity-90"
               >
                 <Skull className="mr-2 h-4 w-4" /> Free SimData <VerifiedBadge color="green" size={16} />
               </Button>
             </Link>
+          </div>
+          </div>
+          <div className="relative mx-auto hidden h-72 w-72 place-items-center md:grid">
+            <div className="absolute inset-0 rounded-full border-2 border-primary shadow-[0_0_42px_oklch(0.85_0.27_145/0.8)]" />
+            <div className="absolute inset-6 rounded-full border border-primary/35 animate-[spin_18s_linear_infinite]" />
+            <div className="grid h-52 w-52 place-items-center rounded-full bg-black/70 ring-1 ring-primary/60 shadow-[inset_0_0_34px_oklch(0.85_0.27_145/0.25)]">
+              <span className="text-center text-5xl drop-shadow-[0_0_18px_oklch(0.85_0.27_145/0.75)]">💀</span>
+            </div>
           </div>
         </div>
       </section>
@@ -100,12 +109,12 @@ function Home() {
       {/* COMPACT CTA ROW */}
       <section className="container mx-auto px-4 pt-3">
         <div className="mx-auto grid max-w-3xl gap-3 sm:grid-cols-2">
-          <Link to="/lucky-draw" className="group relative overflow-hidden rounded-2xl border border-red-500/60 bg-gradient-to-br from-red-950/80 via-black to-red-900/50 p-3 shadow-[0_0_25px_-8px_oklch(0.65_0.25_25/0.8)] hover:scale-[1.02] transition-transform">
+          <Link to="/lucky-draw" className="group relative overflow-hidden rounded-2xl border border-primary/60 bg-gradient-to-br from-black via-card to-primary/10 p-3 shadow-[0_0_25px_-8px_var(--primary)] hover:scale-[1.02] transition-transform">
             <div className="flex items-center gap-3">
               <div className="text-3xl drop-shadow-[0_0_10px_oklch(0.85_0.18_85/0.8)]">💰</div>
               <div className="min-w-0 flex-1">
-                <div className="text-[10px] font-black uppercase tracking-wider text-yellow-300">🔥 Daily 10 PM</div>
-                <h3 className="text-sm font-black leading-tight bg-gradient-to-r from-red-400 to-yellow-300 bg-clip-text text-transparent truncate">
+                <div className="text-[10px] font-black uppercase tracking-wider text-primary">🔥 Daily 10 PM</div>
+                <h3 className="text-sm font-black leading-tight text-primary truncate">
                   {luckyTitle}
                 </h3>
                 <p className="text-[11px] text-red-100/80 truncate">{luckySubtitle}</p>
