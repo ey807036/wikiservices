@@ -266,7 +266,7 @@ function IntroVideo() {
  */
 function NeonOrbitMark({ logoUrl, tone }: { logoUrl?: string | null; tone: string }) {
   return (
-    <div className="relative inline-grid h-16 w-16 place-items-center [transform-style:preserve-3d]">
+    <div className="relative inline-grid h-20 w-20 place-items-center [transform-style:preserve-3d]">
       {/* Rotating neon ring */}
       <span
         className="pointer-events-none absolute inset-0 rounded-full"
@@ -277,9 +277,9 @@ function NeonOrbitMark({ logoUrl, tone }: { logoUrl?: string | null; tone: strin
           animation: "spin 3.5s linear infinite",
         }}
       />
-      <span className="pointer-events-none absolute inset-[3px] rounded-full bg-card" />
+      <span className="pointer-events-none absolute inset-[4px] rounded-full bg-black" />
       <span className="pointer-events-none absolute inset-0 rounded-full ring-2 ring-emerald-400/50 shadow-[0_0_20px_#22ff88aa]" />
-      <div className="relative grid h-12 w-12 place-items-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 [transform:translateZ(10px)]">
+      <div className="relative grid h-16 w-16 place-items-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 [transform:translateZ(10px)]">
         <ItemMark logoUrl={logoUrl} tone={tone} />
       </div>
     </div>
@@ -288,7 +288,7 @@ function NeonOrbitMark({ logoUrl, tone }: { logoUrl?: string | null; tone: strin
 
 function ItemMark({ logoUrl, tone }: { logoUrl?: string | null; tone: string }) {
   if (logoUrl) {
-    return <img src={logoUrl} alt="" className="h-11 w-11 rounded-xl object-cover ring-1 ring-white/10" />;
+    return <img src={logoUrl} alt="" className="h-16 w-16 rounded-full object-cover ring-2 ring-primary/50 shadow-[0_0_22px_oklch(0.85_0.27_145/0.45)]" />;
   }
   if (tone === "whatsapp") return <WhatsAppLogo />;
   if (tone === "id") return <IdCardRealLogo />;
