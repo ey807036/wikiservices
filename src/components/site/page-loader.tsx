@@ -21,7 +21,10 @@ export function PageLoader() {
     setMinElapsed(false);
     const tMin = setTimeout(() => setMinElapsed(true), MIN_MS);
     const tMax = setTimeout(() => setShow(false), MAX_MS);
-    return () => { clearTimeout(tMin); clearTimeout(tMax); };
+    return () => {
+      clearTimeout(tMin);
+      clearTimeout(tMax);
+    };
   }, [path]);
 
   // Hide once both: router ready AND min time elapsed
