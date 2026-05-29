@@ -30,6 +30,9 @@ export function PageLoader() {
       setShow(false);
     }
   }, [isRouterLoading, minElapsed, show]);
+
+  if (!show) return null;
+
   return (
     <div
       className="fixed inset-0 z-[200] grid place-items-center bg-background/90 backdrop-blur-sm animate-fade-in"
