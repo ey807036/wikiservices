@@ -4,33 +4,34 @@ import { VerifiedBadge } from "@/components/site/verified-badge";
 
 const MAX_MS = 2000;
 
+const MIN_MS = 2000;
+const MAX_MS = 6000;
+
 /**
- * Global page loader. Shows on every pathname change for up to 2s, and hides
- * as soon as the router is no longer loading (or the 2s cap is reached —
- * whichever comes first). Never blocks navigation.
+ * Global page loader. Always shows for at least MIN_MS (2s) on every route
+ * change, then hides as soon as the router is ready — capped at MAX_MS.
  */
 export function PageLoader() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const isRouterLoading = useRouterState({ select: (s) => s.isLoading || s.isTransitioning });
   const [show, setShow] = useState(true);
+  const [minElapsed, setMinElapsed] = useState(false);
 
   // Reset on every route change
   useEffect(() => {
     setShow(true);
-    const t = setTimeout(() => setShow(false), MAX_MS);
-    return () => clearTimeout(t);
+    setMinElapsed(false);
+    const tMin = setTimeout(() => setMinElapsed(true), MIN_MS);
+    const tMax = setTimeout(() => setShow(false), MAX_MS);
+    return () => { clearTimeout(tMin); clearTimeout(tMax); };
   }, [path]);
 
-  // Hide early once route is ready
+  // Hide once both: router ready AND min time elapsed
   useEffect(() => {
-    if (!isRouterLoading && show) {
-      const t = setTimeout(() => setShow(false), 250);
-      return () => clearTimeout(t);
+    if (!isRouterLoading && minElapsed && show) {
+      setShow(false);
     }
-  }, [isRouterLoading, show]);
-
-  if (!show) return null;
-
+  }, [isRouterLoading, minElapsed, show]);
   return (
     <div
       className="fixed inset-0 z-[200] grid place-items-center bg-background/90 backdrop-blur-sm animate-fade-in"

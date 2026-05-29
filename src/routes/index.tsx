@@ -60,12 +60,15 @@ function Home() {
               <NeonLogo src={shopLogo} size={96} glow="var(--primary)" />
             </div>
           )}
-          <span className="inline-flex items-center gap-2 rounded-full bg-black/60 px-4 py-1.5 text-xs md:text-sm font-black uppercase backdrop-blur ring-1 ring-primary/70 shadow-[0_0_22px_oklch(0.85_0.27_145/0.35)]">
-            <ShieldAlert className="h-4 w-4 text-primary" /> {heroTag}
+          <span className="inline-flex items-center gap-2 rounded-full bg-black/60 px-4 py-1.5 text-xs md:text-sm font-black uppercase backdrop-blur ring-1 ring-red-500/70 shadow-[0_0_22px_oklch(0.65_0.25_25/0.45)]">
+            <ShieldAlert className="h-4 w-4 text-red-400" />
+            <span className="bg-gradient-to-r from-red-400 via-rose-400 to-red-500 bg-clip-text text-transparent">{heroTag}</span>
           </span>
           <h1 className="mt-3 text-4xl font-black uppercase leading-[0.92] md:text-6xl">
-            <span className="inline-flex items-center justify-center gap-2 text-gradient md:justify-start">
-              {heroTitle} <VerifiedBadge color="green" size={22} />
+            <span className="inline-flex flex-wrap items-center justify-center gap-2 md:justify-start">
+              <span className="text-white drop-shadow-[0_0_18px_rgba(255,255,255,0.45)]">Jammers &amp;</span>
+              <span className="text-gradient">Hacking Devices</span>
+              <VerifiedBadge color="green" size={22} />
             </span>
           </h1>
           <p className="mx-auto mt-2 max-w-xl text-base font-black uppercase tracking-wider md:mx-0 md:text-xl bg-gradient-to-r from-red-400 via-rose-400 to-red-500 bg-clip-text text-transparent">

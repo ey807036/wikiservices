@@ -14,15 +14,19 @@ export const THEMES = [
 export function ThemeProvider() {
   const { data } = useQuery({
     queryKey: ["site-theme"],
+  const { data } = useQuery({
+    queryKey: ["site-theme"],
     queryFn: async () => {
       const { data } = await supabase.from("site_settings").select("theme").eq("id", 1).maybeSingle();
-      return data?.theme ?? "light";
+      return data?.theme ?? "matrix";
     },
   });
 
   useEffect(() => {
-    const t = data ?? "light";
+    const t = data ?? "matrix";
     document.documentElement.setAttribute("data-theme", t);
+    document.documentElement.style.colorScheme = t === "light" ? "light" : "dark";
+  }, [data]);
     document.documentElement.style.colorScheme = t === "light" ? "light" : "dark";
   }, [data]);
 
