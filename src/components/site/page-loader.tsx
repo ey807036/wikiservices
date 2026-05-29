@@ -21,7 +21,10 @@ export function PageLoader() {
     setMinElapsed(false);
     const tMin = setTimeout(() => setMinElapsed(true), MIN_MS);
     const tMax = setTimeout(() => setShow(false), MAX_MS);
-    return () => { clearTimeout(tMin); clearTimeout(tMax); };
+    return () => {
+      clearTimeout(tMin);
+      clearTimeout(tMax);
+    };
   }, [path]);
 
   // Hide once both: router ready AND min time elapsed
@@ -30,6 +33,9 @@ export function PageLoader() {
       setShow(false);
     }
   }, [isRouterLoading, minElapsed, show]);
+
+  if (!show) return null;
+
   return (
     <div
       className="fixed inset-0 z-[200] grid place-items-center bg-background/90 backdrop-blur-sm animate-fade-in"
