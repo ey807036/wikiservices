@@ -2,8 +2,6 @@ import { useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { VerifiedBadge } from "@/components/site/verified-badge";
 
-const MAX_MS = 2000;
-
 const MIN_MS = 2000;
 const MAX_MS = 6000;
 
