@@ -269,6 +269,34 @@ function LogoUpload({ label, url, onChange, onUpload, uploading }: {
   );
 }
 
+function ThemePicker({ label, hint, value, onChange }: { label: string; hint?: string; value: string; onChange: (t: string) => void }) {
+  return (
+    <Field label={label} hint={hint}>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        {THEMES.map((t) => {
+          const active = value === t.id;
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => onChange(t.id)}
+              className={`relative rounded-xl border-2 p-3 text-left transition ${active ? "border-primary ring-2 ring-primary/40" : "border-border hover:border-primary/50"}`}
+            >
+              <div className="flex gap-1.5">
+                <ThemeSwatch theme={t.id} role="bg" />
+                <ThemeSwatch theme={t.id} role="primary" />
+                <ThemeSwatch theme={t.id} role="accent" />
+              </div>
+              <div className="mt-2 text-xs font-semibold">{t.label}</div>
+              {active && <Check className="absolute right-2 top-2 h-4 w-4 text-primary" />}
+            </button>
+          );
+        })}
+      </div>
+    </Field>
+  );
+}
+
 function ThemeSwatch({ theme, role }: { theme: string; role: "bg" | "primary" | "accent" }) {
   const map: Record<string, { bg: string; primary: string; accent: string }> = {
     matrix: { bg: "#0a1a0f", primary: "#5fff8f", accent: "#5fe6d6" },
