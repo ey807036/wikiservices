@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { Terminal, Mail, Lock, User, ArrowRight } from "lucide-react";
+import { lovable } from "@/integrations/lovable/index";
 import logo from "@/assets/logo.png";
 import hacker from "@/assets/hacker-3d.png";
 
