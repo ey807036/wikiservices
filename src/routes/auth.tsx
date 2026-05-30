@@ -87,6 +87,22 @@ function Auth() {
     if (!e2) navigate({ to: "/" });
   };
 
+  const googleSignIn = async () => {
+    setLoading(true);
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+    });
+    if (result.error) {
+      setLoading(false);
+      toast.error(result.error.message || "Google sign-in failed");
+      return;
+    }
+    if (result.redirected) return; // browser navigates away
+    setLoading(false);
+    toast.success("Signed in with Google ✨");
+    navigate({ to: "/" });
+  };
+
   return (
     <div className="min-h-screen w-full bg-background">
       <div className="grid min-h-screen lg:grid-cols-2">
