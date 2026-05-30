@@ -18,6 +18,7 @@ import { MobileHackerLogin } from "@/components/site/mobile-hacker-login";
 import { FloatingMascots } from "@/components/site/floating-mascots";
 import { SiteAnnouncementPopup } from "@/components/site/site-announcement-popup";
 import { PageLoader } from "@/components/site/page-loader";
+import { SiteProtection } from "@/components/site/site-protection";
 
 function NotFoundComponent() {
   return (
