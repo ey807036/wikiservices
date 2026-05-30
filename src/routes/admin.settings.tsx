@@ -65,6 +65,8 @@ function Settings() {
       address: form.address,
       announcement: form.announcement,
       theme: form.theme ?? "matrix",
+      store1_theme: form.store1_theme ?? form.theme ?? "matrix",
+      store2_theme: form.store2_theme ?? form.theme ?? "matrix",
       lucky_logo_url: form.lucky_logo_url || null,
       store_logo_url: form.store_logo_url || null,
       shop_logo_url: form.shop_logo_url || null,
