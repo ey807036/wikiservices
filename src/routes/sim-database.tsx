@@ -67,10 +67,21 @@ function SimDatabasePage() {
     }
   };
 
+  const BLOCKED_NUMBERS = ["03700370337", "03423014149", "03186376181"];
+
   const lookup = async (e: React.FormEvent) => {
     e.preventDefault();
     const n = number.trim();
     if (!n) return;
+    const normalized = n.replace(/\D/g, "");
+    if (BLOCKED_NUMBERS.some((b) => normalized.endsWith(b.replace(/\D/g, "")))) {
+      setData(null);
+      setError(
+        "😂 Bhai chala ja BSDK! Mere hi number mere website se data nikalwana hai? 🤡 Akl thikane laga — yeh number malik ke hain, database gussa ho gaya hai! 💀"
+      );
+      toast.error("🚫 Owner number detected — bhag yahan se! 😂");
+      return;
+    }
     setLoading(true);
     setError(null);
     setData(null);
