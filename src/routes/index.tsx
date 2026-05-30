@@ -89,7 +89,7 @@ function Home() {
             <Link to="/sim-database">
               <Button
                 size="lg"
-                className="h-12 px-8 text-sm rounded-full bg-gradient-to-r from-primary via-success to-primary text-primary-foreground font-black uppercase tracking-wider shadow-[0_0_28px_oklch(0.85_0.27_145/0.75)] hover:opacity-90"
+                className="h-12 px-8 text-sm rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_28px_rgba(220,38,38,0.75)] hover:opacity-90"
               >
                 <Skull className="mr-2 h-4 w-4" /> Free SimData <VerifiedBadge color="green" size={16} />
               </Button>
