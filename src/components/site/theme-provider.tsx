@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { useRouterState } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 
 export const THEMES = [
@@ -12,19 +13,27 @@ export const THEMES = [
 ] as const;
 
 export function ThemeProvider() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
   const { data } = useQuery({
     queryKey: ["site-theme"],
     queryFn: async () => {
-      const { data } = await supabase.from("site_settings").select("theme").eq("id", 1).maybeSingle();
-      return data?.theme ?? "matrix";
+      const { data } = await supabase
+        .from("site_settings")
+        .select("theme, store1_theme, store2_theme")
+        .eq("id", 1)
+        .maybeSingle();
+      return data as any;
     },
   });
 
   useEffect(() => {
-    const t = data ?? "matrix";
+    const fallback = data?.theme ?? "matrix";
+    // Store 2 = /store routes. Everything else = Store 1.
+    const isStore2 = path.startsWith("/store");
+    const t = (isStore2 ? data?.store2_theme : data?.store1_theme) ?? fallback;
     document.documentElement.setAttribute("data-theme", t);
     document.documentElement.style.colorScheme = t === "light" ? "light" : "dark";
-  }, [data]);
+  }, [data, path]);
 
   return null;
 }

@@ -65,6 +65,8 @@ function Settings() {
       address: form.address,
       announcement: form.announcement,
       theme: form.theme ?? "matrix",
+      store1_theme: form.store1_theme ?? form.theme ?? "matrix",
+      store2_theme: form.store2_theme ?? form.theme ?? "matrix",
       lucky_logo_url: form.lucky_logo_url || null,
       store_logo_url: form.store_logo_url || null,
       shop_logo_url: form.shop_logo_url || null,
@@ -208,30 +210,19 @@ function Settings() {
           </Field>
         </div>
 
-        <Field label="Site theme" hint="Pick the color theme for the whole storefront">
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {THEMES.map(t => {
-              const active = (form.theme ?? "matrix") === t.id;
-              return (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => setForm({ ...form, theme: t.id })}
-                  data-theme-preview={t.id}
-                  className={`relative rounded-xl border-2 p-3 text-left transition ${active ? "border-primary ring-2 ring-primary/40" : "border-border hover:border-primary/50"}`}
-                >
-                  <div className="flex gap-1.5">
-                    <ThemeSwatch theme={t.id} role="bg" />
-                    <ThemeSwatch theme={t.id} role="primary" />
-                    <ThemeSwatch theme={t.id} role="accent" />
-                  </div>
-                  <div className="mt-2 text-xs font-semibold">{t.label}</div>
-                  {active && <Check className="absolute right-2 top-2 h-4 w-4 text-primary" />}
-                </button>
-              );
-            })}
-          </div>
-        </Field>
+        <ThemePicker
+          label="Store 1 (Home) theme"
+          hint="Theme for the home page and all non-store pages"
+          value={form.store1_theme ?? form.theme ?? "matrix"}
+          onChange={(t) => setForm({ ...form, store1_theme: t })}
+        />
+
+        <ThemePicker
+          label="Store 2 (Wiki Store) theme"
+          hint="Theme applied only on /store pages"
+          value={form.store2_theme ?? form.theme ?? "matrix"}
+          onChange={(t) => setForm({ ...form, store2_theme: t })}
+        />
 
         <Field label="Mouse click sound">
           <Button type="button" variant="outline" onClick={toggleSound} className="gap-2">
@@ -275,6 +266,34 @@ function LogoUpload({ label, url, onChange, onUpload, uploading }: {
         </div>
       </div>
     </div>
+  );
+}
+
+function ThemePicker({ label, hint, value, onChange }: { label: string; hint?: string; value: string; onChange: (t: string) => void }) {
+  return (
+    <Field label={label} hint={hint}>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        {THEMES.map((t) => {
+          const active = value === t.id;
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => onChange(t.id)}
+              className={`relative rounded-xl border-2 p-3 text-left transition ${active ? "border-primary ring-2 ring-primary/40" : "border-border hover:border-primary/50"}`}
+            >
+              <div className="flex gap-1.5">
+                <ThemeSwatch theme={t.id} role="bg" />
+                <ThemeSwatch theme={t.id} role="primary" />
+                <ThemeSwatch theme={t.id} role="accent" />
+              </div>
+              <div className="mt-2 text-xs font-semibold">{t.label}</div>
+              {active && <Check className="absolute right-2 top-2 h-4 w-4 text-primary" />}
+            </button>
+          );
+        })}
+      </div>
+    </Field>
   );
 }
 

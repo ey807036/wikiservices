@@ -597,6 +597,8 @@ export type Database = {
           store_hero_title: string | null
           store_logo_url: string | null
           store_name: string
+          store1_theme: string
+          store2_theme: string
           theme: string
           updated_at: string
           whatsapp_number: string | null
@@ -621,6 +623,8 @@ export type Database = {
           store_hero_title?: string | null
           store_logo_url?: string | null
           store_name?: string
+          store1_theme?: string
+          store2_theme?: string
           theme?: string
           updated_at?: string
           whatsapp_number?: string | null
@@ -645,6 +649,8 @@ export type Database = {
           store_hero_title?: string | null
           store_logo_url?: string | null
           store_name?: string
+          store1_theme?: string
+          store2_theme?: string
           theme?: string
           updated_at?: string
           whatsapp_number?: string | null

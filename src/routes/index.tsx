@@ -60,9 +60,9 @@ function Home() {
               <NeonLogo src={shopLogo} size={96} glow="var(--primary)" />
             </div>
           )}
-          <span className="inline-flex items-center gap-2 rounded-full bg-black/60 px-4 py-1.5 text-xs md:text-sm font-black uppercase backdrop-blur ring-1 ring-red-500/70 shadow-[0_0_22px_oklch(0.65_0.25_25/0.45)]">
-            <ShieldAlert className="h-4 w-4 text-red-400" />
-            <span className="bg-gradient-to-r from-red-400 via-rose-400 to-red-500 bg-clip-text text-transparent">{heroTag}</span>
+          <span className="inline-flex items-center gap-2 rounded-full bg-black/60 px-4 py-1.5 text-xs md:text-sm font-black uppercase backdrop-blur ring-1 ring-white/50 shadow-[0_0_22px_rgba(255,255,255,0.25)]">
+            <ShieldAlert className="h-4 w-4 text-white" />
+            <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.55)]">{heroTag}</span>
           </span>
           <h1 className="mt-3 text-4xl font-black uppercase leading-[0.92] md:text-6xl">
             <span className="inline-flex flex-wrap items-center justify-center gap-2 md:justify-start">
@@ -71,7 +71,7 @@ function Home() {
               <VerifiedBadge color="green" size={22} />
             </span>
           </h1>
-          <p className="mx-auto mt-2 max-w-xl text-base font-black uppercase tracking-wider md:mx-0 md:text-xl bg-gradient-to-r from-red-400 via-rose-400 to-red-500 bg-clip-text text-transparent">
+          <p className="mx-auto mt-2 max-w-xl text-base font-black uppercase tracking-wider md:mx-0 md:text-xl text-red-600 drop-shadow-[0_0_14px_rgba(220,38,38,0.7)]">
             {heroSubtitle}
           </p>
           <div className="mx-auto mt-3 flex max-w-2xl flex-wrap items-center justify-center gap-1.5 md:mx-0 md:justify-start">
@@ -89,7 +89,7 @@ function Home() {
             <Link to="/sim-database">
               <Button
                 size="lg"
-                className="h-12 px-8 text-sm rounded-full bg-gradient-to-r from-primary via-success to-primary text-primary-foreground font-black uppercase tracking-wider shadow-[0_0_28px_oklch(0.85_0.27_145/0.75)] hover:opacity-90"
+                className="h-12 px-8 text-sm rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_28px_rgba(220,38,38,0.75)] hover:opacity-90"
               >
                 <Skull className="mr-2 h-4 w-4" /> Free SimData <VerifiedBadge color="green" size={16} />
               </Button>
