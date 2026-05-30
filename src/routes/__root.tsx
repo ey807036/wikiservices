@@ -116,6 +116,7 @@ function RootComponent() {
             <FloatingMascots />
             <SiteAnnouncementPopup />
             <PageLoader />
+            <SiteProtection />
             <Toaster richColors position="top-right" />
           </CartProvider>
         </WishlistProvider>
