@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { VerifiedBadge } from "@/components/site/verified-badge";
 import { PayfastCheckout } from "@/components/site/payfast-checkout";
 import { NeonLogo } from "@/components/site/neon-logo";
+import { NeonVideoCircle, VideoPreloader } from "@/components/site/neon-video-circle";
 import e1 from "@/assets/emojis/e1.png";
 import e2 from "@/assets/emojis/e2.png";
 import e3 from "@/assets/emojis/e3.png";
