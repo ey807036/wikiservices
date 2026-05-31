@@ -146,6 +146,11 @@ function SimDatabasePage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
+      {/* Preload all alert videos so they appear instantly when triggered */}
+      <VideoPreloader sources={[VIDEOS.owner, VIDEOS.payment, VIDEOS.notfound]} />
+      {activeVideo && (
+        <NeonVideoCircle src={VIDEOS[activeVideo]} onEnd={() => setActiveVideo(null)} />
+      )}
       {/* Danger animated background */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-black" />
