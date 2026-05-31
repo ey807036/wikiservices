@@ -62,13 +62,11 @@ function SimDatabasePage() {
   } as const;
 
   // Listen for payment failures dispatched by PayfastCheckout
-  // and trigger the payment-fail video.
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffectOnce(() => {
+  useEffect(() => {
     const onFail = () => setActiveVideo("payment");
     window.addEventListener("wiki:payment-fail", onFail as EventListener);
     return () => window.removeEventListener("wiki:payment-fail", onFail as EventListener);
-  });
+  }, []);
 
 
   const formatRecord = (rec: SimRecord) =>
