@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { createPayfastCheckout } from "@/lib/payfast.functions";
 import { useAuth } from "@/lib/auth-context";
 import { saveOrder } from "@/lib/order-history";
-import { VideoPreloader } from "@/components/site/neon-video-circle";
+import { NeonVideoCircle, VideoPreloader } from "@/components/site/neon-video-circle";
 
 type Props = {
   amount: number;
@@ -58,6 +58,7 @@ export function PayfastCheckout({
   const [email, setEmail] = useState(prefillEmail ?? "");
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState<string | null>(null);
+  const [showFailVideo, setShowFailVideo] = useState(false);
 
   // Sync prefill if it arrives async (e.g. auth context hydrates)
   useEffect(() => { if (prefillName && !name) setName(prefillName); }, [prefillName]);
@@ -79,6 +80,7 @@ export function PayfastCheckout({
         const started = Number(sessionStorage.getItem("wiki_payfast_started_at") || "0");
         if (!started || Date.now() - started < 1200) return;
         sessionStorage.removeItem("wiki_payfast_started_at");
+        setShowFailVideo(true);
         window.dispatchEvent(new CustomEvent("wiki:payment-fail", { detail: { reason: "Customer backed out from PayFast" } }));
       } catch {}
     };
@@ -146,6 +148,7 @@ export function PayfastCheckout({
         const msg = res.error || "PayFast init failed";
         setErrMsg(msg);
         toast.error(msg);
+        setShowFailVideo(true);
         try { window.dispatchEvent(new CustomEvent("wiki:payment-fail", { detail: { reason: msg } })); } catch {}
         setLoading(false);
         return;
@@ -193,6 +196,7 @@ export function PayfastCheckout({
       const msg = err?.message || "Network error";
       setErrMsg(msg);
       toast.error(msg);
+      setShowFailVideo(true);
       try { window.dispatchEvent(new CustomEvent("wiki:payment-fail", { detail: { reason: msg } })); } catch {}
       setLoading(false);
     }
@@ -201,6 +205,7 @@ export function PayfastCheckout({
   return (
     <>
       <VideoPreloader sources={["/videos/payment-fail.mp4"]} />
+      {showFailVideo && <NeonVideoCircle src="/videos/payment-fail.mp4" onEnd={() => setShowFailVideo(false)} />}
       <form
         onSubmit={submit}
         className="space-y-3 rounded-2xl border-2 border-red-500/50 bg-card/70 p-5 backdrop-blur shadow-[0_0_30px_oklch(0.65_0.25_25/0.4)]"
