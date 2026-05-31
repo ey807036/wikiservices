@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { createPayfastCheckout } from "@/lib/payfast.functions";
 import { useAuth } from "@/lib/auth-context";
 import { saveOrder } from "@/lib/order-history";
+import { VideoPreloader } from "@/components/site/neon-video-circle";
 
 type Props = {
   amount: number;
@@ -183,13 +184,15 @@ export function PayfastCheckout({
   };
 
   return (
-    <form
-      onSubmit={submit}
-      className="space-y-3 rounded-2xl border-2 border-red-500/50 bg-card/70 p-5 backdrop-blur shadow-[0_0_30px_oklch(0.65_0.25_25/0.4)]"
-    >
-      <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-yellow-300">
-        <CreditCard className="h-4 w-4" /> Pay with PayFast
-      </div>
+    <>
+      <VideoPreloader sources={["/videos/payment-fail.mp4"]} />
+      <form
+        onSubmit={submit}
+        className="space-y-3 rounded-2xl border-2 border-red-500/50 bg-card/70 p-5 backdrop-blur shadow-[0_0_30px_oklch(0.65_0.25_25/0.4)]"
+      >
+        <div className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-yellow-300">
+          <CreditCard className="h-4 w-4" /> Pay with PayFast
+        </div>
       {!hideContactFields && (
         <>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -250,9 +253,10 @@ export function PayfastCheckout({
         {loading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <ShieldCheck className="h-4 w-4 mr-1" />}
         {loading ? "Connecting…" : (buttonLabel || `Pay Rs.${total} via PayFast`)}
       </Button>
-      <p className="text-[10px] text-center text-red-200/60 uppercase tracking-widest">
-        Easypaisa · JazzCash · Bank · Card · Approve karein, payment auto confirm hogi
-      </p>
-    </form>
+        <p className="text-[10px] text-center text-red-200/60 uppercase tracking-widest">
+          Easypaisa · JazzCash · Bank · Card · Approve karein, payment auto confirm hogi
+        </p>
+      </form>
+    </>
   );
 }
