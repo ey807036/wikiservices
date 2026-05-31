@@ -6,13 +6,6 @@ function warmVideo(src: string) {
   if (!src || preloadedVideos.has(src)) return;
   preloadedVideos.add(src);
 
-  const link = document.createElement("link");
-  link.rel = "preload";
-  link.as = "video";
-  link.href = src;
-  link.type = "video/mp4";
-  document.head.appendChild(link);
-
   const video = document.createElement("video");
   video.src = src;
   video.preload = "auto";
