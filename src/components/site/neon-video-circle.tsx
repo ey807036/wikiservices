@@ -43,7 +43,11 @@ export function NeonVideoCircle({ src, onEnd, size = 280 }: Props) {
       } catch {
         // Browser blocked audio — retry muted so visual still plays
         v.muted = true;
-        try { await v.play(); } catch {}
+        try {
+          await v.play();
+        } catch {
+          void 0;
+        }
       }
     };
     tryPlay();
@@ -103,7 +107,10 @@ export function VideoPreloader({ sources }: { sources: string[] }) {
   }, [sources]);
 
   return (
-    <div aria-hidden style={{ position: "absolute", width: 0, height: 0, overflow: "hidden", opacity: 0 }}>
+    <div
+      aria-hidden
+      style={{ position: "absolute", width: 0, height: 0, overflow: "hidden", opacity: 0 }}
+    >
       {sources.map((s) => (
         <video key={s} src={s} preload="auto" muted playsInline aria-hidden />
       ))}
