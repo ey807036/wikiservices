@@ -73,6 +73,20 @@ export function PayfastCheckout({
     if (!phone && meta.phone) setPhone(String(meta.phone).replace(/\D/g, ""));
   }, [user]);
 
+  useEffect(() => {
+    const showReturnFailVideo = () => {
+      try {
+        const started = Number(sessionStorage.getItem("wiki_payfast_started_at") || "0");
+        if (!started || Date.now() - started < 1200) return;
+        sessionStorage.removeItem("wiki_payfast_started_at");
+        window.dispatchEvent(new CustomEvent("wiki:payment-fail", { detail: { reason: "Customer backed out from PayFast" } }));
+      } catch {}
+    };
+    window.addEventListener("pageshow", showReturnFailVideo);
+    showReturnFailVideo();
+    return () => window.removeEventListener("pageshow", showReturnFailVideo);
+  }, []);
+
   const total = amount + 1;
 
   if (requireAuth && !user) {
@@ -161,6 +175,7 @@ export function PayfastCheckout({
       } catch {}
 
       // Submit hidden form -> PayFast hosted checkout
+      try { sessionStorage.setItem("wiki_payfast_started_at", String(Date.now())); } catch {}
       const form = document.createElement("form");
       form.method = "POST";
       form.action = res.checkoutUrl;
