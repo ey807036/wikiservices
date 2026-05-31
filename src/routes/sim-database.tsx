@@ -214,7 +214,7 @@ function SimDatabasePage() {
         {/* Result */}
         <div className="mx-auto mt-8 max-w-3xl">
           {error && (
-            <div className="rounded-xl border border-red-500/60 bg-red-500/10 p-4 text-sm text-red-400">
+            <div className="rounded-xl border border-red-500/60 bg-red-500/10 p-4 text-sm font-semibold text-white shadow-[0_0_24px_oklch(0.65_0.25_25/0.25)]">
               ⚠️ {error}
             </div>
           )}
