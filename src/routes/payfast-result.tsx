@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { CheckCircle2, XCircle, Clock, MessageCircle, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { NeonVideoCircle, VideoPreloader } from "@/components/site/neon-video-circle";
 
 export const Route = createFileRoute("/payfast-result")({
   head: () => ({ meta: [{ title: "Payment Result — Wiki Services" }] }),
@@ -24,6 +25,11 @@ function PayfastResult() {
   const [waLink, setWaLink] = useState<string>("");
   const [intent, setIntent] = useState<any>(null);
   const [dbWritten, setDbWritten] = useState<"lucky" | "store" | null>(null);
+  const [showFailVideo, setShowFailVideo] = useState(false);
+
+  useEffect(() => {
+    if (!success && !pending) setShowFailVideo(true);
+  }, [success, pending]);
 
   useEffect(() => {
     if (!basket) return;
@@ -99,6 +105,8 @@ function PayfastResult() {
 
   return (
     <div className="min-h-screen bg-black text-white grid place-items-center px-4 py-10">
+      <VideoPreloader sources={["/videos/payment-fail.mp4"]} />
+      {showFailVideo && <NeonVideoCircle src="/videos/payment-fail.mp4" onEnd={() => setShowFailVideo(false)} />}
       <div className={`max-w-md w-full rounded-2xl border-2 p-6 text-center shadow-[0_0_40px_oklch(0.65_0.25_25/0.35)] ${tone.ring}`}>
         <div className="flex justify-center mb-3">{tone.icon}</div>
         <h1 className="text-2xl font-black uppercase tracking-wider">{tone.label}</h1>
