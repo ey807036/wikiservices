@@ -53,6 +53,23 @@ function SimDatabasePage() {
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<SimRecord[] | null>(null);
   const [copiedIdx, setCopiedIdx] = useState<number | "all" | null>(null);
+  const [activeVideo, setActiveVideo] = useState<null | "owner" | "payment" | "notfound">(null);
+
+  const VIDEOS = {
+    owner: "/videos/owner-warning.mp4",
+    payment: "/videos/payment-fail.mp4",
+    notfound: "/videos/data-not-found.mp4",
+  } as const;
+
+  // Listen for payment failures dispatched by PayfastCheckout
+  // and trigger the payment-fail video.
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffectOnce(() => {
+    const onFail = () => setActiveVideo("payment");
+    window.addEventListener("wiki:payment-fail", onFail as EventListener);
+    return () => window.removeEventListener("wiki:payment-fail", onFail as EventListener);
+  });
+
 
   const formatRecord = (rec: SimRecord) =>
     Object.entries(rec).map(([k, v]) => `${k}: ${v ?? "—"}`).join("\n");
