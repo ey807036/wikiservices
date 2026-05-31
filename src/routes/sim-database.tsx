@@ -96,6 +96,7 @@ function SimDatabasePage() {
         "😂 Bhai chala ja BSDK! Mere hi number mere website se data nikalwana hai? 🤡 Akl thikane laga — yeh number malik ke hain, database gussa ho gaya hai! 💀"
       );
       toast.error("🚫 Owner number detected — bhag yahan se! 😂");
+      setActiveVideo("owner");
       return;
     }
     setLoading(true);
