@@ -292,15 +292,15 @@ function SimDatabasePage() {
               <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(transparent_94%,oklch(0.65_0.25_25/0.25)_94%)] bg-[length:100%_6px]" />
 
               <div className="relative">
-                <div className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-2xl bg-black/70 ring-1 ring-red-500/50 shadow-[0_0_24px_oklch(0.65_0.25_25/0.6)]">
+                <div className="mx-auto mb-3 flex h-24 w-24 items-center justify-center rounded-full bg-black/70 ring-2 ring-emerald-400/70 shadow-[0_0_24px_oklch(0.7_0.2_150/0.9),0_0_55px_oklch(0.7_0.2_150/0.45)]">
                   <img src={emojiCry} alt="" width={72} height={72} className="h-16 w-16 object-contain" loading="lazy" />
                 </div>
 
                 <h3 className="text-2xl md:text-3xl font-black uppercase tracking-wider text-red-300 drop-shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)]">
-                  ❌ Data Available Nahi 🚫
+                  Data Available Nahi
                 </h3>
 
-                <div className="mt-4 rounded-2xl border border-red-500/40 bg-black/70 p-4 text-left text-sm md:text-[15px] leading-relaxed space-y-3">
+                <div className="mt-4 rounded-2xl border border-red-500/40 bg-black/70 p-4 text-left text-sm md:text-[15px] leading-relaxed space-y-3 text-white">
                   <div className="flex items-start gap-3">
                     <img src={e11} alt="" width={28} height={28} className="h-7 w-7 shrink-0 object-contain" loading="lazy" />
                     <p className="min-w-0 flex-1"><span className="font-black text-red-300">Reason:</span> Yeh number <span className="font-bold">2024 – 2026</span> ka register hua hai, isliye free database mein available nahi hai.</p>
