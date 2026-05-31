@@ -4,7 +4,17 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, ShieldAlert, Skull, Database, Zap, AlertTriangle, Loader2, Copy, Check } from "lucide-react";
+import {
+  Search,
+  ShieldAlert,
+  Skull,
+  Database,
+  Zap,
+  AlertTriangle,
+  Loader2,
+  Copy,
+  Check,
+} from "lucide-react";
 import { toast } from "sonner";
 import { VerifiedBadge } from "@/components/site/verified-badge";
 import { PayfastCheckout } from "@/components/site/payfast-checkout";
@@ -34,7 +44,11 @@ export const Route = createFileRoute("/sim-database")({
   head: () => ({
     meta: [
       { title: "Wiki SimDatabase — Underground SIM Lookup 💀" },
-      { name: "description", content: "Free SIM Data lookup. Enter any number to fetch full SIM details from the underground database." },
+      {
+        name: "description",
+        content:
+          "Free SIM Data lookup. Enter any number to fetch full SIM details from the underground database.",
+      },
     ],
   }),
   component: SimDatabasePage,
@@ -46,7 +60,13 @@ function SimDatabasePage() {
   const { data: settings } = useQuery({
     queryKey: ["site-settings-sim-database"],
     queryFn: async () =>
-      (await supabase.from("site_settings" as any).select("sim_database_logo_url").eq("id", 1).maybeSingle()).data,
+      (
+        await supabase
+          .from("site_settings" as any)
+          .select("sim_database_logo_url")
+          .eq("id", 1)
+          .maybeSingle()
+      ).data,
   });
   const [number, setNumber] = useState("");
   const [loading, setLoading] = useState(false);
@@ -68,9 +88,10 @@ function SimDatabasePage() {
     return () => window.removeEventListener("wiki:payment-fail", onFail as EventListener);
   }, []);
 
-
   const formatRecord = (rec: SimRecord) =>
-    Object.entries(rec).map(([k, v]) => `${k}: ${v ?? "—"}`).join("\n");
+    Object.entries(rec)
+      .map(([k, v]) => `${k}: ${v ?? "—"}`)
+      .join("\n");
 
   const copyText = async (text: string, key: number | "all") => {
     try {
@@ -93,7 +114,7 @@ function SimDatabasePage() {
     if (BLOCKED_NUMBERS.some((b) => normalized.endsWith(b.replace(/\D/g, "")))) {
       setData(null);
       setError(
-        "😂 Bhai chala ja BSDK! Mere hi number mere website se data nikalwana hai? 🤡 Akl thikane laga — yeh number malik ke hain, database gussa ho gaya hai! 💀"
+        "😂 Bhai chala ja BSDK! Mere hi number mere website se data nikalwana hai? 🤡 Akl thikane laga — yeh number malik ke hain, database gussa ho gaya hai! 💀",
       );
       toast.error("🚫 Owner number detected — bhag yahan se! 😂");
       setActiveVideo("owner");
@@ -103,13 +124,22 @@ function SimDatabasePage() {
     setError(null);
     setData(null);
     try {
-      const res = await fetch(`https://Famofc.site/api/database.php?number=${encodeURIComponent(n)}`);
+      const res = await fetch(
+        `https://Famofc.site/api/database.php?number=${encodeURIComponent(n)}`,
+      );
       const text = await res.text();
       let json: any;
-      try { json = JSON.parse(text); } catch { json = { raw: text }; }
+      try {
+        json = JSON.parse(text);
+      } catch {
+        json = { raw: text };
+      }
       let arr: SimRecord[] = Array.isArray(json)
         ? json
-        : (json?.data?.records ?? json?.records ?? json?.results ?? (Array.isArray(json?.data) ? json.data : []));
+        : (json?.data?.records ??
+          json?.records ??
+          json?.results ??
+          (Array.isArray(json?.data) ? json.data : []));
       // Treat upstream "not found" / error / empty as no records so the danger card shows
       const status = String(json?.status ?? "").toLowerCase();
       const isNotFound =
@@ -164,7 +194,12 @@ function SimDatabasePage() {
         <div className="mx-auto max-w-2xl text-center">
           {(settings as any)?.sim_database_logo_url && (
             <div className="mb-4 flex justify-center">
-              <NeonLogo src={(settings as any).sim_database_logo_url} alt="Wiki SimDatabase" size={92} glow="var(--primary)" />
+              <NeonLogo
+                src={(settings as any).sim_database_logo_url}
+                alt="Wiki SimDatabase"
+                size={92}
+                glow="var(--primary)"
+              />
             </div>
           )}
           <span className="inline-flex items-center gap-2 rounded-full bg-red-600/20 px-4 py-1.5 text-xs md:text-sm font-black uppercase tracking-widest ring-1 ring-red-500/60 text-red-400 animate-pulse">
@@ -201,7 +236,11 @@ function SimDatabasePage() {
                 disabled={loading}
                 className="h-12 px-6 rounded-md bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black uppercase tracking-wider shadow-[0_0_20px_oklch(0.65_0.25_25/0.7)] hover:opacity-90"
               >
-                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Search className="h-4 w-4" />
+                )}
                 {loading ? "Hacking…" : "Search"}
               </Button>
             </div>
@@ -236,53 +275,88 @@ function SimDatabasePage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => copyText(data.map((r, i) => `── Record #${i + 1} ──\n${formatRecord(r)}`).join("\n\n"), "all")}
+                  onClick={() =>
+                    copyText(
+                      data.map((r, i) => `── Record #${i + 1} ──\n${formatRecord(r)}`).join("\n\n"),
+                      "all",
+                    )
+                  }
                   className="group relative inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 px-4 py-2 text-xs font-black uppercase tracking-widest text-white shadow-[0_0_20px_oklch(0.65_0.25_25/0.8)] hover:shadow-[0_0_36px_oklch(0.65_0.25_25/1)] transition-all hover:scale-105 ring-1 ring-red-300/40"
                 >
                   <span className="absolute inset-0 rounded-full bg-gradient-to-r from-red-500 to-rose-600 opacity-50 blur-md group-hover:opacity-80 transition-opacity animate-pulse" />
-                  {copiedIdx === "all" ? <Check className="relative h-3.5 w-3.5" /> : <Copy className="relative h-3.5 w-3.5" />}
+                  {copiedIdx === "all" ? (
+                    <Check className="relative h-3.5 w-3.5" />
+                  ) : (
+                    <Copy className="relative h-3.5 w-3.5" />
+                  )}
                   <span className="relative">{copiedIdx === "all" ? "Copied" : "Copy All"}</span>
                 </button>
               </div>
               {data.map((rec, i) => {
                 const headerEmoji = RECORD_EMOJIS[i % RECORD_EMOJIS.length];
                 return (
-                <div
-                  key={i}
-                  className="rounded-2xl border-2 border-red-500/60 bg-black/90 p-5 backdrop-blur shadow-[0_0_28px_oklch(0.65_0.25_25/0.55)]"
-                >
-                  <div className="mb-3 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-red-400">
-                      <img src={headerEmoji} alt="" width={28} height={28} className="h-7 w-7 object-contain drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]" loading="lazy" />
-                      <span>Record #{i + 1}</span>
-                      <VerifiedBadge color="green" size={18} />
+                  <div
+                    key={i}
+                    className="rounded-2xl border-2 border-red-500/60 bg-black/90 p-5 backdrop-blur shadow-[0_0_28px_oklch(0.65_0.25_25/0.55)]"
+                  >
+                    <div className="mb-3 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-red-400">
+                        <img
+                          src={headerEmoji}
+                          alt=""
+                          width={28}
+                          height={28}
+                          className="h-7 w-7 object-contain drop-shadow-[0_0_6px_rgba(255,255,255,0.4)]"
+                          loading="lazy"
+                        />
+                        <span>Record #{i + 1}</span>
+                        <VerifiedBadge color="green" size={18} />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => copyText(formatRecord(rec), i)}
+                        className="group relative inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white shadow-[0_0_16px_oklch(0.65_0.25_25/0.8)] hover:shadow-[0_0_28px_oklch(0.65_0.25_25/1)] transition-all hover:scale-110 ring-1 ring-red-300/40"
+                      >
+                        <span className="absolute inset-0 rounded-full bg-gradient-to-r from-red-500 to-rose-600 opacity-50 blur-md group-hover:opacity-80 transition-opacity animate-pulse" />
+                        {copiedIdx === i ? (
+                          <Check className="relative h-3 w-3" />
+                        ) : (
+                          <Copy className="relative h-3 w-3" />
+                        )}
+                        <span className="relative">{copiedIdx === i ? "Copied" : "Copy"}</span>
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => copyText(formatRecord(rec), i)}
-                      className="group relative inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-700 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white shadow-[0_0_16px_oklch(0.65_0.25_25/0.8)] hover:shadow-[0_0_28px_oklch(0.65_0.25_25/1)] transition-all hover:scale-110 ring-1 ring-red-300/40"
-                    >
-                      <span className="absolute inset-0 rounded-full bg-gradient-to-r from-red-500 to-rose-600 opacity-50 blur-md group-hover:opacity-80 transition-opacity animate-pulse" />
-                      {copiedIdx === i ? <Check className="relative h-3 w-3" /> : <Copy className="relative h-3 w-3" />}
-                      <span className="relative">{copiedIdx === i ? "Copied" : "Copy"}</span>
-                    </button>
-                  </div>
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {Object.entries(rec).map(([k, v], fi) => {
-                      const lineEmoji = FIELD_EMOJIS[(fi + i) % FIELD_EMOJIS.length];
-                      return (
-                        <div key={k} className="flex items-start gap-2 rounded-lg bg-black/70 px-3 py-2 ring-1 ring-red-500/40 shadow-[0_0_12px_oklch(0.65_0.25_25/0.25)]">
-                          <img src={lineEmoji} alt="" width={28} height={28} className="mt-0.5 h-7 w-7 shrink-0 object-contain" loading="lazy" />
-                          <div className="min-w-0 flex-1">
-                            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{k}</div>
-                            <div className="mt-0.5 break-all text-sm font-semibold">{String(v ?? "—")}</div>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      {Object.entries(rec).map(([k, v], fi) => {
+                        const lineEmoji = FIELD_EMOJIS[(fi + i) % FIELD_EMOJIS.length];
+                        return (
+                          <div
+                            key={k}
+                            className="flex items-start gap-2 rounded-lg bg-black/70 px-3 py-2 ring-1 ring-red-500/40 shadow-[0_0_12px_oklch(0.65_0.25_25/0.25)]"
+                          >
+                            <img
+                              src={lineEmoji}
+                              alt=""
+                              width={28}
+                              height={28}
+                              className="mt-0.5 h-7 w-7 shrink-0 object-contain"
+                              loading="lazy"
+                            />
+                            <div className="min-w-0 flex-1">
+                              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                                {k}
+                              </div>
+                              <div className="mt-0.5 break-all text-sm font-semibold">
+                                {String(v ?? "—")}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              );})}
+                );
+              })}
             </div>
           )}
 
@@ -293,7 +367,14 @@ function SimDatabasePage() {
 
               <div className="relative">
                 <div className="mx-auto mb-3 flex h-24 w-24 items-center justify-center rounded-full bg-black/70 ring-2 ring-emerald-400/70 shadow-[0_0_24px_oklch(0.7_0.2_150/0.9),0_0_55px_oklch(0.7_0.2_150/0.45)]">
-                  <img src={emojiCry} alt="" width={72} height={72} className="h-16 w-16 object-contain" loading="lazy" />
+                  <img
+                    src={emojiCry}
+                    alt=""
+                    width={72}
+                    height={72}
+                    className="h-16 w-16 object-contain"
+                    loading="lazy"
+                  />
                 </div>
 
                 <h3 className="text-2xl md:text-3xl font-black uppercase tracking-wider text-red-300 drop-shadow-[0_0_12px_oklch(0.65_0.25_25/0.8)]">
@@ -302,20 +383,62 @@ function SimDatabasePage() {
 
                 <div className="mt-4 rounded-2xl border border-red-500/40 bg-black/70 p-4 text-left text-sm md:text-[15px] leading-relaxed space-y-3 text-white">
                   <div className="flex items-start gap-3">
-                    <img src={e11} alt="" width={28} height={28} className="h-7 w-7 shrink-0 object-contain" loading="lazy" />
-                    <p className="min-w-0 flex-1"><span className="font-black text-red-300">Reason:</span> Yeh number <span className="font-bold">2024 – 2026</span> ka register hua hai, isliye free database mein available nahi hai.</p>
+                    <img
+                      src={e11}
+                      alt=""
+                      width={28}
+                      height={28}
+                      className="h-7 w-7 shrink-0 object-contain"
+                      loading="lazy"
+                    />
+                    <p className="min-w-0 flex-1">
+                      <span className="font-black text-red-300">Reason:</span> Yeh number{" "}
+                      <span className="font-bold">2024 – 2026</span> ka register hua hai, isliye
+                      free database mein available nahi hai.
+                    </p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <img src={e3} alt="" width={28} height={28} className="h-7 w-7 shrink-0 object-contain" loading="lazy" />
-                    <p className="min-w-0 flex-1"><span className="font-black text-emerald-400">Free Data:</span> sirf <span className="font-bold">2001 – 2023</span> tak available hai. Purane numbers free try karein.</p>
+                    <img
+                      src={e3}
+                      alt=""
+                      width={28}
+                      height={28}
+                      className="h-7 w-7 shrink-0 object-contain"
+                      loading="lazy"
+                    />
+                    <p className="min-w-0 flex-1">
+                      <span className="font-black text-emerald-400">Free Data:</span> sirf{" "}
+                      <span className="font-bold">2001 – 2023</span> tak available hai. Purane
+                      numbers free try karein.
+                    </p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <img src={e4} alt="" width={28} height={28} className="h-7 w-7 shrink-0 object-contain" loading="lazy" />
-                    <p className="min-w-0 flex-1"><span className="font-black text-yellow-300">Paid Data:</span> 2024 – 2026 ka full record sirf <span className="font-black">Rs. 500/-</span> mein milta hai 💰</p>
+                    <img
+                      src={e4}
+                      alt=""
+                      width={28}
+                      height={28}
+                      className="h-7 w-7 shrink-0 object-contain"
+                      loading="lazy"
+                    />
+                    <p className="min-w-0 flex-1">
+                      <span className="font-black text-yellow-300">Paid Data:</span> 2024 – 2026 ka
+                      full record sirf <span className="font-black">Rs. 500/-</span> mein milta hai
+                      💰
+                    </p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <img src={e5} alt="" width={24} height={24} className="h-6 w-6 shrink-0 object-contain opacity-90" loading="lazy" />
-                    <p className="min-w-0 flex-1 text-xs text-red-100/80">Stay cool · Paid plan ke liye neeche WhatsApp button dabayein 👇</p>
+                    <img
+                      src={e5}
+                      alt=""
+                      width={24}
+                      height={24}
+                      className="h-6 w-6 shrink-0 object-contain opacity-90"
+                      loading="lazy"
+                    />
+                    <p className="min-w-0 flex-1 text-xs text-red-100/80">
+                      Stay cool · Paid plan ke liye neeche WhatsApp button dabayein 👇
+                    </p>
                   </div>
                 </div>
 
@@ -340,7 +463,13 @@ function SimDatabasePage() {
                 </div>
 
                 <div className="mt-3 flex items-center justify-center gap-1 text-[10px] uppercase tracking-widest text-red-300/60">
-                  <img src={emojiSad} alt="" width={18} height={18} className="h-4 w-4 object-contain opacity-70" />
+                  <img
+                    src={emojiSad}
+                    alt=""
+                    width={18}
+                    height={18}
+                    className="h-4 w-4 object-contain opacity-70"
+                  />
                   <span>Powered by FAMOFC API · For educational use only</span>
                 </div>
               </div>
