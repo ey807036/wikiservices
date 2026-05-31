@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { CheckCircle2, XCircle, Clock, MessageCircle, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { NeonVideoCircle, VideoPreloader } from "@/components/site/neon-video-circle";
 
 export const Route = createFileRoute("/payfast-result")({
   head: () => ({ meta: [{ title: "Payment Result — Wiki Services" }] }),
@@ -24,6 +25,11 @@ function PayfastResult() {
   const [waLink, setWaLink] = useState<string>("");
   const [intent, setIntent] = useState<any>(null);
   const [dbWritten, setDbWritten] = useState<"lucky" | "store" | null>(null);
+  const [showFailVideo, setShowFailVideo] = useState(false);
+
+  useEffect(() => {
+    if (!success && !pending) setShowFailVideo(true);
+  }, [success, pending]);
 
   useEffect(() => {
     if (!basket) return;
@@ -82,24 +88,48 @@ function PayfastResult() {
         if (found.intentType !== "lucky" && found.whatsappAfter) {
           setWaLink(found.whatsappAfter);
           const t = setTimeout(() => {
-            try { window.open(found.whatsappAfter, "_blank", "noopener"); } catch {}
+            try {
+              window.open(found.whatsappAfter, "_blank", "noopener");
+            } catch {}
           }, 1500);
           return () => clearTimeout(t);
         }
-      } catch (e) { console.error(e); }
+      } catch (e) {
+        console.error(e);
+      }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [basket, success]);
 
   const tone = success
-    ? { ring: "border-emerald-500/60 bg-emerald-950/30", icon: <CheckCircle2 className="h-14 w-14 text-emerald-400" />, label: "Payment Successful" }
+    ? {
+        ring: "border-emerald-500/60 bg-emerald-950/30",
+        icon: <CheckCircle2 className="h-14 w-14 text-emerald-400" />,
+        label: "Payment Successful",
+      }
     : pending
-    ? { ring: "border-yellow-500/60 bg-yellow-950/30", icon: <Clock className="h-14 w-14 text-yellow-400" />, label: "Payment Pending" }
-    : { ring: "border-red-500/60 bg-red-950/30", icon: <XCircle className="h-14 w-14 text-red-400" />, label: "Payment Failed" };
+      ? {
+          ring: "border-yellow-500/60 bg-yellow-950/30",
+          icon: <Clock className="h-14 w-14 text-yellow-400" />,
+          label: "Payment Pending",
+        }
+      : {
+          ring: "border-red-500/60 bg-red-950/30",
+          icon: <XCircle className="h-14 w-14 text-red-400" />,
+          label: "Payment Failed",
+        };
 
   return (
     <div className="min-h-screen bg-black text-white grid place-items-center px-4 py-10">
-      <div className={`max-w-md w-full rounded-2xl border-2 p-6 text-center shadow-[0_0_40px_oklch(0.65_0.25_25/0.35)] ${tone.ring}`}>
+      <VideoPreloader sources={["/videos/payment-fail.mp4"]} />
+      {showFailVideo && (
+        <NeonVideoCircle src="/videos/payment-fail.mp4" onEnd={() => setShowFailVideo(false)} />
+      )}
+      <div
+        className={`max-w-md w-full rounded-2xl border-2 p-6 text-center shadow-[0_0_40px_oklch(0.65_0.25_25/0.35)] ${tone.ring}`}
+      >
         <div className="flex justify-center mb-3">{tone.icon}</div>
         <h1 className="text-2xl font-black uppercase tracking-wider">{tone.label}</h1>
 
@@ -116,30 +146,52 @@ function PayfastResult() {
         {success && intent?.intentType === "lucky" && (
           <div className="mt-5 rounded-xl border-2 border-yellow-400/60 bg-yellow-950/40 p-4 text-yellow-100">
             <Trophy className="h-6 w-6 mx-auto text-yellow-300 mb-1" />
-            <p className="text-sm font-bold">Aap ka naam aaj ki Lucky Draw list mae shamil ho gaya hai!</p>
-            <p className="text-[11px] text-yellow-200/70 mt-1">Raat 10:00 PM ko Quran-andazi se winner select hoga.</p>
-            <Link to="/lucky-draw" className="mt-3 inline-block text-xs font-bold underline text-yellow-200">View Live Participants →</Link>
+            <p className="text-sm font-bold">
+              Aap ka naam aaj ki Lucky Draw list mae shamil ho gaya hai!
+            </p>
+            <p className="text-[11px] text-yellow-200/70 mt-1">
+              Raat 10:00 PM ko Quran-andazi se winner select hoga.
+            </p>
+            <Link
+              to="/lucky-draw"
+              className="mt-3 inline-block text-xs font-bold underline text-yellow-200"
+            >
+              View Live Participants →
+            </Link>
           </div>
         )}
 
         {success && waLink && intent?.intentType !== "lucky" && (
-          <a href={waLink} target="_blank" rel="noreferrer"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-black uppercase tracking-widest text-white shadow-[0_0_18px_oklch(0.7_0.2_150/0.7)]">
+          <a
+            href={waLink}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 px-5 py-2.5 text-sm font-black uppercase tracking-widest text-white shadow-[0_0_18px_oklch(0.7_0.2_150/0.7)]"
+          >
             <MessageCircle className="h-4 w-4" /> WhatsApp par confirm karein
           </a>
         )}
 
         <div className="mt-6 flex flex-col sm:flex-row gap-2 justify-center">
-          <Link to="/" className="rounded-full bg-white/10 hover:bg-white/20 px-5 py-2 text-sm font-bold uppercase tracking-widest">
+          <Link
+            to="/"
+            className="rounded-full bg-white/10 hover:bg-white/20 px-5 py-2 text-sm font-bold uppercase tracking-widest"
+          >
             Back Home
           </Link>
           {success && (
-            <Link to="/my-orders" className="rounded-full bg-emerald-600 hover:bg-emerald-500 px-5 py-2 text-sm font-bold uppercase tracking-widest">
+            <Link
+              to="/my-orders"
+              className="rounded-full bg-emerald-600 hover:bg-emerald-500 px-5 py-2 text-sm font-bold uppercase tracking-widest"
+            >
               My Orders
             </Link>
           )}
           {!success && !pending && (
-            <Link to="/lucky-draw" className="rounded-full bg-red-600 hover:bg-red-500 px-5 py-2 text-sm font-bold uppercase tracking-widest">
+            <Link
+              to="/lucky-draw"
+              className="rounded-full bg-red-600 hover:bg-red-500 px-5 py-2 text-sm font-bold uppercase tracking-widest"
+            >
               Try Again
             </Link>
           )}

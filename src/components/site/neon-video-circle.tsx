@@ -1,5 +1,21 @@
 import { useEffect, useRef } from "react";
 
+const preloadedVideos = new Set<string>();
+
+function warmVideo(src: string) {
+  if (!src || preloadedVideos.has(src)) return;
+  preloadedVideos.add(src);
+
+  const video = document.createElement("video");
+  video.src = src;
+  video.preload = "auto";
+  video.muted = true;
+  video.playsInline = true;
+  video.load();
+
+  fetch(src, { cache: "force-cache" }).catch(() => {});
+}
+
 type Props = {
   src: string;
   onEnd: () => void;
@@ -14,8 +30,11 @@ export function NeonVideoCircle({ src, onEnd, size = 280 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    warmVideo(src);
     const v = videoRef.current;
     if (!v) return;
+    v.preload = "auto";
+    v.load();
     v.muted = false;
     v.volume = 1;
     const tryPlay = async () => {
@@ -24,7 +43,11 @@ export function NeonVideoCircle({ src, onEnd, size = 280 }: Props) {
       } catch {
         // Browser blocked audio — retry muted so visual still plays
         v.muted = true;
-        try { await v.play(); } catch {}
+        try {
+          await v.play();
+        } catch {
+          void 0;
+        }
       }
     };
     tryPlay();
@@ -79,10 +102,17 @@ export function NeonVideoCircle({ src, onEnd, size = 280 }: Props) {
 
 /** Hidden <video> tags to force-preload assets the moment the page mounts. */
 export function VideoPreloader({ sources }: { sources: string[] }) {
+  useEffect(() => {
+    sources.forEach(warmVideo);
+  }, [sources]);
+
   return (
-    <div aria-hidden style={{ position: "absolute", width: 0, height: 0, overflow: "hidden", opacity: 0 }}>
+    <div
+      aria-hidden
+      style={{ position: "absolute", width: 0, height: 0, overflow: "hidden", opacity: 0 }}
+    >
       {sources.map((s) => (
-        <video key={s} src={s} preload="auto" muted playsInline />
+        <video key={s} src={s} preload="auto" muted playsInline aria-hidden />
       ))}
     </div>
   );
