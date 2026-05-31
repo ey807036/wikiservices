@@ -136,6 +136,7 @@ function SimDatabasePage() {
           return vals.some((v) => !isJunkVal(v));
         });
       setData(arr);
+      if (arr.length === 0) setActiveVideo("notfound");
     } catch (err: any) {
       setError(err?.message ?? "Failed to fetch SIM data");
     } finally {
