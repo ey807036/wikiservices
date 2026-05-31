@@ -131,6 +131,7 @@ export function PayfastCheckout({
         const msg = res.error || "PayFast init failed";
         setErrMsg(msg);
         toast.error(msg);
+        try { window.dispatchEvent(new CustomEvent("wiki:payment-fail", { detail: { reason: msg } })); } catch {}
         setLoading(false);
         return;
       }
@@ -176,6 +177,7 @@ export function PayfastCheckout({
       const msg = err?.message || "Network error";
       setErrMsg(msg);
       toast.error(msg);
+      try { window.dispatchEvent(new CustomEvent("wiki:payment-fail", { detail: { reason: msg } })); } catch {}
       setLoading(false);
     }
   };

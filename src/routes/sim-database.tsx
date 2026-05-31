@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { VerifiedBadge } from "@/components/site/verified-badge";
 import { PayfastCheckout } from "@/components/site/payfast-checkout";
 import { NeonLogo } from "@/components/site/neon-logo";
+import { NeonVideoCircle, VideoPreloader } from "@/components/site/neon-video-circle";
 import e1 from "@/assets/emojis/e1.png";
 import e2 from "@/assets/emojis/e2.png";
 import e3 from "@/assets/emojis/e3.png";
@@ -52,6 +53,21 @@ function SimDatabasePage() {
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<SimRecord[] | null>(null);
   const [copiedIdx, setCopiedIdx] = useState<number | "all" | null>(null);
+  const [activeVideo, setActiveVideo] = useState<null | "owner" | "payment" | "notfound">(null);
+
+  const VIDEOS = {
+    owner: "/videos/owner-warning.mp4",
+    payment: "/videos/payment-fail.mp4",
+    notfound: "/videos/data-not-found.mp4",
+  } as const;
+
+  // Listen for payment failures dispatched by PayfastCheckout
+  useEffect(() => {
+    const onFail = () => setActiveVideo("payment");
+    window.addEventListener("wiki:payment-fail", onFail as EventListener);
+    return () => window.removeEventListener("wiki:payment-fail", onFail as EventListener);
+  }, []);
+
 
   const formatRecord = (rec: SimRecord) =>
     Object.entries(rec).map(([k, v]) => `${k}: ${v ?? "—"}`).join("\n");
@@ -80,6 +96,7 @@ function SimDatabasePage() {
         "😂 Bhai chala ja BSDK! Mere hi number mere website se data nikalwana hai? 🤡 Akl thikane laga — yeh number malik ke hain, database gussa ho gaya hai! 💀"
       );
       toast.error("🚫 Owner number detected — bhag yahan se! 😂");
+      setActiveVideo("owner");
       return;
     }
     setLoading(true);
@@ -119,6 +136,7 @@ function SimDatabasePage() {
           return vals.some((v) => !isJunkVal(v));
         });
       setData(arr);
+      if (arr.length === 0) setActiveVideo("notfound");
     } catch (err: any) {
       setError(err?.message ?? "Failed to fetch SIM data");
     } finally {
@@ -128,6 +146,11 @@ function SimDatabasePage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
+      {/* Preload all alert videos so they appear instantly when triggered */}
+      <VideoPreloader sources={[VIDEOS.owner, VIDEOS.payment, VIDEOS.notfound]} />
+      {activeVideo && (
+        <NeonVideoCircle src={VIDEOS[activeVideo]} onEnd={() => setActiveVideo(null)} />
+      )}
       {/* Danger animated background */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-black" />
