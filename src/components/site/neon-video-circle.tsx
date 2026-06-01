@@ -9,7 +9,10 @@ function primeVideosOnce() {
   mediaPrimed = true;
   preloadedVideos.forEach((video) => {
     video.muted = true;
-    video.play().then(() => video.pause()).catch(() => {});
+    video
+      .play()
+      .then(() => video.pause())
+      .catch(() => {});
   });
 }
 
