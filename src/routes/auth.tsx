@@ -65,9 +65,35 @@ function Auth() {
   const [name, setName] = useState("");
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    const finishOAuth = async () => {
+      const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+      const search = new URLSearchParams(window.location.search);
+      const accessToken = hash.get("access_token") || search.get("access_token");
+      const refreshToken = hash.get("refresh_token") || search.get("refresh_token");
+      const oauthError = hash.get("error_description") || search.get("error_description") || hash.get("error") || search.get("error");
+
+      if (oauthError) {
+        toast.error(oauthError);
+        window.history.replaceState(null, "", "/auth");
+        setLoading(false);
+        return;
+      }
+
+      if (accessToken && refreshToken) {
+        setLoading(true);
+        const { error } = await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+        window.history.replaceState(null, "", "/auth");
+        setLoading(false);
+        if (error) return toast.error(error.message || "Google session save nahi hua");
+        toast.success("Signed in with Google ✨");
+        navigate({ to: "/", replace: true });
+        return;
+      }
+
+      const { data } = await supabase.auth.getSession();
       if (data.session?.user) navigate({ to: "/", replace: true });
-    });
+    };
+    finishOAuth();
   }, [navigate]);
 
   useEffect(() => { if (user) navigate({ to: "/", replace: true }); }, [user, navigate]);
