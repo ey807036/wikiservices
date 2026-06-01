@@ -38,8 +38,8 @@ function MatrixRain() {
       "",
     );
     const fontSize = 14;
-    let columns = Math.floor(canvas.width / fontSize);
-    let drops: number[] = Array(columns).fill(1);
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops: number[] = Array(columns).fill(1);
     const draw = () => {
       ctx.fillStyle = "rgba(5, 12, 8, 0.08)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
