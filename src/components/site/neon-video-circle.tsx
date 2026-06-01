@@ -29,7 +29,8 @@ function warmVideo(src: string) {
   video.playsInline = true;
   video.setAttribute("webkit-playsinline", "true");
   video.setAttribute("aria-hidden", "true");
-  video.style.cssText = "position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;top:-9999px;";
+  video.style.cssText =
+    "position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;top:-9999px;";
   document.body.appendChild(video);
   preloadedVideos.set(src, video);
   video.load();
