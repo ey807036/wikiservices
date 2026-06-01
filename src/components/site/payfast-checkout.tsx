@@ -52,7 +52,7 @@ export function PayfastCheckout({
   orderCity,
   intentType = "generic",
   intentPayload,
-  showEntryVideo = true,
+  showEntryVideo = false,
 }: Props) {
   const checkout = useServerFn(createPayfastCheckout);
   const { user } = useAuth();
