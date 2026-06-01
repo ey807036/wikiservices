@@ -64,7 +64,13 @@ function Auth() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  useEffect(() => { if (user) navigate({ to: "/" }); }, [user, navigate]);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session?.user) navigate({ to: "/", replace: true });
+    });
+  }, [navigate]);
+
+  useEffect(() => { if (user) navigate({ to: "/", replace: true }); }, [user, navigate]);
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault(); setLoading(true);
@@ -90,7 +96,8 @@ function Auth() {
   const googleSignIn = async () => {
     setLoading(true);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}/auth`,
+      extraParams: { prompt: "select_account" },
     });
     if (result.error) {
       setLoading(false);
@@ -98,9 +105,14 @@ function Auth() {
       return;
     }
     if (result.redirected) return; // browser navigates away
+    const { data } = await supabase.auth.getSession();
     setLoading(false);
-    toast.success("Signed in with Google ✨");
-    navigate({ to: "/" });
+    if (data.session?.user) {
+      toast.success("Signed in with Google ✨");
+      navigate({ to: "/", replace: true });
+    } else {
+      toast.error("Google session save nahi hua — dobara try karein");
+    }
   };
 
   return (
