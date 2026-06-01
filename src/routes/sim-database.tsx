@@ -450,6 +450,7 @@ function SimDatabasePage() {
                       basketPrefix="SIM"
                       buttonLabel="Pay Rs.501 · Unlock Data"
                       whatsappAfter={`https://wa.me/923186376181?text=${encodeURIComponent(`Salam! Payment done for NEW SimData (2024-2026) of number ${number}. Please share details.`)}`}
+                      showEntryVideo
                     />
                   </div>
                   <a
