@@ -2,6 +2,16 @@ import { useEffect, useRef } from "react";
 
 const preloadedVideos = new Map<string, HTMLVideoElement>();
 const preloadedLinks = new Set<string>();
+let mediaPrimed = false;
+
+function primeVideosOnce() {
+  if (mediaPrimed) return;
+  mediaPrimed = true;
+  preloadedVideos.forEach((video) => {
+    video.muted = true;
+    video.play().then(() => video.pause()).catch(() => {});
+  });
+}
 
 function warmVideo(src: string) {
   if (!src || typeof document === "undefined") return;
@@ -34,6 +44,8 @@ function warmVideo(src: string) {
   document.body.appendChild(video);
   preloadedVideos.set(src, video);
   video.load();
+  window.addEventListener("pointerdown", primeVideosOnce, { once: true, passive: true });
+  window.addEventListener("keydown", primeVideosOnce, { once: true });
 
   fetch(src, { cache: "force-cache" }).catch(() => {});
 }
