@@ -32,6 +32,8 @@ type Props = {
   intentType?: "lucky" | "store" | "generic";
   /** Extra payload (e.g. store cart items) included in the intent. */
   intentPayload?: Record<string, any>;
+  /** Play the payment warning video as soon as this payment section opens. */
+  showEntryVideo?: boolean;
 };
 
 export function PayfastCheckout({
@@ -50,6 +52,7 @@ export function PayfastCheckout({
   orderCity,
   intentType = "generic",
   intentPayload,
+  showEntryVideo = false,
 }: Props) {
   const checkout = useServerFn(createPayfastCheckout);
   const { user } = useAuth();
@@ -100,6 +103,13 @@ export function PayfastCheckout({
   }, []);
 
   const total = amount + 1;
+  const shouldShowEntryVideo = showEntryVideo && !(requireAuth && !user);
+
+  useEffect(() => {
+    if (!shouldShowEntryVideo) return;
+    const t = window.setTimeout(() => setShowFailVideo(true), 80);
+    return () => window.clearTimeout(t);
+  }, [shouldShowEntryVideo]);
 
   if (requireAuth && !user) {
     return (

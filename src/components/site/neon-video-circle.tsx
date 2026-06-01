@@ -1,17 +1,54 @@
 import { useEffect, useRef } from "react";
 
-const preloadedVideos = new Set<string>();
+const preloadedVideos = new Map<string, HTMLVideoElement>();
+const preloadedLinks = new Set<string>();
+let mediaPrimed = false;
+
+function primeVideosOnce() {
+  if (mediaPrimed) return;
+  mediaPrimed = true;
+  preloadedVideos.forEach((video) => {
+    video.muted = true;
+    video
+      .play()
+      .then(() => video.pause())
+      .catch(() => {});
+  });
+}
 
 function warmVideo(src: string) {
-  if (!src || preloadedVideos.has(src)) return;
-  preloadedVideos.add(src);
+  if (!src || typeof document === "undefined") return;
 
-  const video = document.createElement("video");
+  if (!preloadedLinks.has(src)) {
+    preloadedLinks.add(src);
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "video";
+    link.href = src;
+    link.type = "video/mp4";
+    document.head.appendChild(link);
+  }
+
+  let video = preloadedVideos.get(src);
+  if (video) {
+    video.load();
+    return;
+  }
+
+  video = document.createElement("video");
   video.src = src;
   video.preload = "auto";
   video.muted = true;
   video.playsInline = true;
+  video.setAttribute("webkit-playsinline", "true");
+  video.setAttribute("aria-hidden", "true");
+  video.style.cssText =
+    "position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;top:-9999px;";
+  document.body.appendChild(video);
+  preloadedVideos.set(src, video);
   video.load();
+  window.addEventListener("pointerdown", primeVideosOnce, { once: true, passive: true });
+  window.addEventListener("keydown", primeVideosOnce, { once: true });
 
   fetch(src, { cache: "force-cache" }).catch(() => {});
 }
