@@ -36,22 +36,23 @@ function TestRunner() {
   const loadTest = async () => {
     setLoading(true);
     const { data: p } = await supabase.from("fia_posts").select("*").eq("slug", post).maybeSingle();
-    if (p) {
-      setPostName(p.name);
-      setAccent(p.accent_color);
-    }
+    if (!p) { setLoading(false); return; }
+    setPostName(p.name);
+    setAccent(p.accent_color);
+
     const { data: s } = await supabase
       .from("fia_subjects")
       .select("id, name")
-      .eq("post_id", p?.id)
+      .eq("post_id", p.id)
       .eq("slug", subject)
       .maybeSingle();
-    if (s) setSubjectName(s.name);
+    if (!s) { setLoading(false); return; }
+    setSubjectName(s.name);
 
     const { data: q } = await supabase
       .from("fia_questions")
       .select("id, question, options, correct_answer")
-      .eq("subject_id", s?.id);
+      .eq("subject_id", s.id);
     setQuestions(shuffle((q ?? []) as Q[]));
     setIdx(0);
     setPicked(null);
