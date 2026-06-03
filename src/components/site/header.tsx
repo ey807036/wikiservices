@@ -29,7 +29,6 @@ import { useState } from "react";
 
 const NAV = [
   { to: "/", label: "Home" },
-  { to: "/fia-preparation", label: "FIA Prep" },
   { to: "/shop", label: "Shop" },
   { to: "/store", label: "Wiki Store" },
   { to: "/my-orders", label: "Order History" },

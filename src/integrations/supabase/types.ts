@@ -83,118 +83,6 @@ export type Database = {
         }
         Relationships: []
       }
-      fia_posts: {
-        Row: {
-          accent_color: string
-          active: boolean
-          created_at: string
-          description: string | null
-          id: string
-          name: string
-          slug: string
-          sort_order: number
-          updated_at: string
-        }
-        Insert: {
-          accent_color?: string
-          active?: boolean
-          created_at?: string
-          description?: string | null
-          id?: string
-          name: string
-          slug: string
-          sort_order?: number
-          updated_at?: string
-        }
-        Update: {
-          accent_color?: string
-          active?: boolean
-          created_at?: string
-          description?: string | null
-          id?: string
-          name?: string
-          slug?: string
-          sort_order?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      fia_questions: {
-        Row: {
-          correct_answer: string
-          created_at: string
-          id: string
-          options: Json
-          question: string
-          sort_order: number
-          subject_id: string
-        }
-        Insert: {
-          correct_answer: string
-          created_at?: string
-          id?: string
-          options?: Json
-          question: string
-          sort_order?: number
-          subject_id: string
-        }
-        Update: {
-          correct_answer?: string
-          created_at?: string
-          id?: string
-          options?: Json
-          question?: string
-          sort_order?: number
-          subject_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fia_questions_subject_id_fkey"
-            columns: ["subject_id"]
-            isOneToOne: false
-            referencedRelation: "fia_subjects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      fia_subjects: {
-        Row: {
-          active: boolean
-          created_at: string
-          id: string
-          name: string
-          post_id: string
-          slug: string
-          sort_order: number
-        }
-        Insert: {
-          active?: boolean
-          created_at?: string
-          id?: string
-          name: string
-          post_id: string
-          slug: string
-          sort_order?: number
-        }
-        Update: {
-          active?: boolean
-          created_at?: string
-          id?: string
-          name?: string
-          post_id?: string
-          slug?: string
-          sort_order?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fia_subjects_post_id_fkey"
-            columns: ["post_id"]
-            isOneToOne: false
-            referencedRelation: "fia_posts"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       home_items: {
         Row: {
           action: string | null
@@ -694,8 +582,6 @@ export type Database = {
           announcement: string | null
           contact_email: string | null
           contact_phone: string | null
-          fia_badge_url: string | null
-          fia_logo_url: string | null
           id: number
           lucky_logo_url: string | null
           lucky_subtitle: string | null
@@ -722,8 +608,6 @@ export type Database = {
           announcement?: string | null
           contact_email?: string | null
           contact_phone?: string | null
-          fia_badge_url?: string | null
-          fia_logo_url?: string | null
           id?: number
           lucky_logo_url?: string | null
           lucky_subtitle?: string | null
@@ -750,8 +634,6 @@ export type Database = {
           announcement?: string | null
           contact_email?: string | null
           contact_phone?: string | null
-          fia_badge_url?: string | null
-          fia_logo_url?: string | null
           id?: number
           lucky_logo_url?: string | null
           lucky_subtitle?: string | null

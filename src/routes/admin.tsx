@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { useEffect } from "react";
-import { LayoutDashboard, Package, ShoppingBag, Tags, Users, ArrowLeft, Ticket, BarChart3, Settings as SettingsIcon, Gift, Activity, Coins, Store, Home, GraduationCap } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Tags, Users, ArrowLeft, Ticket, BarChart3, Settings as SettingsIcon, Gift, Activity, Coins, Store, Home } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/admin")({ component: AdminLayout });
@@ -10,7 +10,6 @@ const ADMIN_EMAILS = ["admin@wikiservices.pk", "haki84226@gmail.com"];
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/admin/fia", label: "FIA Preparation", icon: GraduationCap },
   { to: "/admin/activity", label: "User Activity", icon: Activity },
   { to: "/admin/lucky", label: "Lucky Draw", icon: Coins },
   { to: "/admin/store", label: "Wiki Store", icon: Store },
