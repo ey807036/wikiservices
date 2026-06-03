@@ -72,7 +72,7 @@ function LogosTab() {
       if (error) throw error;
       const { data: pub } = supabase.storage.from("store-products").getPublicUrl(path);
       const url = pub.publicUrl;
-      await supabase.from("site_settings").update({ [field]: url }).eq("id", 1);
+      await supabase.from("site_settings").update({ [field]: url } as any).eq("id", 1);
       if (field === "fia_logo_url") setLogo(url);
       else setBadge(url);
       toast.success("Uploaded ✅");
