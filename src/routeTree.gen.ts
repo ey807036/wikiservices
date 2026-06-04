@@ -20,6 +20,7 @@ import { Route as PayfastResultRouteImport } from './routes/payfast-result'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as MyOrdersRouteImport } from './routes/my-orders'
 import { Route as LuckyDrawRouteImport } from './routes/lucky-draw'
+import { Route as FiaPreparationRouteImport } from './routes/fia-preparation'
 import { Route as FakeWhatsappRouteImport } from './routes/fake-whatsapp'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
@@ -30,6 +31,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
+import { Route as FiaPreparationSlugRouteImport } from './routes/fia-preparation.$slug'
 import { Route as AdminStoreRouteImport } from './routes/admin.store'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
@@ -38,6 +40,7 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminLuckyRouteImport } from './routes/admin.lucky'
 import { Route as AdminHomeItemsRouteImport } from './routes/admin.home-items'
+import { Route as AdminFiaRouteImport } from './routes/admin.fia'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
@@ -100,6 +103,11 @@ const LuckyDrawRoute = LuckyDrawRouteImport.update({
   path: '/lucky-draw',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FiaPreparationRoute = FiaPreparationRouteImport.update({
+  id: '/fia-preparation',
+  path: '/fia-preparation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FakeWhatsappRoute = FakeWhatsappRouteImport.update({
   id: '/fake-whatsapp',
   path: '/fake-whatsapp',
@@ -150,6 +158,11 @@ const ProductsSlugRoute = ProductsSlugRouteImport.update({
   path: '/products/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FiaPreparationSlugRoute = FiaPreparationSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => FiaPreparationRoute,
+} as any)
 const AdminStoreRoute = AdminStoreRouteImport.update({
   id: '/store',
   path: '/store',
@@ -188,6 +201,11 @@ const AdminLuckyRoute = AdminLuckyRouteImport.update({
 const AdminHomeItemsRoute = AdminHomeItemsRouteImport.update({
   id: '/home-items',
   path: '/home-items',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFiaRoute = AdminFiaRouteImport.update({
+  id: '/fia',
+  path: '/fia',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminCustomersRoute = AdminCustomersRouteImport.update({
@@ -230,6 +248,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/fake-whatsapp': typeof FakeWhatsappRoute
+  '/fia-preparation': typeof FiaPreparationRouteWithChildren
   '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
@@ -245,6 +264,7 @@ export interface FileRoutesByFullPath {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/fia': typeof AdminFiaRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -253,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/store': typeof AdminStoreRoute
+  '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -266,6 +287,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/fake-whatsapp': typeof FakeWhatsappRoute
+  '/fia-preparation': typeof FiaPreparationRouteWithChildren
   '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
@@ -281,6 +303,7 @@ export interface FileRoutesByTo {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/fia': typeof AdminFiaRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -289,6 +312,7 @@ export interface FileRoutesByTo {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/store': typeof AdminStoreRoute
+  '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -304,6 +328,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/fake-whatsapp': typeof FakeWhatsappRoute
+  '/fia-preparation': typeof FiaPreparationRouteWithChildren
   '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
@@ -319,6 +344,7 @@ export interface FileRoutesById {
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/fia': typeof AdminFiaRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -327,6 +353,7 @@ export interface FileRoutesById {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/store': typeof AdminStoreRoute
+  '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -343,6 +370,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/fake-whatsapp'
+    | '/fia-preparation'
     | '/lucky-draw'
     | '/my-orders'
     | '/order'
@@ -358,6 +386,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/coupons'
     | '/admin/customers'
+    | '/admin/fia'
     | '/admin/home-items'
     | '/admin/lucky'
     | '/admin/orders'
@@ -366,6 +395,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/store'
+    | '/fia-preparation/$slug'
     | '/products/$slug'
     | '/store/$slug'
     | '/admin/'
@@ -379,6 +409,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/fake-whatsapp'
+    | '/fia-preparation'
     | '/lucky-draw'
     | '/my-orders'
     | '/order'
@@ -394,6 +425,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/coupons'
     | '/admin/customers'
+    | '/admin/fia'
     | '/admin/home-items'
     | '/admin/lucky'
     | '/admin/orders'
@@ -402,6 +434,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/store'
+    | '/fia-preparation/$slug'
     | '/products/$slug'
     | '/store/$slug'
     | '/admin'
@@ -416,6 +449,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/fake-whatsapp'
+    | '/fia-preparation'
     | '/lucky-draw'
     | '/my-orders'
     | '/order'
@@ -431,6 +465,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/coupons'
     | '/admin/customers'
+    | '/admin/fia'
     | '/admin/home-items'
     | '/admin/lucky'
     | '/admin/orders'
@@ -439,6 +474,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/store'
+    | '/fia-preparation/$slug'
     | '/products/$slug'
     | '/store/$slug'
     | '/admin/'
@@ -454,6 +490,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   FakeWhatsappRoute: typeof FakeWhatsappRoute
+  FiaPreparationRoute: typeof FiaPreparationRouteWithChildren
   LuckyDrawRoute: typeof LuckyDrawRoute
   MyOrdersRoute: typeof MyOrdersRoute
   OrderRoute: typeof OrderRoute
@@ -549,6 +586,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LuckyDrawRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/fia-preparation': {
+      id: '/fia-preparation'
+      path: '/fia-preparation'
+      fullPath: '/fia-preparation'
+      preLoaderRoute: typeof FiaPreparationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/fake-whatsapp': {
       id: '/fake-whatsapp'
       path: '/fake-whatsapp'
@@ -619,6 +663,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/fia-preparation/$slug': {
+      id: '/fia-preparation/$slug'
+      path: '/$slug'
+      fullPath: '/fia-preparation/$slug'
+      preLoaderRoute: typeof FiaPreparationSlugRouteImport
+      parentRoute: typeof FiaPreparationRoute
+    }
     '/admin/store': {
       id: '/admin/store'
       path: '/store'
@@ -675,6 +726,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHomeItemsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/fia': {
+      id: '/admin/fia'
+      path: '/fia'
+      fullPath: '/admin/fia'
+      preLoaderRoute: typeof AdminFiaRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/customers': {
       id: '/admin/customers'
       path: '/customers'
@@ -725,6 +783,7 @@ interface AdminRouteChildren {
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminCustomersRoute: typeof AdminCustomersRoute
+  AdminFiaRoute: typeof AdminFiaRoute
   AdminHomeItemsRoute: typeof AdminHomeItemsRoute
   AdminLuckyRoute: typeof AdminLuckyRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
@@ -741,6 +800,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminCouponsRoute: AdminCouponsRoute,
   AdminCustomersRoute: AdminCustomersRoute,
+  AdminFiaRoute: AdminFiaRoute,
   AdminHomeItemsRoute: AdminHomeItemsRoute,
   AdminLuckyRoute: AdminLuckyRoute,
   AdminOrdersRoute: AdminOrdersRoute,
@@ -753,6 +813,18 @@ const AdminRouteChildren: AdminRouteChildren = {
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface FiaPreparationRouteChildren {
+  FiaPreparationSlugRoute: typeof FiaPreparationSlugRoute
+}
+
+const FiaPreparationRouteChildren: FiaPreparationRouteChildren = {
+  FiaPreparationSlugRoute: FiaPreparationSlugRoute,
+}
+
+const FiaPreparationRouteWithChildren = FiaPreparationRoute._addFileChildren(
+  FiaPreparationRouteChildren,
+)
 
 interface StoreRouteChildren {
   StoreSlugRoute: typeof StoreSlugRoute
@@ -772,6 +844,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   FakeWhatsappRoute: FakeWhatsappRoute,
+  FiaPreparationRoute: FiaPreparationRouteWithChildren,
   LuckyDrawRoute: LuckyDrawRoute,
   MyOrdersRoute: MyOrdersRoute,
   OrderRoute: OrderRoute,
@@ -790,13 +863,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
