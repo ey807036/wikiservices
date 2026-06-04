@@ -83,117 +83,115 @@ export type Database = {
         }
         Relationships: []
       }
-      fia_posts: {
+      fia_categories: {
         Row: {
           accent_color: string
-          active: boolean
           created_at: string
-          description: string | null
+          description: string
+          icon_url: string | null
           id: string
           name: string
           slug: string
           sort_order: number
+          subtitle: string
           updated_at: string
         }
         Insert: {
           accent_color?: string
-          active?: boolean
           created_at?: string
-          description?: string | null
+          description?: string
+          icon_url?: string | null
           id?: string
           name: string
           slug: string
           sort_order?: number
+          subtitle?: string
           updated_at?: string
         }
         Update: {
           accent_color?: string
-          active?: boolean
           created_at?: string
-          description?: string | null
+          description?: string
+          icon_url?: string | null
           id?: string
           name?: string
           slug?: string
           sort_order?: number
+          subtitle?: string
           updated_at?: string
         }
         Relationships: []
       }
-      fia_questions: {
+      fia_mcqs: {
         Row: {
-          correct_answer: string
+          category_id: string
+          correct_index: number
           created_at: string
+          explanation: string
           id: string
-          options: Json
+          options: string[]
           question: string
-          sort_order: number
-          subject_id: string
+          updated_at: string
         }
         Insert: {
-          correct_answer: string
+          category_id: string
+          correct_index: number
           created_at?: string
+          explanation?: string
           id?: string
-          options?: Json
+          options: string[]
           question: string
-          sort_order?: number
-          subject_id: string
+          updated_at?: string
         }
         Update: {
-          correct_answer?: string
+          category_id?: string
+          correct_index?: number
           created_at?: string
+          explanation?: string
           id?: string
-          options?: Json
+          options?: string[]
           question?: string
-          sort_order?: number
-          subject_id?: string
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "fia_questions_subject_id_fkey"
-            columns: ["subject_id"]
+            foreignKeyName: "fia_mcqs_category_id_fkey"
+            columns: ["category_id"]
             isOneToOne: false
-            referencedRelation: "fia_subjects"
+            referencedRelation: "fia_categories"
             referencedColumns: ["id"]
           },
         ]
       }
-      fia_subjects: {
+      fia_posts: {
         Row: {
-          active: boolean
           created_at: string
+          description: string
           id: string
-          name: string
-          post_id: string
-          slug: string
-          sort_order: number
+          images: string[]
+          title: string
+          updated_at: string
+          videos: string[]
         }
         Insert: {
-          active?: boolean
           created_at?: string
+          description?: string
           id?: string
-          name: string
-          post_id: string
-          slug: string
-          sort_order?: number
+          images?: string[]
+          title: string
+          updated_at?: string
+          videos?: string[]
         }
         Update: {
-          active?: boolean
           created_at?: string
+          description?: string
           id?: string
-          name?: string
-          post_id?: string
-          slug?: string
-          sort_order?: number
+          images?: string[]
+          title?: string
+          updated_at?: string
+          videos?: string[]
         }
-        Relationships: [
-          {
-            foreignKeyName: "fia_subjects_post_id_fkey"
-            columns: ["post_id"]
-            isOneToOne: false
-            referencedRelation: "fia_posts"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       home_items: {
         Row: {
@@ -695,7 +693,16 @@ export type Database = {
           contact_email: string | null
           contact_phone: string | null
           fia_badge_url: string | null
+          fia_brand_byline: string
+          fia_brand_title: string
+          fia_footer_text: string
+          fia_header_brand: string
+          fia_hero_subtitle: string
+          fia_hero_tagline: string
+          fia_hero_title: string
           fia_logo_url: string | null
+          fia_main_logo_url: string | null
+          fia_secondary_logo_url: string | null
           id: number
           lucky_logo_url: string | null
           lucky_subtitle: string | null
@@ -723,7 +730,16 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           fia_badge_url?: string | null
+          fia_brand_byline?: string
+          fia_brand_title?: string
+          fia_footer_text?: string
+          fia_header_brand?: string
+          fia_hero_subtitle?: string
+          fia_hero_tagline?: string
+          fia_hero_title?: string
           fia_logo_url?: string | null
+          fia_main_logo_url?: string | null
+          fia_secondary_logo_url?: string | null
           id?: number
           lucky_logo_url?: string | null
           lucky_subtitle?: string | null
@@ -751,7 +767,16 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           fia_badge_url?: string | null
+          fia_brand_byline?: string
+          fia_brand_title?: string
+          fia_footer_text?: string
+          fia_header_brand?: string
+          fia_hero_subtitle?: string
+          fia_hero_tagline?: string
+          fia_hero_title?: string
           fia_logo_url?: string | null
+          fia_main_logo_url?: string | null
+          fia_secondary_logo_url?: string | null
           id?: number
           lucky_logo_url?: string | null
           lucky_subtitle?: string | null
