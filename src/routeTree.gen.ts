@@ -31,7 +31,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
-import { Route as FiaPreparationPostRouteImport } from './routes/fia-preparation.$post'
+import { Route as FiaPreparationSlugRouteImport } from './routes/fia-preparation.$slug'
 import { Route as AdminStoreRouteImport } from './routes/admin.store'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
@@ -45,7 +45,6 @@ import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
-import { Route as FiaPreparationPostSubjectRouteImport } from './routes/fia-preparation.$post.$subject'
 import { Route as ApiPublicSimRouteImport } from './routes/api/public/sim'
 import { Route as ApiPublicPayfastCallbackRouteImport } from './routes/api/public/payfast-callback'
 
@@ -159,9 +158,9 @@ const ProductsSlugRoute = ProductsSlugRouteImport.update({
   path: '/products/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FiaPreparationPostRoute = FiaPreparationPostRouteImport.update({
-  id: '/$post',
-  path: '/$post',
+const FiaPreparationSlugRoute = FiaPreparationSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
   getParentRoute: () => FiaPreparationRoute,
 } as any)
 const AdminStoreRoute = AdminStoreRouteImport.update({
@@ -229,12 +228,6 @@ const AdminActivityRoute = AdminActivityRouteImport.update({
   path: '/activity',
   getParentRoute: () => AdminRoute,
 } as any)
-const FiaPreparationPostSubjectRoute =
-  FiaPreparationPostSubjectRouteImport.update({
-    id: '/$subject',
-    path: '/$subject',
-    getParentRoute: () => FiaPreparationPostRoute,
-  } as any)
 const ApiPublicSimRoute = ApiPublicSimRouteImport.update({
   id: '/api/public/sim',
   path: '/api/public/sim',
@@ -280,13 +273,12 @@ export interface FileRoutesByFullPath {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/store': typeof AdminStoreRoute
-  '/fia-preparation/$post': typeof FiaPreparationPostRouteWithChildren
+  '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
-  '/fia-preparation/$post/$subject': typeof FiaPreparationPostSubjectRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -320,13 +312,12 @@ export interface FileRoutesByTo {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/store': typeof AdminStoreRoute
-  '/fia-preparation/$post': typeof FiaPreparationPostRouteWithChildren
+  '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/admin': typeof AdminIndexRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
-  '/fia-preparation/$post/$subject': typeof FiaPreparationPostSubjectRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -362,13 +353,12 @@ export interface FileRoutesById {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/store': typeof AdminStoreRoute
-  '/fia-preparation/$post': typeof FiaPreparationPostRouteWithChildren
+  '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
-  '/fia-preparation/$post/$subject': typeof FiaPreparationPostSubjectRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -405,13 +395,12 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/store'
-    | '/fia-preparation/$post'
+    | '/fia-preparation/$slug'
     | '/products/$slug'
     | '/store/$slug'
     | '/admin/'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
-    | '/fia-preparation/$post/$subject'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -445,13 +434,12 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/store'
-    | '/fia-preparation/$post'
+    | '/fia-preparation/$slug'
     | '/products/$slug'
     | '/store/$slug'
     | '/admin'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
-    | '/fia-preparation/$post/$subject'
   id:
     | '__root__'
     | '/'
@@ -486,13 +474,12 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/store'
-    | '/fia-preparation/$post'
+    | '/fia-preparation/$slug'
     | '/products/$slug'
     | '/store/$slug'
     | '/admin/'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
-    | '/fia-preparation/$post/$subject'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -676,11 +663,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/fia-preparation/$post': {
-      id: '/fia-preparation/$post'
-      path: '/$post'
-      fullPath: '/fia-preparation/$post'
-      preLoaderRoute: typeof FiaPreparationPostRouteImport
+    '/fia-preparation/$slug': {
+      id: '/fia-preparation/$slug'
+      path: '/$slug'
+      fullPath: '/fia-preparation/$slug'
+      preLoaderRoute: typeof FiaPreparationSlugRouteImport
       parentRoute: typeof FiaPreparationRoute
     }
     '/admin/store': {
@@ -774,13 +761,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminActivityRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/fia-preparation/$post/$subject': {
-      id: '/fia-preparation/$post/$subject'
-      path: '/$subject'
-      fullPath: '/fia-preparation/$post/$subject'
-      preLoaderRoute: typeof FiaPreparationPostSubjectRouteImport
-      parentRoute: typeof FiaPreparationPostRoute
-    }
     '/api/public/sim': {
       id: '/api/public/sim'
       path: '/api/public/sim'
@@ -834,23 +814,12 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
-interface FiaPreparationPostRouteChildren {
-  FiaPreparationPostSubjectRoute: typeof FiaPreparationPostSubjectRoute
-}
-
-const FiaPreparationPostRouteChildren: FiaPreparationPostRouteChildren = {
-  FiaPreparationPostSubjectRoute: FiaPreparationPostSubjectRoute,
-}
-
-const FiaPreparationPostRouteWithChildren =
-  FiaPreparationPostRoute._addFileChildren(FiaPreparationPostRouteChildren)
-
 interface FiaPreparationRouteChildren {
-  FiaPreparationPostRoute: typeof FiaPreparationPostRouteWithChildren
+  FiaPreparationSlugRoute: typeof FiaPreparationSlugRoute
 }
 
 const FiaPreparationRouteChildren: FiaPreparationRouteChildren = {
-  FiaPreparationPostRoute: FiaPreparationPostRouteWithChildren,
+  FiaPreparationSlugRoute: FiaPreparationSlugRoute,
 }
 
 const FiaPreparationRouteWithChildren = FiaPreparationRoute._addFileChildren(

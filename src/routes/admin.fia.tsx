@@ -1,400 +1,382 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Trash2, Upload, Plus } from "lucide-react";
+import { FiaVerifiedBadge } from "@/components/fia/verified-badge";
+import { FiaNeonLogo } from "@/components/fia/neon-logo";
+import { FiaMcqAdminSection } from "@/components/fia/mcq-admin-section";
+import { uploadFiaFile, deleteFiaByUrl } from "@/lib/fia/storage";
+import type { FiaPostData } from "@/components/fia/post-card";
 
-export const Route = createFileRoute("/admin/fia")({ component: AdminFia });
+export const Route = createFileRoute("/admin/fia")({
+  head: () => ({ meta: [{ title: "FIA Preparation Admin — Wikiservices" }] }),
+  component: AdminFiaPage,
+});
 
-type Post = { id: string; slug: string; name: string; accent_color: string; sort_order: number; active: boolean };
-type Subject = { id: string; post_id: string; slug: string; name: string; sort_order: number; active: boolean };
-type Question = { id: string; subject_id: string; question: string; options: string[]; correct_answer: string };
+type Settings = {
+  fia_main_logo_url: string | null;
+  fia_secondary_logo_url: string | null;
+  fia_header_brand: string;
+  fia_hero_title: string;
+  fia_hero_subtitle: string;
+  fia_hero_tagline: string;
+  fia_brand_title: string;
+  fia_brand_byline: string;
+  fia_footer_text: string;
+};
 
-function AdminFia() {
-  const [tab, setTab] = useState<"logos" | "posts" | "subjects" | "questions">("logos");
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">FIA Preparation</h1>
-        <p className="text-sm text-muted-foreground">Manage logos, posts, subjects & MCQs</p>
-      </div>
-      <div className="flex flex-wrap gap-2 border-b">
-        {(["logos", "posts", "subjects", "questions"] as const).map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-              tab === t ? "border-primary text-primary" : "border-transparent text-muted-foreground"
-            }`}
-          >
-            {t.charAt(0).toUpperCase() + t.slice(1)}
-          </button>
-        ))}
-      </div>
-      {tab === "logos" && <LogosTab />}
-      {tab === "posts" && <PostsTab />}
-      {tab === "subjects" && <SubjectsTab />}
-      {tab === "questions" && <QuestionsTab />}
-    </div>
-  );
-}
+const DEFAULT_SETTINGS: Settings = {
+  fia_main_logo_url: null,
+  fia_secondary_logo_url: null,
+  fia_header_brand: "FIA · WIKI",
+  fia_hero_title: "WIKI PREP",
+  fia_hero_subtitle: "Your Success Starts Here",
+  fia_hero_tagline: "Best platform for FIA, FPSC, PPSC, NTS and all other competitive exam preparation.",
+  fia_brand_title: "FIA PREPARATION",
+  fia_brand_byline: "BY WIKI",
+  fia_footer_text: "© 2026 FIA Preparation by Wiki. All rights reserved.",
+};
 
-function LogosTab() {
-  const [logo, setLogo] = useState<string | null>(null);
-  const [badge, setBadge] = useState<string | null>(null);
-  const [uploading, setUploading] = useState<"logo" | "badge" | null>(null);
-
-  useEffect(() => {
-    supabase
-      .from("site_settings")
-      .select("fia_logo_url, fia_badge_url")
-      .eq("id", 1)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (data) {
-          setLogo(data.fia_logo_url);
-          setBadge(data.fia_badge_url);
-        }
-      });
-  }, []);
-
-  const upload = async (file: File, field: "fia_logo_url" | "fia_badge_url") => {
-    setUploading(field === "fia_logo_url" ? "logo" : "badge");
-    try {
-      const path = `fia/${field}-${Date.now()}-${file.name.replace(/[^a-z0-9.]/gi, "_")}`;
-      const { error } = await supabase.storage.from("store-products").upload(path, file, { upsert: true });
-      if (error) throw error;
-      const { data: pub } = supabase.storage.from("store-products").getPublicUrl(path);
-      const url = pub.publicUrl;
-      await supabase.from("site_settings").update({ [field]: url } as any).eq("id", 1);
-      if (field === "fia_logo_url") setLogo(url);
-      else setBadge(url);
-      toast.success("Uploaded ✅");
-    } catch (e: any) {
-      toast.error(e.message ?? "Upload failed");
-    } finally {
-      setUploading(null);
-    }
-  };
-
-  return (
-    <div className="grid gap-4 sm:grid-cols-2">
-      <Card>
-        <CardHeader>
-          <CardTitle>Main Logo (Bookmark)</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {logo ? (
-            <img src={logo} alt="" className="h-32 w-32 object-contain rounded-lg border" />
-          ) : (
-            <div className="h-32 w-32 rounded-lg border-2 border-dashed grid place-items-center text-muted-foreground text-xs">
-              No logo
-            </div>
-          )}
-          <label className="inline-flex items-center gap-2 cursor-pointer">
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], "fia_logo_url")}
-            />
-            <Button asChild variant="outline" size="sm">
-              <span>
-                <Upload className="h-3.5 w-3.5 mr-1" /> {uploading === "logo" ? "Uploading..." : "Upload logo"}
-              </span>
-            </Button>
-          </label>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Round Green Badge</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {badge ? (
-            <img src={badge} alt="" className="h-32 w-32 object-cover rounded-full border ring-2 ring-emerald-400" />
-          ) : (
-            <div className="h-32 w-32 rounded-full border-2 border-dashed border-emerald-400 grid place-items-center text-muted-foreground text-xs">
-              No badge
-            </div>
-          )}
-          <label className="inline-flex items-center gap-2 cursor-pointer">
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => e.target.files?.[0] && upload(e.target.files[0], "fia_badge_url")}
-            />
-            <Button asChild variant="outline" size="sm">
-              <span>
-                <Upload className="h-3.5 w-3.5 mr-1" /> {uploading === "badge" ? "Uploading..." : "Upload badge"}
-              </span>
-            </Button>
-          </label>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-function PostsTab() {
-  const [items, setItems] = useState<Post[]>([]);
-  const [form, setForm] = useState({ slug: "", name: "", accent_color: "#22d3ee" });
-
-  const load = async () => {
-    const { data } = await supabase.from("fia_posts").select("*").order("sort_order");
-    setItems((data ?? []) as Post[]);
-  };
-  useEffect(() => { load(); }, []);
-
-  const add = async () => {
-    if (!form.slug || !form.name) return toast.error("Slug & name required");
-    const { error } = await supabase.from("fia_posts").insert({ ...form, sort_order: items.length + 1 });
-    if (error) return toast.error(error.message);
-    setForm({ slug: "", name: "", accent_color: "#22d3ee" });
-    load();
-  };
-  const del = async (id: string) => {
-    if (!confirm("Delete this post and all its subjects/questions?")) return;
-    await supabase.from("fia_posts").delete().eq("id", id);
-    load();
-  };
-
-  return (
-    <Card>
-      <CardHeader><CardTitle>Posts</CardTitle></CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid gap-2 sm:grid-cols-4">
-          <Input placeholder="slug" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
-          <Input placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-          <Input type="color" value={form.accent_color} onChange={(e) => setForm({ ...form, accent_color: e.target.value })} />
-          <Button onClick={add}><Plus className="h-4 w-4 mr-1" /> Add</Button>
-        </div>
-        <div className="space-y-2">
-          {items.map((p) => (
-            <div key={p.id} className="flex items-center gap-3 rounded-lg border p-3">
-              <div className="h-8 w-8 rounded-full" style={{ background: p.accent_color }} />
-              <div className="flex-1">
-                <div className="font-medium">{p.name}</div>
-                <div className="text-xs text-muted-foreground">{p.slug}</div>
-              </div>
-              <Button size="icon" variant="ghost" onClick={() => del(p.id)}><Trash2 className="h-4 w-4" /></Button>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function SubjectsTab() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [postId, setPostId] = useState<string>("");
-  const [form, setForm] = useState({ slug: "", name: "" });
-
-  const load = async () => {
-    const { data: p } = await supabase.from("fia_posts").select("*").order("sort_order");
-    setPosts((p ?? []) as Post[]);
-    if (!postId && p?.[0]) setPostId(p[0].id);
-    const { data: s } = await supabase.from("fia_subjects").select("*").order("sort_order");
-    setSubjects((s ?? []) as Subject[]);
-  };
-  useEffect(() => { load(); }, []);
-
-  const add = async () => {
-    if (!postId || !form.slug || !form.name) return toast.error("All fields required");
-    const filtered = subjects.filter((s) => s.post_id === postId);
-    const { error } = await supabase.from("fia_subjects").insert({
-      post_id: postId, slug: form.slug, name: form.name, sort_order: filtered.length + 1,
-    });
-    if (error) return toast.error(error.message);
-    setForm({ slug: "", name: "" });
-    load();
-  };
-  const del = async (id: string) => {
-    if (!confirm("Delete subject and its questions?")) return;
-    await supabase.from("fia_subjects").delete().eq("id", id);
-    load();
-  };
-
-  const filtered = subjects.filter((s) => s.post_id === postId);
-
-  return (
-    <Card>
-      <CardHeader><CardTitle>Subjects</CardTitle></CardHeader>
-      <CardContent className="space-y-4">
-        <Select value={postId} onValueChange={setPostId}>
-          <SelectTrigger><SelectValue placeholder="Select post" /></SelectTrigger>
-          <SelectContent>
-            {posts.map((p) => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
-          </SelectContent>
-        </Select>
-        <div className="grid gap-2 sm:grid-cols-3">
-          <Input placeholder="slug (e.g. english)" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
-          <Input placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-          <Button onClick={add}><Plus className="h-4 w-4 mr-1" /> Add subject</Button>
-        </div>
-        <div className="space-y-2">
-          {filtered.map((s) => (
-            <div key={s.id} className="flex items-center gap-3 rounded-lg border p-3">
-              <div className="flex-1">
-                <div className="font-medium">{s.name}</div>
-                <div className="text-xs text-muted-foreground">{s.slug}</div>
-              </div>
-              <Button size="icon" variant="ghost" onClick={() => del(s.id)}><Trash2 className="h-4 w-4" /></Button>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function QuestionsTab() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [postId, setPostId] = useState<string>("");
-  const [subjectId, setSubjectId] = useState<string>("");
-  const [bulk, setBulk] = useState("");
-  const [single, setSingle] = useState({ q: "", o1: "", o2: "", o3: "", o4: "", ans: "" });
+function AdminFiaPage() {
+  const [posts, setPosts] = useState<FiaPostData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState<FiaPostData | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
 
   const loadPosts = async () => {
-    const { data } = await supabase.from("fia_posts").select("*").order("sort_order");
-    setPosts((data ?? []) as Post[]);
-    if (!postId && data?.[0]) setPostId(data[0].id);
-  };
-  const loadSubjects = async () => {
-    if (!postId) return;
-    const { data } = await supabase.from("fia_subjects").select("*").eq("post_id", postId).order("sort_order");
-    setSubjects((data ?? []) as Subject[]);
-    if (data?.[0]) setSubjectId(data[0].id);
-    else setSubjectId("");
-  };
-  const loadQuestions = async () => {
-    if (!subjectId) return setQuestions([]);
-    const { data } = await supabase.from("fia_questions").select("*").eq("subject_id", subjectId).order("sort_order");
-    setQuestions((data ?? []) as Question[]);
+    setLoading(true);
+    const { data, error } = await supabase.from("fia_posts").select("*").order("created_at", { ascending: false });
+    if (error) toast.error(error.message);
+    setPosts((data ?? []) as FiaPostData[]);
+    setLoading(false);
   };
 
-  useEffect(() => { loadPosts(); }, []);
-  useEffect(() => { loadSubjects(); }, [postId]);
-  useEffect(() => { loadQuestions(); }, [subjectId]);
-
-  const addOne = async () => {
-    if (!subjectId) return toast.error("Pick a subject");
-    const opts = [single.o1, single.o2, single.o3, single.o4].filter(Boolean);
-    if (opts.length < 2 || !single.q || !single.ans) return toast.error("Fill q, 2+ options, answer");
-    const { error } = await supabase.from("fia_questions").insert({
-      subject_id: subjectId, question: single.q, options: opts, correct_answer: single.ans,
-      sort_order: questions.length + 1,
-    });
-    if (error) return toast.error(error.message);
-    setSingle({ q: "", o1: "", o2: "", o3: "", o4: "", ans: "" });
-    loadQuestions();
+  const loadSettings = async () => {
+    const { data } = await supabase.from("site_settings")
+      .select("fia_main_logo_url, fia_secondary_logo_url, fia_header_brand, fia_hero_title, fia_hero_subtitle, fia_hero_tagline, fia_brand_title, fia_brand_byline, fia_footer_text")
+      .eq("id", 1).maybeSingle();
+    if (data) setSettings({ ...DEFAULT_SETTINGS, ...(data as unknown as Settings) });
   };
 
-  const addBulk = async () => {
-    if (!subjectId) return toast.error("Pick a subject");
+  useEffect(() => { loadPosts(); loadSettings(); }, []);
+
+  const handleDelete = async (post: FiaPostData) => {
+    if (!confirm(`Delete "${post.title}"?`)) return;
+    for (const url of [...(post.images ?? []), ...(post.videos ?? [])]) {
+      await deleteFiaByUrl(url);
+    }
+    const { error } = await supabase.from("fia_posts").delete().eq("id", post.id);
+    if (error) toast.error(error.message);
+    else { toast.success("Deleted"); loadPosts(); }
+  };
+
+  const uploadLogo = async (file: File, kind: "main" | "secondary") => {
     try {
-      const parsed = JSON.parse(bulk);
-      if (!Array.isArray(parsed)) throw new Error("Must be an array");
-      const rows = parsed.map((r: any, i: number) => ({
-        subject_id: subjectId,
-        question: r.question,
-        options: r.options,
-        correct_answer: r.correct_answer,
-        sort_order: questions.length + i + 1,
-      }));
-      const { error } = await supabase.from("fia_questions").insert(rows);
-      if (error) throw error;
-      toast.success(`Added ${rows.length} MCQs`);
-      setBulk("");
-      loadQuestions();
+      const url = await uploadFiaFile(file, "site");
+      const column = kind === "main" ? "fia_main_logo_url" : "fia_secondary_logo_url";
+      const { error: upErr } = await supabase.from("site_settings")
+        .update({ [column]: url, updated_at: new Date().toISOString() } as any).eq("id", 1);
+      if (upErr) throw upErr;
+      toast.success(`${kind === "main" ? "Main" : "Small"} logo updated`);
+      loadSettings();
     } catch (e: any) {
-      toast.error(e.message ?? "Invalid JSON");
+      toast.error(e.message ?? "Upload failed");
     }
   };
 
-  const del = async (id: string) => {
-    await supabase.from("fia_questions").delete().eq("id", id);
-    loadQuestions();
+  const removeLogo = async (kind: "main" | "secondary") => {
+    const column = kind === "main" ? "fia_main_logo_url" : "fia_secondary_logo_url";
+    const url = kind === "main" ? settings.fia_main_logo_url : settings.fia_secondary_logo_url;
+    if (url) await deleteFiaByUrl(url);
+    await supabase.from("site_settings").update({ [column]: null } as any).eq("id", 1);
+    toast.success("Removed");
+    loadSettings();
   };
 
   return (
-    <div className="space-y-4">
-      <Card>
-        <CardHeader><CardTitle>Select Subject</CardTitle></CardHeader>
-        <CardContent className="grid gap-2 sm:grid-cols-2">
-          <Select value={postId} onValueChange={setPostId}>
-            <SelectTrigger><SelectValue placeholder="Post" /></SelectTrigger>
-            <SelectContent>
-              {posts.map((p) => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
-            </SelectContent>
-          </Select>
-          <Select value={subjectId} onValueChange={setSubjectId}>
-            <SelectTrigger><SelectValue placeholder="Subject" /></SelectTrigger>
-            <SelectContent>
-              {subjects.map((s) => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </CardContent>
-      </Card>
+    <div className="space-y-8">
+      <div className="flex items-center gap-3">
+        <FiaNeonLogo size={56} src={settings.fia_main_logo_url ?? undefined} />
+        <div>
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            FIA Preparation Admin <FiaVerifiedBadge size={18} />
+          </h1>
+          <p className="text-sm text-muted-foreground">Logos, homepage text, posts aur MCQs yahan se manage karen.</p>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader><CardTitle>Add single MCQ</CardTitle></CardHeader>
-        <CardContent className="space-y-2">
-          <Textarea placeholder="Question text" value={single.q} onChange={(e) => setSingle({ ...single, q: e.target.value })} />
-          <div className="grid gap-2 sm:grid-cols-2">
-            <Input placeholder="Option A" value={single.o1} onChange={(e) => setSingle({ ...single, o1: e.target.value })} />
-            <Input placeholder="Option B" value={single.o2} onChange={(e) => setSingle({ ...single, o2: e.target.value })} />
-            <Input placeholder="Option C" value={single.o3} onChange={(e) => setSingle({ ...single, o3: e.target.value })} />
-            <Input placeholder="Option D" value={single.o4} onChange={(e) => setSingle({ ...single, o4: e.target.value })} />
-          </div>
-          <Input placeholder="Correct answer (must match one option exactly)" value={single.ans} onChange={(e) => setSingle({ ...single, ans: e.target.value })} />
-          <Button onClick={addOne}><Plus className="h-4 w-4 mr-1" /> Add MCQ</Button>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Bulk add (paste JSON)</CardTitle>
-          <p className="text-xs text-muted-foreground">
-            Format: <code>{`[{"question":"...","options":["A","B","C","D"],"correct_answer":"A"}]`}</code>
-          </p>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <Textarea rows={6} placeholder='[{"question":"...","options":["..."],"correct_answer":"..."}]' value={bulk} onChange={(e) => setBulk(e.target.value)} />
-          <Button onClick={addBulk}><Plus className="h-4 w-4 mr-1" /> Import JSON</Button>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader><CardTitle>Existing MCQs ({questions.length})</CardTitle></CardHeader>
-        <CardContent className="space-y-2 max-h-[500px] overflow-y-auto">
-          {questions.map((q, i) => (
-            <div key={q.id} className="flex items-start gap-2 rounded-lg border p-3">
-              <div className="flex-1 text-sm">
-                <div className="font-medium">{i + 1}. {q.question}</div>
-                <div className="mt-1 text-xs text-muted-foreground">
-                  Options: {q.options.join(" · ")}
-                </div>
-                <div className="text-xs text-emerald-600">✓ {q.correct_answer}</div>
+      {/* Branding */}
+      <section className="rounded-2xl p-5 border border-white/10 bg-card">
+        <h2 className="text-lg font-bold mb-4">FIA Branding (Logos)</h2>
+        <p className="text-xs text-muted-foreground mb-5">
+          Big circle = main FIA logo. Choota circle = apni dosri picture upload kar saktay hain (saath dikhegi).
+        </p>
+        <div className="flex items-center gap-8 flex-wrap">
+          <div className="relative">
+            <FiaNeonLogo size={120} src={settings.fia_main_logo_url ?? undefined} />
+            {settings.fia_secondary_logo_url && (
+              <div className="absolute -bottom-1 -right-2 rounded-full overflow-hidden border-2"
+                style={{ width: 48, height: 48, borderColor: "oklch(0.85 0.25 145)", boxShadow: "0 0 12px oklch(0.85 0.25 145 / 0.7)" }}>
+                <img src={settings.fia_secondary_logo_url} alt="" className="w-full h-full object-cover" />
               </div>
-              <Button size="icon" variant="ghost" onClick={() => del(q.id)}><Trash2 className="h-4 w-4" /></Button>
+            )}
+          </div>
+          <div className="flex flex-col gap-3">
+            <LogoUploader label="Main Logo (Big Circle)" current={settings.fia_main_logo_url}
+              onUpload={(f) => uploadLogo(f, "main")} onRemove={() => removeLogo("main")} />
+            <LogoUploader label="Small Circle Logo (Overlay)" current={settings.fia_secondary_logo_url}
+              onUpload={(f) => uploadLogo(f, "secondary")} onRemove={() => removeLogo("secondary")} />
+          </div>
+        </div>
+      </section>
+
+      <HomepageContentEditor settings={settings} onSaved={loadSettings} />
+
+      {/* Posts */}
+      <section>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold">Manage Posts</h2>
+          <button onClick={() => { setEditing(null); setShowForm(true); }}
+            className="px-4 py-2 rounded-lg font-bold text-sm bg-[oklch(0.85_0.22_145)] text-black hover:opacity-90"
+            style={{ boxShadow: "0 0 18px oklch(0.85 0.22 145 / 0.5)" }}>+ NEW POST</button>
+        </div>
+
+        {loading ? <p className="text-muted-foreground">Loading...</p> :
+          posts.length === 0 ? (
+            <div className="rounded-2xl p-10 text-center text-muted-foreground border border-white/10">
+              No posts yet. Click <strong>+ NEW POST</strong> to add one.
             </div>
-          ))}
-        </CardContent>
-      </Card>
+          ) : (
+            <ul className="space-y-3">
+              {posts.map((p) => (
+                <li key={p.id} className="rounded-xl p-4 flex items-center gap-4 border border-white/10 bg-card">
+                  {p.images?.[0] ? (
+                    <img src={p.images[0]} alt="" className="w-16 h-16 rounded-lg object-cover" />
+                  ) : (
+                    <div className="w-16 h-16 rounded-lg bg-muted flex items-center justify-center text-xs text-muted-foreground">no img</div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold truncate">{p.title}</h3>
+                    <p className="text-xs text-muted-foreground truncate">{p.description}</p>
+                    <p className="text-[10px] text-muted-foreground/70 mt-0.5">
+                      {p.images?.length ?? 0} img · {p.videos?.length ?? 0} video · {new Date(p.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <button onClick={() => { setEditing(p); setShowForm(true); }}
+                      className="text-xs px-3 py-1.5 rounded border border-input hover:bg-muted">Edit</button>
+                    <button onClick={() => handleDelete(p)}
+                      className="text-xs px-3 py-1.5 rounded border border-red-500/40 text-red-400 hover:bg-red-500/10">Delete</button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </section>
+
+      <FiaMcqAdminSection />
+
+      {showForm && (
+        <PostFormModal post={editing}
+          onClose={() => { setShowForm(false); setEditing(null); }}
+          onSaved={() => { setShowForm(false); setEditing(null); loadPosts(); }} />
+      )}
     </div>
   );
 }
 
-import { Label as _L } from "@/components/ui/label"; void _L;
+function LogoUploader({ label, current, onUpload, onRemove }: {
+  label: string; current: string | null;
+  onUpload: (f: File) => Promise<void>; onRemove: () => Promise<void>;
+}) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <div className="flex items-center gap-3">
+      <label className="text-xs px-3 py-2 rounded-lg border border-[oklch(0.85_0.22_145/0.4)] hover:bg-[oklch(0.85_0.22_145/0.1)] cursor-pointer">
+        {busy ? "Uploading..." : `Upload ${label}`}
+        <input type="file" accept="image/*" className="hidden"
+          onChange={async (e) => {
+            const f = e.target.files?.[0]; if (!f) return;
+            setBusy(true); await onUpload(f); setBusy(false);
+            e.target.value = "";
+          }} />
+      </label>
+      {current && (
+        <button onClick={onRemove} className="text-xs px-2 py-1 rounded border border-red-500/40 text-red-400">Remove</button>
+      )}
+    </div>
+  );
+}
+
+function HomepageContentEditor({ settings, onSaved }: { settings: Settings; onSaved: () => void }) {
+  const [form, setForm] = useState(settings);
+  const [saving, setSaving] = useState(false);
+  useEffect(() => { setForm(settings); }, [settings]);
+
+  const save = async () => {
+    setSaving(true);
+    const { error } = await supabase.from("site_settings").update({
+      fia_header_brand: form.fia_header_brand,
+      fia_hero_title: form.fia_hero_title,
+      fia_hero_subtitle: form.fia_hero_subtitle,
+      fia_hero_tagline: form.fia_hero_tagline,
+      fia_brand_title: form.fia_brand_title,
+      fia_brand_byline: form.fia_brand_byline,
+      fia_footer_text: form.fia_footer_text,
+      updated_at: new Date().toISOString(),
+    } as any).eq("id", 1);
+    setSaving(false);
+    if (error) toast.error(error.message); else { toast.success("Homepage text updated"); onSaved(); }
+  };
+
+  const Field = ({ label, k, area }: { label: string; k: keyof Settings; area?: boolean }) => (
+    <label className="block">
+      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</span>
+      {area ? (
+        <textarea value={(form[k] as string) ?? ""} rows={2}
+          onChange={(e) => setForm({ ...form, [k]: e.target.value })}
+          className="mt-1 w-full bg-background border border-input rounded-lg px-3 py-2 text-sm" />
+      ) : (
+        <input value={(form[k] as string) ?? ""}
+          onChange={(e) => setForm({ ...form, [k]: e.target.value })}
+          className="mt-1 w-full bg-background border border-input rounded-lg px-3 py-2 text-sm" />
+      )}
+    </label>
+  );
+
+  return (
+    <section className="rounded-2xl p-5 space-y-3 border border-white/10 bg-card">
+      <h2 className="text-lg font-bold">FIA Homepage Wording</h2>
+      <p className="text-xs text-muted-foreground">Saari FIA page ki wording yahan se badlein.</p>
+      <div className="grid sm:grid-cols-2 gap-3">
+        <Field label="Header Brand" k="fia_header_brand" />
+        <Field label="Hero Title (2 words colored)" k="fia_hero_title" />
+        <Field label="Hero Subtitle" k="fia_hero_subtitle" />
+        <Field label="Brand Title (under logo)" k="fia_brand_title" />
+        <Field label="Brand Byline" k="fia_brand_byline" />
+        <Field label="Footer Text" k="fia_footer_text" />
+      </div>
+      <Field label="Hero Tagline" k="fia_hero_tagline" area />
+      <div className="flex justify-end">
+        <button onClick={save} disabled={saving}
+          className="px-4 py-2 rounded-lg bg-[oklch(0.85_0.22_145)] text-black text-sm font-semibold disabled:opacity-50">
+          {saving ? "Saving..." : "Save Homepage Text"}
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function PostFormModal({ post, onClose, onSaved }: {
+  post: FiaPostData | null; onClose: () => void; onSaved: () => void;
+}) {
+  const [title, setTitle] = useState(post?.title ?? "");
+  const [description, setDescription] = useState(post?.description ?? "");
+  const [images, setImages] = useState<string[]>(post?.images ?? []);
+  const [videos, setVideos] = useState<string[]>(post?.videos ?? []);
+  const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const handleUpload = async (files: FileList | null, kind: "image" | "video") => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    const uploaded: string[] = [];
+    for (const file of Array.from(files)) {
+      try {
+        const url = await uploadFiaFile(file, kind === "image" ? "images" : "videos");
+        uploaded.push(url);
+      } catch (e: any) {
+        toast.error(e.message ?? "Upload failed");
+      }
+    }
+    if (kind === "image") setImages((cur) => [...cur, ...uploaded]);
+    else setVideos((cur) => [...cur, ...uploaded]);
+    setUploading(false);
+  };
+
+  const removeFile = async (url: string, kind: "image" | "video") => {
+    await deleteFiaByUrl(url);
+    if (kind === "image") setImages((c) => c.filter((u) => u !== url));
+    else setVideos((c) => c.filter((u) => u !== url));
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim()) { toast.error("Title required"); return; }
+    setSaving(true);
+    const payload = { title: title.trim(), description, images, videos };
+    const { error } = post
+      ? await supabase.from("fia_posts").update(payload).eq("id", post.id)
+      : await supabase.from("fia_posts").insert(payload);
+    setSaving(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success(post ? "Updated" : "Created");
+    onSaved();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/70 backdrop-blur z-50 flex items-center justify-center p-4 overflow-y-auto">
+      <form onSubmit={handleSave} className="rounded-2xl p-6 w-full max-w-lg my-8 bg-card border border-white/10">
+        <h2 className="text-xl font-bold mb-4">{post ? "Edit Post" : "New Post"}</h2>
+
+        <label className="block mb-3">
+          <span className="text-xs uppercase tracking-wider text-muted-foreground">Title</span>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} required
+            className="mt-1 w-full bg-background border border-input rounded-lg px-3 py-2 text-sm" />
+        </label>
+
+        <label className="block mb-3">
+          <span className="text-xs uppercase tracking-wider text-muted-foreground">Description</span>
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4}
+            className="mt-1 w-full bg-background border border-input rounded-lg px-3 py-2 text-sm" />
+        </label>
+
+        <div className="mb-4">
+          <span className="text-xs uppercase tracking-wider text-muted-foreground">Images</span>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            {images.map((url) => (
+              <div key={url} className="relative aspect-square rounded-lg overflow-hidden group">
+                <img src={url} alt="" className="w-full h-full object-cover" />
+                <button type="button" onClick={() => removeFile(url, "image")}
+                  className="absolute top-1 right-1 bg-black/70 text-white text-xs w-6 h-6 rounded-full opacity-0 group-hover:opacity-100 transition">×</button>
+              </div>
+            ))}
+            <label className="aspect-square rounded-lg border-2 border-dashed border-input hover:border-[oklch(0.85_0.22_145)] flex items-center justify-center cursor-pointer text-xs text-muted-foreground text-center px-2">
+              {uploading ? "..." : "+ Image"}
+              <input type="file" multiple accept="image/*" className="hidden"
+                onChange={(e) => handleUpload(e.target.files, "image")} />
+            </label>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <span className="text-xs uppercase tracking-wider text-muted-foreground">Videos</span>
+          <div className="mt-2 space-y-2">
+            {videos.map((url) => (
+              <div key={url} className="relative rounded-lg overflow-hidden bg-black">
+                <video src={url} controls className="w-full max-h-48" />
+                <button type="button" onClick={() => removeFile(url, "video")}
+                  className="absolute top-1 right-1 bg-black/70 text-white text-xs w-7 h-7 rounded-full">×</button>
+              </div>
+            ))}
+            <label className="block rounded-lg border-2 border-dashed border-input hover:border-[oklch(0.85_0.22_145)] cursor-pointer text-xs text-muted-foreground text-center py-4">
+              {uploading ? "Uploading..." : "+ Add Video(s)"}
+              <input type="file" multiple accept="video/*" className="hidden"
+                onChange={(e) => handleUpload(e.target.files, "video")} />
+            </label>
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-2 mt-6">
+          <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg border border-input text-sm">Cancel</button>
+          <button type="submit" disabled={saving || uploading}
+            className="px-4 py-2 rounded-lg bg-[oklch(0.85_0.22_145)] text-black text-sm font-semibold disabled:opacity-50">
+            {saving ? "Saving..." : (post ? "Update" : "Create")}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
