@@ -92,13 +92,26 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function Layout({ children }: { children: React.ReactNode }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const isAdmin = path.startsWith("/admin");
-  if (isAdmin) return <>{children}</>;
+  const isFia = path.startsWith("/fia-preparation");
+  if (isAdmin || isFia) return <>{children}</>;
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
     </div>
+  );
+}
+
+function FloatingChrome() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  if (path.startsWith("/fia-preparation") || path.startsWith("/admin")) return null;
+  return (
+    <>
+      <WhatsAppButton />
+      <FloatingMascots />
+      <SiteAnnouncementPopup />
+    </>
   );
 }
 
