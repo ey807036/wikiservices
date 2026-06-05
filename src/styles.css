@@ -493,3 +493,9 @@
   pointer-events: none;
   animation: scanlines 4s linear infinite;
 }
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-10px) rotate(2deg); }
+}
+.float-anim { animation: float-y 4s ease-in-out infinite; }
