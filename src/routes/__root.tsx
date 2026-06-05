@@ -12,6 +12,7 @@ import { Footer } from "@/components/site/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeIntensity } from "@/components/site/theme-intensity";
 import { WhatsAppButton } from "@/components/site/whatsapp-button";
+import { WhatsAppEntryPopup } from "@/components/site/whatsapp-entry-popup";
 import { ThemeProvider } from "@/components/site/theme-provider";
 import { ClickSound } from "@/components/site/click-sound";
 import { MobileHackerLogin } from "@/components/site/mobile-hacker-login";
@@ -109,10 +110,17 @@ function FloatingChrome() {
   return (
     <>
       <WhatsAppButton />
+      <WhatsAppEntryPopup />
       <FloatingMascots />
       <SiteAnnouncementPopup />
     </>
   );
+}
+
+function PageLoaderGate() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  if (path.startsWith("/fia-preparation")) return null;
+  return <PageLoader />;
 }
 
 function RootComponent() {
@@ -126,7 +134,7 @@ function RootComponent() {
             <ClickSound />
             <Layout><Outlet /></Layout>
             <FloatingChrome />
-            <PageLoader />
+            <PageLoaderGate />
             <SiteProtection />
             <Toaster richColors position="top-right" />
           </CartProvider>

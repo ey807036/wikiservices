@@ -723,6 +723,9 @@ export type Database = {
           theme: string
           updated_at: string
           whatsapp_number: string | null
+          whatsapp_popup_delay_seconds: number
+          whatsapp_popup_enabled: boolean
+          whatsapp_popup_message: string
         }
         Insert: {
           address?: string | null
@@ -760,6 +763,9 @@ export type Database = {
           theme?: string
           updated_at?: string
           whatsapp_number?: string | null
+          whatsapp_popup_delay_seconds?: number
+          whatsapp_popup_enabled?: boolean
+          whatsapp_popup_message?: string
         }
         Update: {
           address?: string | null
@@ -797,6 +803,9 @@ export type Database = {
           theme?: string
           updated_at?: string
           whatsapp_number?: string | null
+          whatsapp_popup_delay_seconds?: number
+          whatsapp_popup_enabled?: boolean
+          whatsapp_popup_message?: string
         }
         Relationships: []
       }
