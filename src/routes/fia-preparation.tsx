@@ -40,7 +40,7 @@ function FiaPreparationPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-zinc-950 to-black text-white">
-      <Header />
+      <FiaPreloadVideos />
       <FiaHero />
 
       <div className="max-w-6xl mx-auto">
