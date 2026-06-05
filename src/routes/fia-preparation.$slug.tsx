@@ -1,8 +1,8 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Header } from "@/components/site/header";
+import { FiaPreloadVideos, FiaResultVideoCircle, type FiaVideoKind } from "@/components/fia/result-video-circle";
 
 export const Route = createFileRoute("/fia-preparation/$slug")({
   head: ({ params }) => ({
@@ -50,6 +50,7 @@ function CategoryQuiz() {
   const [picks, setPicks] = useState<(number | null)[]>([]);
   const [revealed, setRevealed] = useState(false);
   const [seed, setSeed] = useState(0);
+  const [overlay, setOverlay] = useState<FiaVideoKind | null>(null);
 
   const shuffled = useMemo(() => {
     if (!data?.mcqs) return [];
@@ -57,8 +58,8 @@ function CategoryQuiz() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.mcqs, seed]);
 
-  if (isLoading) return <div className="min-h-screen bg-black text-white"><Header /><div className="p-8 text-center">Loading...</div></div>;
-  if (!data?.category) return <div className="min-h-screen bg-black text-white"><Header /><div className="p-8 text-center">Category not found.</div></div>;
+  if (isLoading) return <div className="min-h-screen bg-black text-white p-8 text-center">Loading...</div>;
+  if (!data?.category) return <div className="min-h-screen bg-black text-white p-8 text-center">Category not found.</div>;
 
   const c = data.category;
   const total = shuffled.length;
@@ -69,11 +70,26 @@ function CategoryQuiz() {
     setStarted(true); setIdx(0); setPicks(Array(total).fill(null)); setRevealed(false); setSeed((s) => s + 1);
   };
 
+  const handleBack = () => {
+    if (started && !finished) {
+      setOverlay("back");
+      return;
+    }
+    navigate({ to: "/fia-preparation" });
+  };
+
+  // When quiz finishes, decide pass/fail overlay video
+  const resultKind: FiaVideoKind | null = finished
+    ? (score >= Math.ceil(total / 2) ? "pass" : "fail")
+    : null;
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-zinc-950 to-black text-white">
-      <Header />
+      {/* Preload all three videos in the background while the user is taking the test */}
+      <FiaPreloadVideos />
+
       <header className="flex items-center justify-between px-4 py-3 border-b border-white/10 sticky top-0 z-10 bg-black/70 backdrop-blur">
-        <Link to="/fia-preparation" className="text-xs px-3 py-1.5 rounded-full border border-white/15 hover:bg-white/10">← Back</Link>
+        <button onClick={handleBack} className="text-xs px-3 py-1.5 rounded-full border border-white/15 hover:bg-white/10">← Back</button>
         <div className="text-sm font-bold" style={{ color: c.accent_color }}>{c.name} Preparation</div>
         <div className="w-16" />
       </header>
@@ -161,18 +177,20 @@ function CategoryQuiz() {
           </div>
         )}
 
-        {finished && (
+        {finished && resultKind && (
           <div className="rounded-2xl p-8 text-center border bg-zinc-900/60"
             style={{ borderColor: `${c.accent_color}55`, boxShadow: `0 0 28px ${c.accent_color}44` }}>
-            <div className="text-5xl mb-3">🏆</div>
+            <div className="mb-5">
+              <FiaResultVideoCircle kind={resultKind} size={240} />
+            </div>
             <h2 className="text-3xl font-bold mb-2" style={{ color: c.accent_color }}>Quiz Complete!</h2>
             <p className="text-5xl font-bold my-4" style={{ color: c.accent_color, textShadow: `0 0 18px ${c.accent_color}` }}>
               {score} / {total}
             </p>
             <p className="text-zinc-400 text-sm mb-5">
-              {score === total ? "🔥 Perfect score! Mubarak ho!" :
-               score >= total * 0.7 ? "👏 Bohat acha! Practice jari rakhen." :
-               "📚 Aur practice ki zarurat hai. Phir try karen!"}
+              {resultKind === "pass"
+                ? (score === total ? "🔥 Perfect score! Mubarak ho!" : "👏 Bohat acha! Practice jari rakhen.")
+                : "📚 Aur practice ki zarurat hai. Phir try karen!"}
             </p>
             <div className="flex gap-2 justify-center">
               <button onClick={startQuiz} className="px-5 py-2 rounded-full text-sm border border-white/15">Retry</button>
@@ -185,6 +203,27 @@ function CategoryQuiz() {
           </div>
         )}
       </main>
+
+      {/* Back-from-quiz overlay */}
+      {overlay === "back" && (
+        <div className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-6 gap-6">
+          <FiaResultVideoCircle kind="back" size={260} />
+          <p className="text-center text-sm text-zinc-300 max-w-xs">
+            Test adhura chhor ke ja rahe ho? Try again later!
+          </p>
+          <div className="flex gap-3">
+            <button onClick={() => setOverlay(null)}
+              className="px-5 py-2 rounded-full text-sm font-semibold"
+              style={{ background: c.accent_color, color: "#000" }}>
+              Wapas test par
+            </button>
+            <button onClick={() => navigate({ to: "/fia-preparation" })}
+              className="px-5 py-2 rounded-full text-sm border border-white/20 text-white">
+              Phir bhi jao
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

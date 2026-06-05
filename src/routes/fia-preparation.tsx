@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Header } from "@/components/site/header";
 import { FiaHero } from "@/components/fia/hero";
+import { FiaPreloadVideos } from "@/components/fia/result-video-circle";
 import { FiaCategoriesGrid } from "@/components/fia/categories-grid";
 import { FiaPostCard, type FiaPostData } from "@/components/fia/post-card";
 

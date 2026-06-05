@@ -44,7 +44,7 @@ export function FiaHero() {
           boxShadow: "0 0 28px oklch(0.6 0.2 280 / 0.25), inset 0 0 40px oklch(0.5 0.2 260 / 0.15)",
         }}>
         <img src={heroBook} alt="" aria-hidden
-          className="absolute -top-2 -right-6 w-40 sm:w-56 opacity-90 pointer-events-none select-none" />
+          className="absolute -top-2 -right-6 w-40 sm:w-56 opacity-90 pointer-events-none select-none float-anim" />
 
         <h1 className="relative text-3xl sm:text-4xl font-bold leading-tight">
           <span style={{
