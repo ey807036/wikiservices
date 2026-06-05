@@ -125,9 +125,7 @@ function RootComponent() {
             <ThemeProvider />
             <ClickSound />
             <Layout><Outlet /></Layout>
-            <WhatsAppButton />
-            <FloatingMascots />
-            <SiteAnnouncementPopup />
+            <FloatingChrome />
             <PageLoader />
             <SiteProtection />
             <Toaster richColors position="top-right" />
