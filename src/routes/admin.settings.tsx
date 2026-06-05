@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Save, Volume2, VolumeX, Check, Upload, Image as ImageIcon } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { THEMES } from "@/components/site/theme-provider";
 import { HomeItemsManager } from "@/components/admin/home-items-manager";
 
