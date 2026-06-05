@@ -133,6 +133,36 @@ function Settings() {
         <Field label="WhatsApp number" hint="Digits only with country code, e.g. 923001234567">
           <Input value={form.whatsapp_number ?? ""} onChange={e => setForm({ ...form, whatsapp_number: e.target.value.replace(/\D/g, "") })} />
         </Field>
+
+        {/* WhatsApp entry popup controls */}
+        <div className="rounded-xl border border-[#25D366]/40 bg-[#25D366]/5 p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-bold text-sm">WhatsApp Entry Popup</h3>
+              <p className="text-xs text-muted-foreground">Auto-shows once per session when a user enters the site.</p>
+            </div>
+            <Switch
+              checked={form.whatsapp_popup_enabled ?? true}
+              onCheckedChange={(v) => setForm({ ...form, whatsapp_popup_enabled: v })}
+            />
+          </div>
+          <Field label="Delay before showing (seconds)" hint="How long after entering the site the popup appears">
+            <Input
+              type="number" min={0} max={120}
+              value={form.whatsapp_popup_delay_seconds ?? 5}
+              onChange={(e) => setForm({ ...form, whatsapp_popup_delay_seconds: e.target.value })}
+            />
+          </Field>
+          <Field label="Popup message">
+            <Textarea
+              rows={2}
+              value={form.whatsapp_popup_message ?? ""}
+              onChange={(e) => setForm({ ...form, whatsapp_popup_message: e.target.value })}
+              placeholder="Asalam-o-Alaikum! 👋 Koi madad chahiye?"
+            />
+          </Field>
+        </div>
+
         <Field label="Store address">
           <Textarea rows={2} value={form.address ?? ""} onChange={e => setForm({ ...form, address: e.target.value })} />
         </Field>
