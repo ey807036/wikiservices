@@ -134,7 +134,7 @@ function RootComponent() {
             <ClickSound />
             <Layout><Outlet /></Layout>
             <FloatingChrome />
-            <PageLoader />
+            <PageLoaderGate />
             <SiteProtection />
             <Toaster richColors position="top-right" />
           </CartProvider>
