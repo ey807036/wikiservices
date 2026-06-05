@@ -110,10 +110,17 @@ function FloatingChrome() {
   return (
     <>
       <WhatsAppButton />
+      <WhatsAppEntryPopup />
       <FloatingMascots />
       <SiteAnnouncementPopup />
     </>
   );
+}
+
+function PageLoaderGate() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  if (path.startsWith("/fia-preparation")) return null;
+  return <PageLoader />;
 }
 
 function RootComponent() {
