@@ -81,6 +81,9 @@ function Settings() {
       shop_store_name: form.shop_store_name || null,
       lucky_title: form.lucky_title || null,
       lucky_subtitle: form.lucky_subtitle || null,
+      whatsapp_popup_enabled: form.whatsapp_popup_enabled ?? true,
+      whatsapp_popup_delay_seconds: Number(form.whatsapp_popup_delay_seconds) || 5,
+      whatsapp_popup_message: form.whatsapp_popup_message || null,
       updated_at: new Date().toISOString(),
     }).eq("id", 1);
     setSaving(false);
