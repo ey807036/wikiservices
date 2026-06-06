@@ -104,6 +104,18 @@ export function FiaHero() {
           style={{ background: "oklch(0.22 0.04 250)", border: "1px solid oklch(0.85 0.22 145 / 0.3)", color: "oklch(0.85 0.22 145)" }}>
           ✨ 100% FREE · Mobile Friendly · Instant Results
         </div>
+
+        <button
+          onClick={() => document.getElementById("categories-section")?.scrollIntoView({ behavior: "smooth" })}
+          className="btn-neon mt-6 px-8 py-3 rounded-full text-sm font-bold tracking-widest uppercase"
+          style={{
+            background: "oklch(0.85 0.22 145)",
+            color: "#000",
+            boxShadow: "0 0 28px oklch(0.85 0.22 145 / 0.7), 0 0 60px oklch(0.85 0.22 145 / 0.35)",
+          }}
+        >
+          ▶ START TEST
+        </button>
       </div>
     </section>
   );
