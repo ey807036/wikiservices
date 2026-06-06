@@ -21,7 +21,7 @@ export function FiaCategoriesGrid() {
   });
 
   return (
-    <section className="px-3 py-6">
+    <section id="categories-section" className="px-3 py-6">
       <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
         <span style={{ color: NEON_GREEN }}>◂</span>
         <span style={{ color: NEON_GREEN, textShadow: "0 0 10px oklch(0.85 0.22 145 / 0.6)" }}>Start Test</span>
