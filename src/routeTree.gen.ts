@@ -28,6 +28,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FiaPreparationIndexRouteImport } from './routes/fia-preparation.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
@@ -142,6 +143,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const FiaPreparationIndexRoute = FiaPreparationIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => FiaPreparationRoute,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
@@ -277,6 +283,7 @@ export interface FileRoutesByFullPath {
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/fia-preparation/': typeof FiaPreparationIndexRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
@@ -287,7 +294,6 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/fake-whatsapp': typeof FakeWhatsappRoute
-  '/fia-preparation': typeof FiaPreparationRouteWithChildren
   '/lucky-draw': typeof LuckyDrawRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
@@ -316,6 +322,7 @@ export interface FileRoutesByTo {
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/fia-preparation': typeof FiaPreparationIndexRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
@@ -357,6 +364,7 @@ export interface FileRoutesById {
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/fia-preparation/': typeof FiaPreparationIndexRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
@@ -399,6 +407,7 @@ export interface FileRouteTypes {
     | '/products/$slug'
     | '/store/$slug'
     | '/admin/'
+    | '/fia-preparation/'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
   fileRoutesByTo: FileRoutesByTo
@@ -409,7 +418,6 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/fake-whatsapp'
-    | '/fia-preparation'
     | '/lucky-draw'
     | '/my-orders'
     | '/order'
@@ -438,6 +446,7 @@ export interface FileRouteTypes {
     | '/products/$slug'
     | '/store/$slug'
     | '/admin'
+    | '/fia-preparation'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
   id:
@@ -478,6 +487,7 @@ export interface FileRouteTypes {
     | '/products/$slug'
     | '/store/$slug'
     | '/admin/'
+    | '/fia-preparation/'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
   fileRoutesById: FileRoutesById
@@ -641,6 +651,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/fia-preparation/': {
+      id: '/fia-preparation/'
+      path: '/'
+      fullPath: '/fia-preparation/'
+      preLoaderRoute: typeof FiaPreparationIndexRouteImport
+      parentRoute: typeof FiaPreparationRoute
     }
     '/admin/': {
       id: '/admin/'
@@ -816,10 +833,12 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface FiaPreparationRouteChildren {
   FiaPreparationSlugRoute: typeof FiaPreparationSlugRoute
+  FiaPreparationIndexRoute: typeof FiaPreparationIndexRoute
 }
 
 const FiaPreparationRouteChildren: FiaPreparationRouteChildren = {
   FiaPreparationSlugRoute: FiaPreparationSlugRoute,
+  FiaPreparationIndexRoute: FiaPreparationIndexRoute,
 }
 
 const FiaPreparationRouteWithChildren = FiaPreparationRoute._addFileChildren(
