@@ -23,8 +23,8 @@ export function FiaCategoriesGrid() {
   return (
     <section className="px-3 py-6">
       <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-        <span className="text-[oklch(0.85_0.22_145)]">◂</span>
-        <span style={{ color: "oklch(0.85 0.22 145)", textShadow: "0 0 10px oklch(0.85 0.22 145 / 0.6)" }}>Explore Categories</span>
+        <span style={{ color: NEON_GREEN }}>◂</span>
+        <span style={{ color: NEON_GREEN, textShadow: "0 0 10px oklch(0.85 0.22 145 / 0.6)" }}>Start Test</span>
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {categories?.map((c) => (
