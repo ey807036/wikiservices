@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
+const NEON_GREEN = "oklch(0.85 0.22 145)";
+
 type Category = {
   id: string; slug: string; name: string; subtitle: string;
   description: string; accent_color: string; icon_url: string | null;
