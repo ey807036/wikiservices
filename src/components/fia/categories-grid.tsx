@@ -50,9 +50,9 @@ export function FiaCategoriesGrid() {
             </div>
             <div className="text-xs font-semibold" style={{ color: `${c.accent_color}cc` }}>{c.subtitle}</div>
             <div className="text-[10px] text-white/70 mt-1 leading-tight">{c.description}</div>
-            <div className="mt-3 text-xs px-3 py-1 rounded-full border inline-flex items-center gap-1"
-              style={{ borderColor: c.accent_color, color: c.accent_color }}>
-              Explore <span>›</span>
+            <div className="mt-3 text-xs px-3 py-1.5 rounded-full border inline-flex items-center gap-1 font-bold tracking-wider"
+              style={{ borderColor: NEON_GREEN, color: NEON_GREEN, boxShadow: `0 0 12px oklch(0.85 0.22 145 / 0.4)` }}>
+              ▶ START TEST
             </div>
           </Link>
         ))}
