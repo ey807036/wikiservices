@@ -208,7 +208,7 @@ function CategoryQuiz() {
       {overlay === "back" && (
         <div className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-6 gap-6">
           <FiaResultVideoCircle kind="back" size={260} />
-          <p className="text-center text-sm text-zinc-300 max-w-xs">
+          <p className="text-center text-base text-white font-semibold max-w-xs">
             Test adhura chhor ke ja rahe ho? Try again later!
           </p>
           <div className="flex gap-3">
