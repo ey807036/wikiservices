@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
+const NEON_GREEN = "oklch(0.85 0.22 145)";
+
 type Category = {
   id: string; slug: string; name: string; subtitle: string;
   description: string; accent_color: string; icon_url: string | null;
@@ -19,10 +21,10 @@ export function FiaCategoriesGrid() {
   });
 
   return (
-    <section className="px-3 py-6">
+    <section id="categories-section" className="px-3 py-6">
       <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-        <span className="text-[oklch(0.85_0.22_145)]">◂</span>
-        <span style={{ color: "oklch(0.85 0.22 145)", textShadow: "0 0 10px oklch(0.85 0.22 145 / 0.6)" }}>Explore Categories</span>
+        <span style={{ color: NEON_GREEN }}>◂</span>
+        <span style={{ color: NEON_GREEN, textShadow: "0 0 10px oklch(0.85 0.22 145 / 0.6)" }}>Start Test</span>
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {categories?.map((c) => (
@@ -48,9 +50,9 @@ export function FiaCategoriesGrid() {
             </div>
             <div className="text-xs font-semibold" style={{ color: `${c.accent_color}cc` }}>{c.subtitle}</div>
             <div className="text-[10px] text-white/70 mt-1 leading-tight">{c.description}</div>
-            <div className="mt-3 text-xs px-3 py-1 rounded-full border inline-flex items-center gap-1"
-              style={{ borderColor: c.accent_color, color: c.accent_color }}>
-              Explore <span>›</span>
+            <div className="mt-3 text-xs px-3 py-1.5 rounded-full border inline-flex items-center gap-1 font-bold tracking-wider"
+              style={{ borderColor: NEON_GREEN, color: NEON_GREEN, boxShadow: `0 0 12px oklch(0.85 0.22 145 / 0.4)` }}>
+              ▶ START TEST
             </div>
           </Link>
         ))}
