@@ -54,6 +54,7 @@ function CategoryQuiz() {
   const [revealed, setRevealed] = useState(false);
   const [seed, setSeed] = useState(0);
   const [overlay, setOverlay] = useState<FiaVideoKind | null>(null);
+  const [elapsed, setElapsed] = useState(0);
   // Track whether we should show back-video on leaving start screen too
   const visitedRef = useRef(false);
   useEffect(() => { visitedRef.current = true; }, []);
