@@ -102,8 +102,15 @@ function CategoryQuiz() {
   const startQuiz = () => {
     const n = Math.min(desiredCount, availableTotal);
     setDesiredCount(n);
-    setStarted(true); setIdx(0); setPicks(Array(n).fill(null)); setRevealed(false); setSeed((s) => s + 1);
+    setStarted(true); setIdx(0); setPicks(Array(n).fill(null)); setRevealed(false); setSeed((s) => s + 1); setElapsed(0);
   };
+
+  // Timer: runs while quiz is active
+  useEffect(() => {
+    if (!started || finished) return;
+    const id = setInterval(() => setElapsed((e) => e + 1), 1000);
+    return () => clearInterval(id);
+  }, [started, finished]);
 
   const handleBack = () => {
     // Show back video both during quiz AND from start screen (after they entered)
