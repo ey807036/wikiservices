@@ -200,7 +200,7 @@ function CategoryQuiz() {
             style={{ borderColor: `${c.accent_color}55`, boxShadow: `0 0 18px ${c.accent_color}22` }}>
             <div className="flex justify-between text-xs text-zinc-400 mb-3">
               <span>Question {idx + 1} / {total}</span>
-              <span className="font-mono font-bold" style={{ color: c.accent_color }}>{fmtTime(elapsed)}</span>
+              <span className="font-mono font-bold" style={{ color: "#facc15", textShadow: "0 0 8px #facc1580" }}>{fmtTime(elapsed)}</span>
               <span>Score: {score}</span>
             </div>
             <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mb-5">
