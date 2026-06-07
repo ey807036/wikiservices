@@ -82,7 +82,6 @@ function CategoryQuiz() {
     if (typeof window === "undefined") return;
     window.history.pushState({ fiaGuard: true }, "");
     const onPop = () => {
-      // user just pressed back — re-push to keep them here, then show overlay
       if (!finished) {
         window.history.pushState({ fiaGuard: true }, "");
         setOverlay("back");
@@ -94,6 +93,13 @@ function CategoryQuiz() {
     return () => window.removeEventListener("popstate", onPop);
   }, [finished, navigate]);
 
+  // Timer: runs while quiz is active (must be before any early return — Rules of Hooks)
+  useEffect(() => {
+    if (!started || finished) return;
+    const id = setInterval(() => setElapsed((e) => e + 1), 1000);
+    return () => clearInterval(id);
+  }, [started, finished]);
+
   if (isLoading) return <div className="min-h-screen bg-black text-white p-8 text-center">Loading...</div>;
   if (!data?.category) return <div className="min-h-screen bg-black text-white p-8 text-center">Category not found.</div>;
 
@@ -101,22 +107,12 @@ function CategoryQuiz() {
   const score = picks.filter((p, i) => p !== null && p === shuffled[i]?.correct_index).length;
   const availableTotal = allShuffled.length;
   const visibleCountOptions = COUNT_OPTIONS.filter((n) => n <= availableTotal);
-  if (availableTotal > 0 && !visibleCountOptions.includes(desiredCount) && availableTotal < desiredCount) {
-    // ensure desiredCount is achievable; if not, will be set in handler
-  }
 
   const startQuiz = () => {
     const n = Math.min(desiredCount, availableTotal);
     setDesiredCount(n);
     setStarted(true); setIdx(0); setPicks(Array(n).fill(null)); setRevealed(false); setSeed((s) => s + 1); setElapsed(0);
   };
-
-  // Timer: runs while quiz is active
-  useEffect(() => {
-    if (!started || finished) return;
-    const id = setInterval(() => setElapsed((e) => e + 1), 1000);
-    return () => clearInterval(id);
-  }, [started, finished]);
 
   const handleBack = () => {
     // Show back video both during quiz AND from start screen (after they entered)
