@@ -271,6 +271,7 @@ function CategoryQuiz() {
             <p className="text-5xl font-bold my-4" style={{ color: c.accent_color, textShadow: `0 0 18px ${c.accent_color}` }}>
               {score} / {total}
             </p>
+            <p className="text-zinc-300 text-sm mb-2">Time taken: <span className="font-mono font-bold text-white">{fmtTime(elapsed)}</span></p>
             <p className="text-white text-base font-semibold mb-5">
               {resultKind === "pass"
                 ? (score === total ? "🔥 Perfect score! Mubarak ho!" : "👏 Bohat acha! Practice jari rakhen.")
