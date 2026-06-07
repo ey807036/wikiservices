@@ -29,6 +29,12 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
+function fmtTime(sec: number) {
+  const m = Math.floor(sec / 60).toString().padStart(2, "0");
+  const s = (sec % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
+
 function CategoryQuiz() {
   const { slug } = Route.useParams();
   const navigate = useNavigate();
@@ -54,6 +60,7 @@ function CategoryQuiz() {
   const [revealed, setRevealed] = useState(false);
   const [seed, setSeed] = useState(0);
   const [overlay, setOverlay] = useState<FiaVideoKind | null>(null);
+  const [elapsed, setElapsed] = useState(0);
   // Track whether we should show back-video on leaving start screen too
   const visitedRef = useRef(false);
   useEffect(() => { visitedRef.current = true; }, []);
@@ -101,8 +108,15 @@ function CategoryQuiz() {
   const startQuiz = () => {
     const n = Math.min(desiredCount, availableTotal);
     setDesiredCount(n);
-    setStarted(true); setIdx(0); setPicks(Array(n).fill(null)); setRevealed(false); setSeed((s) => s + 1);
+    setStarted(true); setIdx(0); setPicks(Array(n).fill(null)); setRevealed(false); setSeed((s) => s + 1); setElapsed(0);
   };
+
+  // Timer: runs while quiz is active
+  useEffect(() => {
+    if (!started || finished) return;
+    const id = setInterval(() => setElapsed((e) => e + 1), 1000);
+    return () => clearInterval(id);
+  }, [started, finished]);
 
   const handleBack = () => {
     // Show back video both during quiz AND from start screen (after they entered)
@@ -190,6 +204,7 @@ function CategoryQuiz() {
             style={{ borderColor: `${c.accent_color}55`, boxShadow: `0 0 18px ${c.accent_color}22` }}>
             <div className="flex justify-between text-xs text-zinc-400 mb-3">
               <span>Question {idx + 1} / {total}</span>
+              <span className="font-mono font-bold" style={{ color: c.accent_color }}>{fmtTime(elapsed)}</span>
               <span>Score: {score}</span>
             </div>
             <div className="h-1.5 bg-white/10 rounded-full overflow-hidden mb-5">
@@ -256,6 +271,7 @@ function CategoryQuiz() {
             <p className="text-5xl font-bold my-4" style={{ color: c.accent_color, textShadow: `0 0 18px ${c.accent_color}` }}>
               {score} / {total}
             </p>
+            <p className="text-zinc-300 text-sm mb-2">Time taken: <span className="font-mono font-bold text-white">{fmtTime(elapsed)}</span></p>
             <p className="text-white text-base font-semibold mb-5">
               {resultKind === "pass"
                 ? (score === total ? "🔥 Perfect score! Mubarak ho!" : "👏 Bohat acha! Practice jari rakhen.")
