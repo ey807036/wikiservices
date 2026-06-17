@@ -84,6 +84,10 @@ function Settings() {
       whatsapp_popup_enabled: form.whatsapp_popup_enabled ?? true,
       whatsapp_popup_delay_seconds: Number(form.whatsapp_popup_delay_seconds) || 5,
       whatsapp_popup_message: form.whatsapp_popup_message || null,
+      wa_channel_url: form.wa_channel_url || null,
+      wa_channel_popup_enabled: form.wa_channel_popup_enabled ?? true,
+      wa_channel_popup_delay_seconds: Number(form.wa_channel_popup_delay_seconds) || 5,
+      wa_channel_popup_message: form.wa_channel_popup_message || null,
       updated_at: new Date().toISOString(),
     }).eq("id", 1);
     setSaving(false);
