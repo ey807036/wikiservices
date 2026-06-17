@@ -13,6 +13,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ThemeIntensity } from "@/components/site/theme-intensity";
 import { WhatsAppButton } from "@/components/site/whatsapp-button";
 import { WhatsAppEntryPopup } from "@/components/site/whatsapp-entry-popup";
+import { WhatsAppChannelPopup } from "@/components/site/whatsapp-channel-popup";
 import { ThemeProvider } from "@/components/site/theme-provider";
 import { ClickSound } from "@/components/site/click-sound";
 import { MobileHackerLogin } from "@/components/site/mobile-hacker-login";
@@ -134,6 +135,7 @@ function RootComponent() {
             <ClickSound />
             <Layout><Outlet /></Layout>
             <FloatingChrome />
+            <WhatsAppChannelPopup />
             <PageLoaderGate />
             <SiteProtection />
             <Toaster richColors position="top-right" />

@@ -722,6 +722,10 @@ export type Database = {
           store2_theme: string
           theme: string
           updated_at: string
+          wa_channel_popup_delay_seconds: number
+          wa_channel_popup_enabled: boolean
+          wa_channel_popup_message: string | null
+          wa_channel_url: string | null
           whatsapp_number: string | null
           whatsapp_popup_delay_seconds: number
           whatsapp_popup_enabled: boolean
@@ -762,6 +766,10 @@ export type Database = {
           store2_theme?: string
           theme?: string
           updated_at?: string
+          wa_channel_popup_delay_seconds?: number
+          wa_channel_popup_enabled?: boolean
+          wa_channel_popup_message?: string | null
+          wa_channel_url?: string | null
           whatsapp_number?: string | null
           whatsapp_popup_delay_seconds?: number
           whatsapp_popup_enabled?: boolean
@@ -802,6 +810,10 @@ export type Database = {
           store2_theme?: string
           theme?: string
           updated_at?: string
+          wa_channel_popup_delay_seconds?: number
+          wa_channel_popup_enabled?: boolean
+          wa_channel_popup_message?: string | null
+          wa_channel_url?: string | null
           whatsapp_number?: string | null
           whatsapp_popup_delay_seconds?: number
           whatsapp_popup_enabled?: boolean

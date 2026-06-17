@@ -84,6 +84,10 @@ function Settings() {
       whatsapp_popup_enabled: form.whatsapp_popup_enabled ?? true,
       whatsapp_popup_delay_seconds: Number(form.whatsapp_popup_delay_seconds) || 5,
       whatsapp_popup_message: form.whatsapp_popup_message || null,
+      wa_channel_url: form.wa_channel_url || null,
+      wa_channel_popup_enabled: form.wa_channel_popup_enabled ?? true,
+      wa_channel_popup_delay_seconds: Number(form.wa_channel_popup_delay_seconds) || 5,
+      wa_channel_popup_message: form.wa_channel_popup_message || null,
       updated_at: new Date().toISOString(),
     }).eq("id", 1);
     setSaving(false);
@@ -159,6 +163,42 @@ function Settings() {
               value={form.whatsapp_popup_message ?? ""}
               onChange={(e) => setForm({ ...form, whatsapp_popup_message: e.target.value })}
               placeholder="Asalam-o-Alaikum! 👋 Koi madad chahiye?"
+            />
+          </Field>
+        </div>
+
+        {/* WhatsApp Channel popup controls */}
+        <div className="rounded-xl border border-[#25D366]/40 bg-[#25D366]/5 p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-bold text-sm">WhatsApp Channel Popup</h3>
+              <p className="text-xs text-muted-foreground">Shows on every page (including admin) after the delay.</p>
+            </div>
+            <Switch
+              checked={form.wa_channel_popup_enabled ?? true}
+              onCheckedChange={(v) => setForm({ ...form, wa_channel_popup_enabled: v })}
+            />
+          </div>
+          <Field label="WhatsApp Channel URL">
+            <Input
+              value={form.wa_channel_url ?? ""}
+              onChange={(e) => setForm({ ...form, wa_channel_url: e.target.value })}
+              placeholder="https://whatsapp.com/channel/xxxxxxxxxxxx"
+            />
+          </Field>
+          <Field label="Delay before showing (seconds)">
+            <Input
+              type="number" min={0} max={120}
+              value={form.wa_channel_popup_delay_seconds ?? 5}
+              onChange={(e) => setForm({ ...form, wa_channel_popup_delay_seconds: e.target.value })}
+            />
+          </Field>
+          <Field label="Popup message">
+            <Textarea
+              rows={2}
+              value={form.wa_channel_popup_message ?? ""}
+              onChange={(e) => setForm({ ...form, wa_channel_popup_message: e.target.value })}
+              placeholder="Join our WhatsApp Channel for daily updates!"
             />
           </Field>
         </div>
