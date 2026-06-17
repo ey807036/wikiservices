@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Radio, X } from "lucide-react";
+import { Radio, X, ArrowRight, Bell } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouterState } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 
-const AUTO_HIDE_MS = 10000;
+const AUTO_HIDE_MS = 12000;
 const DEFAULT_URL = "https://whatsapp.com/channel/0029Vb6Wikiservices";
 
 export function WhatsAppChannelPopup() {
@@ -22,11 +22,13 @@ export function WhatsAppChannelPopup() {
   });
 
   const [open, setOpen] = useState(false);
+  const [entered, setEntered] = useState(false);
 
   // Re-trigger on every route change
   useEffect(() => {
     if (!data?.wa_channel_popup_enabled) return;
     setOpen(false);
+    setEntered(false);
     const delay = Math.max(0, (data.wa_channel_popup_delay_seconds ?? 5)) * 1000;
     const showT = setTimeout(() => {
       setOpen(true);
@@ -45,37 +47,70 @@ export function WhatsAppChannelPopup() {
   const msg = data.wa_channel_popup_message?.trim() || "Join our WhatsApp Channel for daily updates, offers & alerts!";
 
   return (
-    <div className="fixed inset-0 z-[185] pointer-events-none flex items-start sm:items-center justify-center p-4 pt-20 sm:pt-4">
-      <div className="pointer-events-auto relative w-full max-w-sm rounded-2xl border border-[#25D366]/60 bg-card/95 backdrop-blur p-4 shadow-[0_0_50px_rgba(37,211,102,0.55)] animate-in fade-in slide-in-from-top-4">
+    <div
+      className="fixed inset-0 z-[200] flex items-start justify-center p-3 pt-4 sm:pt-6"
+      style={{ backgroundColor: "rgba(0,0,0,0.75)", backdropFilter: "blur(6px)" }}
+    >
+      <div
+        onMouseEnter={() => setEntered(true)}
+        className={`relative w-full max-w-md rounded-3xl border-2 border-[#25D366]/70 bg-[#0a1f0f] p-5 sm:p-6 shadow-[0_0_80px_rgba(37,211,102,0.4),0_0_24px_rgba(37,211,102,0.2)] transition-all duration-500 ${entered ? "scale-[1.02] shadow-[0_0_100px_rgba(37,211,102,0.55),0_0_32px_rgba(37,211,102,0.3)]" : ""} animate-in fade-in zoom-in-95 slide-in-from-top-6`}
+      >
+        {/* Close */}
         <button
           onClick={() => setOpen(false)}
           aria-label="Close"
-          className="absolute top-2 right-2 h-7 w-7 grid place-items-center rounded-full bg-background/60 hover:bg-background text-muted-foreground hover:text-foreground"
+          className="absolute -top-3 -right-3 h-8 w-8 grid place-items-center rounded-full bg-[#1a1a1a] border border-[#25D366]/40 text-[#25D366] hover:bg-[#25D366] hover:text-black transition shadow-[0_0_16px_rgba(37,211,102,0.5)]"
         >
           <X className="h-4 w-4" />
         </button>
 
-        <div className="flex items-start gap-3">
-          <div className="relative shrink-0">
-            <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-50 animate-ping" />
-            <span className="relative grid h-12 w-12 place-items-center rounded-full bg-[#25D366] text-black shadow-[0_0_24px_rgba(37,211,102,0.7)]">
-              <Radio className="h-6 w-6" />
+        {/* Top accent line */}
+        <div className="absolute top-0 left-6 right-6 h-[2px] bg-gradient-to-r from-transparent via-[#25D366] to-transparent" />
+
+        {/* Icon + Header */}
+        <div className="flex flex-col items-center text-center">
+          <div className="relative mb-4">
+            <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-40 animate-ping" />
+            <span className="relative grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-[#25D366] to-[#128C7E] text-black shadow-[0_0_40px_rgba(37,211,102,0.7)]">
+              <Bell className="h-7 w-7" />
+            </span>
+            <span className="absolute -bottom-1 -right-1 grid h-6 w-6 place-items-center rounded-full bg-[#25D366] text-black text-[10px] font-bold shadow-[0_0_12px_rgba(37,211,102,0.6)]">
+              <Radio className="h-3 w-3" />
             </span>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-mono text-[#25D366]">&gt; whatsapp_channel</p>
-            <p className="mt-1 text-sm font-semibold leading-snug text-foreground">{msg}</p>
-            <a
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setOpen(false)}
-              className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-4 py-2 text-sm font-bold text-black hover:scale-105 transition"
-            >
-              <Radio className="h-4 w-4" /> Join Channel
-            </a>
-          </div>
+
+          <h3 className="text-lg sm:text-xl font-bold text-white tracking-wide">
+            Join Our WhatsApp Channel
+          </h3>
+          <p className="mt-2 text-sm sm:text-base text-[#a3f0c5] leading-relaxed max-w-xs">
+            {msg}
+          </p>
         </div>
+
+        {/* CTA */}
+        <div className="mt-5 flex flex-col items-center gap-3">
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#25D366] to-[#128C7E] px-6 py-3 text-sm sm:text-base font-bold text-black shadow-[0_0_24px_rgba(37,211,102,0.5)] hover:shadow-[0_0_40px_rgba(37,211,102,0.7)] hover:scale-105 transition-all duration-300"
+          >
+            <Radio className="h-4 w-4" />
+            Join Channel Now
+            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </a>
+
+          <button
+            onClick={() => setOpen(false)}
+            className="text-xs text-[#25D366]/70 hover:text-[#25D366] underline underline-offset-2 transition"
+          >
+            Maybe later
+          </button>
+        </div>
+
+        {/* Bottom glow bar */}
+        <div className="mt-5 h-1 w-full rounded-full bg-gradient-to-r from-transparent via-[#25D366]/60 to-transparent" />
       </div>
     </div>
   );
