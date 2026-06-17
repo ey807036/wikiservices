@@ -135,6 +135,7 @@ function RootComponent() {
             <ClickSound />
             <Layout><Outlet /></Layout>
             <FloatingChrome />
+            <WhatsAppChannelPopup />
             <PageLoaderGate />
             <SiteProtection />
             <Toaster richColors position="top-right" />
