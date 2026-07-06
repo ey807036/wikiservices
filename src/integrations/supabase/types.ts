@@ -599,6 +599,75 @@ export type Database = {
         }
         Relationships: []
       }
+      push_notifications_log: {
+        Row: {
+          body: string
+          created_at: string
+          failed_count: number
+          icon: string | null
+          id: string
+          sent_by: string | null
+          sent_count: number
+          title: string
+          url: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          failed_count?: number
+          icon?: string | null
+          id?: string
+          sent_by?: string | null
+          sent_count?: number
+          title: string
+          url?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          failed_count?: number
+          icon?: string | null
+          id?: string
+          sent_by?: string | null
+          sent_count?: number
+          title?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          last_seen_at: string
+          p256dh: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          last_seen_at?: string
+          p256dh: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          last_seen_at?: string
+          p256dh?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       referral_settings: {
         Row: {
           id: number
