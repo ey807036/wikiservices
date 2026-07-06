@@ -39,6 +39,7 @@ import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminNotificationsRouteImport } from './routes/admin.notifications'
 import { Route as AdminLuckyRouteImport } from './routes/admin.lucky'
 import { Route as AdminHomeItemsRouteImport } from './routes/admin.home-items'
 import { Route as AdminFiaRouteImport } from './routes/admin.fia'
@@ -199,6 +200,11 @@ const AdminOrdersRoute = AdminOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNotificationsRoute = AdminNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLuckyRoute = AdminLuckyRouteImport.update({
   id: '/lucky',
   path: '/lucky',
@@ -273,6 +279,7 @@ export interface FileRoutesByFullPath {
   '/admin/fia': typeof AdminFiaRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
+  '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -312,6 +319,7 @@ export interface FileRoutesByTo {
   '/admin/fia': typeof AdminFiaRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
+  '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -354,6 +362,7 @@ export interface FileRoutesById {
   '/admin/fia': typeof AdminFiaRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
+  '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -397,6 +406,7 @@ export interface FileRouteTypes {
     | '/admin/fia'
     | '/admin/home-items'
     | '/admin/lucky'
+    | '/admin/notifications'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/referrals'
@@ -436,6 +446,7 @@ export interface FileRouteTypes {
     | '/admin/fia'
     | '/admin/home-items'
     | '/admin/lucky'
+    | '/admin/notifications'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/referrals'
@@ -477,6 +488,7 @@ export interface FileRouteTypes {
     | '/admin/fia'
     | '/admin/home-items'
     | '/admin/lucky'
+    | '/admin/notifications'
     | '/admin/orders'
     | '/admin/products'
     | '/admin/referrals'
@@ -729,6 +741,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrdersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/notifications': {
+      id: '/admin/notifications'
+      path: '/notifications'
+      fullPath: '/admin/notifications'
+      preLoaderRoute: typeof AdminNotificationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/lucky': {
       id: '/admin/lucky'
       path: '/lucky'
@@ -803,6 +822,7 @@ interface AdminRouteChildren {
   AdminFiaRoute: typeof AdminFiaRoute
   AdminHomeItemsRoute: typeof AdminHomeItemsRoute
   AdminLuckyRoute: typeof AdminLuckyRoute
+  AdminNotificationsRoute: typeof AdminNotificationsRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminReferralsRoute: typeof AdminReferralsRoute
@@ -820,6 +840,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminFiaRoute: AdminFiaRoute,
   AdminHomeItemsRoute: AdminHomeItemsRoute,
   AdminLuckyRoute: AdminLuckyRoute,
+  AdminNotificationsRoute: AdminNotificationsRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminReferralsRoute: AdminReferralsRoute,

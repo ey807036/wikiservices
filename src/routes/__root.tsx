@@ -21,6 +21,7 @@ import { FloatingMascots } from "@/components/site/floating-mascots";
 import { SiteAnnouncementPopup } from "@/components/site/site-announcement-popup";
 import { PageLoader } from "@/components/site/page-loader";
 import { SiteProtection } from "@/components/site/site-protection";
+import { NotificationPermission } from "@/components/site/notification-permission";
 
 function NotFoundComponent() {
   return (
@@ -136,6 +137,7 @@ function RootComponent() {
             <Layout><Outlet /></Layout>
             <FloatingChrome />
             <WhatsAppChannelPopup />
+            <NotificationPermission />
             <PageLoaderGate />
             <SiteProtection />
             <Toaster richColors position="top-right" />
