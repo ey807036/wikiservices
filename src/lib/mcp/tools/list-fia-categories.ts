@@ -1,5 +1,4 @@
 import { defineTool } from "@lovable.dev/mcp-js";
-import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
 
 export default defineTool({
@@ -27,5 +26,3 @@ export default defineTool({
     };
   },
 });
-
-declare const _z: typeof z; // keep import
