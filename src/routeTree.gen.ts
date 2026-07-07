@@ -19,6 +19,7 @@ import { Route as ProAccountsRouteImport } from './routes/pro-accounts'
 import { Route as PayfastResultRouteImport } from './routes/payfast-result'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as MyOrdersRouteImport } from './routes/my-orders'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LuckyDrawRouteImport } from './routes/lucky-draw'
 import { Route as FiaPreparationRouteImport } from './routes/fia-preparation'
 import { Route as FakeWhatsappRouteImport } from './routes/fake-whatsapp'
@@ -40,6 +41,7 @@ import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminNotificationsRouteImport } from './routes/admin.notifications'
+import { Route as AdminMcpRouteImport } from './routes/admin.mcp'
 import { Route as AdminLuckyRouteImport } from './routes/admin.lucky'
 import { Route as AdminHomeItemsRouteImport } from './routes/admin.home-items'
 import { Route as AdminFiaRouteImport } from './routes/admin.fia'
@@ -47,8 +49,11 @@ import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ApiPublicSimRouteImport } from './routes/api/public/sim'
 import { Route as ApiPublicPayfastCallbackRouteImport } from './routes/api/public/payfast-callback'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
@@ -98,6 +103,11 @@ const OrderRoute = OrderRouteImport.update({
 const MyOrdersRoute = MyOrdersRouteImport.update({
   id: '/my-orders',
   path: '/my-orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LuckyDrawRoute = LuckyDrawRouteImport.update({
@@ -205,6 +215,11 @@ const AdminNotificationsRoute = AdminNotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminMcpRoute = AdminMcpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLuckyRoute = AdminLuckyRouteImport.update({
   id: '/lucky',
   path: '/lucky',
@@ -240,6 +255,18 @@ const AdminActivityRoute = AdminActivityRouteImport.update({
   path: '/activity',
   getParentRoute: () => AdminRoute,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicSimRoute = ApiPublicSimRouteImport.update({
   id: '/api/public/sim',
   path: '/api/public/sim',
@@ -249,6 +276,12 @@ const ApiPublicPayfastCallbackRoute =
   ApiPublicPayfastCallbackRouteImport.update({
     id: '/api/public/payfast-callback',
     path: '/api/public/payfast-callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -262,6 +295,7 @@ export interface FileRoutesByFullPath {
   '/fake-whatsapp': typeof FakeWhatsappRoute
   '/fia-preparation': typeof FiaPreparationRouteWithChildren
   '/lucky-draw': typeof LuckyDrawRoute
+  '/mcp': typeof McpRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
   '/payfast-result': typeof PayfastResultRoute
@@ -272,6 +306,8 @@ export interface FileRoutesByFullPath {
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
   '/wishlist': typeof WishlistRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -279,6 +315,7 @@ export interface FileRoutesByFullPath {
   '/admin/fia': typeof AdminFiaRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
+  '/admin/mcp': typeof AdminMcpRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -291,6 +328,7 @@ export interface FileRoutesByFullPath {
   '/store/$slug': typeof StoreSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/fia-preparation/': typeof FiaPreparationIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
@@ -302,6 +340,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/fake-whatsapp': typeof FakeWhatsappRoute
   '/lucky-draw': typeof LuckyDrawRoute
+  '/mcp': typeof McpRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
   '/payfast-result': typeof PayfastResultRoute
@@ -312,6 +351,8 @@ export interface FileRoutesByTo {
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
   '/wishlist': typeof WishlistRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -319,6 +360,7 @@ export interface FileRoutesByTo {
   '/admin/fia': typeof AdminFiaRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
+  '/admin/mcp': typeof AdminMcpRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -331,6 +373,7 @@ export interface FileRoutesByTo {
   '/store/$slug': typeof StoreSlugRoute
   '/admin': typeof AdminIndexRoute
   '/fia-preparation': typeof FiaPreparationIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
@@ -345,6 +388,7 @@ export interface FileRoutesById {
   '/fake-whatsapp': typeof FakeWhatsappRoute
   '/fia-preparation': typeof FiaPreparationRouteWithChildren
   '/lucky-draw': typeof LuckyDrawRoute
+  '/mcp': typeof McpRoute
   '/my-orders': typeof MyOrdersRoute
   '/order': typeof OrderRoute
   '/payfast-result': typeof PayfastResultRoute
@@ -355,6 +399,8 @@ export interface FileRoutesById {
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
   '/wishlist': typeof WishlistRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -362,6 +408,7 @@ export interface FileRoutesById {
   '/admin/fia': typeof AdminFiaRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
+  '/admin/mcp': typeof AdminMcpRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -374,6 +421,7 @@ export interface FileRoutesById {
   '/store/$slug': typeof StoreSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/fia-preparation/': typeof FiaPreparationIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/payfast-callback': typeof ApiPublicPayfastCallbackRoute
   '/api/public/sim': typeof ApiPublicSimRoute
 }
@@ -389,6 +437,7 @@ export interface FileRouteTypes {
     | '/fake-whatsapp'
     | '/fia-preparation'
     | '/lucky-draw'
+    | '/mcp'
     | '/my-orders'
     | '/order'
     | '/payfast-result'
@@ -399,6 +448,8 @@ export interface FileRouteTypes {
     | '/sim-database'
     | '/store'
     | '/wishlist'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/activity'
     | '/admin/categories'
     | '/admin/coupons'
@@ -406,6 +457,7 @@ export interface FileRouteTypes {
     | '/admin/fia'
     | '/admin/home-items'
     | '/admin/lucky'
+    | '/admin/mcp'
     | '/admin/notifications'
     | '/admin/orders'
     | '/admin/products'
@@ -418,6 +470,7 @@ export interface FileRouteTypes {
     | '/store/$slug'
     | '/admin/'
     | '/fia-preparation/'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
   fileRoutesByTo: FileRoutesByTo
@@ -429,6 +482,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/fake-whatsapp'
     | '/lucky-draw'
+    | '/mcp'
     | '/my-orders'
     | '/order'
     | '/payfast-result'
@@ -439,6 +493,8 @@ export interface FileRouteTypes {
     | '/sim-database'
     | '/store'
     | '/wishlist'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/activity'
     | '/admin/categories'
     | '/admin/coupons'
@@ -446,6 +502,7 @@ export interface FileRouteTypes {
     | '/admin/fia'
     | '/admin/home-items'
     | '/admin/lucky'
+    | '/admin/mcp'
     | '/admin/notifications'
     | '/admin/orders'
     | '/admin/products'
@@ -458,6 +515,7 @@ export interface FileRouteTypes {
     | '/store/$slug'
     | '/admin'
     | '/fia-preparation'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
   id:
@@ -471,6 +529,7 @@ export interface FileRouteTypes {
     | '/fake-whatsapp'
     | '/fia-preparation'
     | '/lucky-draw'
+    | '/mcp'
     | '/my-orders'
     | '/order'
     | '/payfast-result'
@@ -481,6 +540,8 @@ export interface FileRouteTypes {
     | '/sim-database'
     | '/store'
     | '/wishlist'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/activity'
     | '/admin/categories'
     | '/admin/coupons'
@@ -488,6 +549,7 @@ export interface FileRouteTypes {
     | '/admin/fia'
     | '/admin/home-items'
     | '/admin/lucky'
+    | '/admin/mcp'
     | '/admin/notifications'
     | '/admin/orders'
     | '/admin/products'
@@ -500,6 +562,7 @@ export interface FileRouteTypes {
     | '/store/$slug'
     | '/admin/'
     | '/fia-preparation/'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/payfast-callback'
     | '/api/public/sim'
   fileRoutesById: FileRoutesById
@@ -514,6 +577,7 @@ export interface RootRouteChildren {
   FakeWhatsappRoute: typeof FakeWhatsappRoute
   FiaPreparationRoute: typeof FiaPreparationRouteWithChildren
   LuckyDrawRoute: typeof LuckyDrawRoute
+  McpRoute: typeof McpRoute
   MyOrdersRoute: typeof MyOrdersRoute
   OrderRoute: typeof OrderRoute
   PayfastResultRoute: typeof PayfastResultRoute
@@ -524,7 +588,10 @@ export interface RootRouteChildren {
   SimDatabaseRoute: typeof SimDatabaseRoute
   StoreRoute: typeof StoreRouteWithChildren
   WishlistRoute: typeof WishlistRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicPayfastCallbackRoute: typeof ApiPublicPayfastCallbackRoute
   ApiPublicSimRoute: typeof ApiPublicSimRoute
 }
@@ -599,6 +666,13 @@ declare module '@tanstack/react-router' {
       path: '/my-orders'
       fullPath: '/my-orders'
       preLoaderRoute: typeof MyOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lucky-draw': {
@@ -748,6 +822,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNotificationsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/mcp': {
+      id: '/admin/mcp'
+      path: '/mcp'
+      fullPath: '/admin/mcp'
+      preLoaderRoute: typeof AdminMcpRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/lucky': {
       id: '/admin/lucky'
       path: '/lucky'
@@ -797,6 +878,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminActivityRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/sim': {
       id: '/api/public/sim'
       path: '/api/public/sim'
@@ -811,6 +906,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPayfastCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -822,6 +924,7 @@ interface AdminRouteChildren {
   AdminFiaRoute: typeof AdminFiaRoute
   AdminHomeItemsRoute: typeof AdminHomeItemsRoute
   AdminLuckyRoute: typeof AdminLuckyRoute
+  AdminMcpRoute: typeof AdminMcpRoute
   AdminNotificationsRoute: typeof AdminNotificationsRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
@@ -840,6 +943,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminFiaRoute: AdminFiaRoute,
   AdminHomeItemsRoute: AdminHomeItemsRoute,
   AdminLuckyRoute: AdminLuckyRoute,
+  AdminMcpRoute: AdminMcpRoute,
   AdminNotificationsRoute: AdminNotificationsRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,
@@ -886,6 +990,7 @@ const rootRouteChildren: RootRouteChildren = {
   FakeWhatsappRoute: FakeWhatsappRoute,
   FiaPreparationRoute: FiaPreparationRouteWithChildren,
   LuckyDrawRoute: LuckyDrawRoute,
+  McpRoute: McpRoute,
   MyOrdersRoute: MyOrdersRoute,
   OrderRoute: OrderRoute,
   PayfastResultRoute: PayfastResultRoute,
@@ -896,7 +1001,11 @@ const rootRouteChildren: RootRouteChildren = {
   SimDatabaseRoute: SimDatabaseRoute,
   StoreRoute: StoreRouteWithChildren,
   WishlistRoute: WishlistRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ProductsSlugRoute: ProductsSlugRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicPayfastCallbackRoute: ApiPublicPayfastCallbackRoute,
   ApiPublicSimRoute: ApiPublicSimRoute,
 }
