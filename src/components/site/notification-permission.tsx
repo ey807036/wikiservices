@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
-import { Bell, X } from "lucide-react";
+import { Bell, ShieldAlert } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { VAPID_PUBLIC_KEY, urlBase64ToUint8Array } from "@/lib/push-config";
 import { toast } from "sonner";
 
-const DISMISS_KEY = "__push_perm_dismissed_v1";
 const SUBSCRIBED_KEY = "__push_perm_subscribed_v1";
 
 export function NotificationPermission() {
-  const [show, setShow] = useState(false);
+  const [supported, setSupported] = useState(true);
+  const [granted, setGranted] = useState(false);
+  const [denied, setDenied] = useState(false);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) return;
-
-    // Register service worker once
+    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+      setSupported(false);
+      return;
+    }
     navigator.serviceWorker.register("/sw.js").catch(() => {});
-
-    // Listen for SW navigation messages
     const onMsg = (e: MessageEvent) => {
       if (e.data?.type === "navigate" && e.data.url) window.location.href = e.data.url;
     };
@@ -26,20 +26,12 @@ export function NotificationPermission() {
 
     const perm = Notification.permission;
     if (perm === "granted") {
-      // Already granted — ensure DB has our subscription and never ask again
+      setGranted(true);
       ensureSubscribed();
-      return () => navigator.serviceWorker.removeEventListener("message", onMsg);
+    } else if (perm === "denied") {
+      setDenied(true);
     }
-    if (perm === "denied") return () => navigator.serviceWorker.removeEventListener("message", onMsg);
-
-    if (localStorage.getItem(DISMISS_KEY) === "1") return () => navigator.serviceWorker.removeEventListener("message", onMsg);
-
-    // Show our styled prompt after a short delay
-    const t = setTimeout(() => setShow(true), 2500);
-    return () => {
-      clearTimeout(t);
-      navigator.serviceWorker.removeEventListener("message", onMsg);
-    };
+    return () => navigator.serviceWorker.removeEventListener("message", onMsg);
   }, []);
 
   async function ensureSubscribed() {
@@ -77,118 +69,115 @@ export function NotificationPermission() {
       const perm = await Notification.requestPermission();
       if (perm === "granted") {
         await ensureSubscribed();
+        setGranted(true);
         toast.success("Notifications on ho gayi! 🔔");
-        setShow(false);
-      } else {
-        localStorage.setItem(DISMISS_KEY, "1");
-        setShow(false);
+      } else if (perm === "denied") {
+        setDenied(true);
       }
     } finally {
       setBusy(false);
     }
   }
 
-  function dismiss() {
-    localStorage.setItem(DISMISS_KEY, "1");
-    setShow(false);
-  }
-
-  if (!show) return null;
+  // Unsupported browser: don't block (iOS Safari without PWA, older browsers)
+  if (!supported) return null;
+  // Already granted or nothing to do
+  if (granted) return null;
 
   return (
     <div
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 210,
-        background: "rgba(0,0,0,0.7)",
-        backdropFilter: "blur(6px)",
+        zIndex: 2147483000,
+        background: "rgba(0,0,0,0.92)",
+        backdropFilter: "blur(10px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         padding: 16,
       }}
+      role="dialog"
+      aria-modal="true"
     >
       <div
         style={{
-          maxWidth: 380,
+          maxWidth: 420,
           width: "100%",
           background: "linear-gradient(180deg,#0b0b0b 0%,#111 100%)",
           border: "1px solid rgba(239,68,68,0.55)",
           borderRadius: 24,
-          padding: 24,
+          padding: 28,
           boxShadow: "0 20px 60px rgba(239,68,68,0.35)",
           color: "white",
-          position: "relative",
           textAlign: "center",
         }}
       >
-        <button
-          aria-label="Close"
-          onClick={dismiss}
-          style={{
-            position: "absolute",
-            top: 10,
-            right: 10,
-            background: "transparent",
-            border: 0,
-            color: "rgba(255,255,255,0.6)",
-            cursor: "pointer",
-          }}
-        >
-          <X size={18} />
-        </button>
         <div
           style={{
-            width: 72,
-            height: 72,
+            width: 84,
+            height: 84,
             borderRadius: "50%",
             background: "radial-gradient(circle,#ef4444 0%,#7f1d1d 100%)",
-            margin: "0 auto 14px",
+            margin: "0 auto 16px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             boxShadow: "0 0 40px rgba(239,68,68,0.7)",
           }}
         >
-          <Bell size={34} color="white" />
+          {denied ? <ShieldAlert size={38} color="white" /> : <Bell size={38} color="white" />}
         </div>
-        <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 6 }}>Notifications On karein</h3>
-        <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", marginBottom: 20, lineHeight: 1.5 }}>
-          Naye products, offers, aur updates ki khabar seedha aap ke phone par — chahe website band ho.
+        <h3 style={{ fontSize: 22, fontWeight: 800, marginBottom: 8 }}>
+          {denied ? "Notifications Blocked Hain" : "Notifications On Karein"}
+        </h3>
+        <p style={{ fontSize: 14, color: "rgba(255,255,255,0.8)", marginBottom: 22, lineHeight: 1.6 }}>
+          {denied
+            ? "Aap ne notifications block ki hain. Site use karne ke liye browser settings mein ja kar is site ke liye notifications 'Allow' karein, phir page reload karein."
+            : "Site use karne ke liye notifications on karna zaroori hai. Naye products, offers, aur updates seedha aap ke phone par pohnchein ge — chahe website band ho."}
         </p>
-        <button
-          disabled={busy}
-          onClick={enable}
-          style={{
-            width: "100%",
-            padding: "12px 16px",
-            borderRadius: 12,
-            border: 0,
-            background: "linear-gradient(90deg,#ef4444,#dc2626)",
-            color: "white",
-            fontWeight: 700,
-            fontSize: 15,
-            cursor: busy ? "wait" : "pointer",
-            boxShadow: "0 6px 24px rgba(239,68,68,0.5)",
-          }}
-        >
-          {busy ? "Enabling..." : "Allow Notifications"}
-        </button>
-        <button
-          onClick={dismiss}
-          style={{
-            marginTop: 10,
-            background: "transparent",
-            border: 0,
-            color: "rgba(255,255,255,0.55)",
-            fontSize: 13,
-            textDecoration: "underline",
-            cursor: "pointer",
-          }}
-        >
-          Abhi nahi
-        </button>
+        {!denied && (
+          <button
+            disabled={busy}
+            onClick={enable}
+            style={{
+              width: "100%",
+              padding: "14px 16px",
+              borderRadius: 12,
+              border: 0,
+              background: "linear-gradient(90deg,#ef4444,#dc2626)",
+              color: "white",
+              fontWeight: 800,
+              fontSize: 16,
+              cursor: busy ? "wait" : "pointer",
+              boxShadow: "0 6px 24px rgba(239,68,68,0.5)",
+            }}
+          >
+            {busy ? "Enabling..." : "Allow Notifications"}
+          </button>
+        )}
+        {denied && (
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              width: "100%",
+              padding: "14px 16px",
+              borderRadius: 12,
+              border: 0,
+              background: "linear-gradient(90deg,#ef4444,#dc2626)",
+              color: "white",
+              fontWeight: 800,
+              fontSize: 16,
+              cursor: "pointer",
+              boxShadow: "0 6px 24px rgba(239,68,68,0.5)",
+            }}
+          >
+            Reload Page
+          </button>
+        )}
+        <p style={{ marginTop: 14, fontSize: 12, color: "rgba(255,255,255,0.45)" }}>
+          Aik dafa allow karne ke baad yeh popup dobara nahi aayega.
+        </p>
       </div>
     </div>
   );
