@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-type SendInput = { title: string; body: string; url?: string; icon?: string };
+type SendInput = { title: string; body: string; url?: string; icon?: string; verified?: boolean; silent?: boolean };
 
 export const sendPushNotification = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -12,6 +12,8 @@ export const sendPushNotification = createServerFn({ method: "POST" })
       body: String(input.body).slice(0, 500),
       url: input.url ? String(input.url).slice(0, 500) : "/",
       icon: input.icon ? String(input.icon).slice(0, 500) : undefined,
+      verified: !!input.verified,
+      silent: !!input.silent,
     };
   })
   .handler(async ({ data, context }) => {
