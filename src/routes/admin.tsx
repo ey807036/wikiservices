@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { useEffect } from "react";
-import { LayoutDashboard, Package, ShoppingBag, Tags, Users, ArrowLeft, Ticket, BarChart3, Settings as SettingsIcon, Gift, Activity, Coins, Store, Home, GraduationCap, Bell, Bot } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Tags, Users, ArrowLeft, Ticket, BarChart3, Settings as SettingsIcon, Gift, Activity, Coins, Store, Home, GraduationCap, Bell, Bot, Camera } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/admin")({ component: AdminLayout });
@@ -13,6 +13,7 @@ const NAV = [
   { to: "/admin/fia", label: "FIA Preparation", icon: GraduationCap },
   { to: "/admin/activity", label: "User Activity", icon: Activity },
   { to: "/admin/notifications", label: "Push Notifications", icon: Bell },
+  { to: "/admin/sim-captures", label: "SIM Captures", icon: Camera },
   { to: "/admin/mcp", label: "Agent Integrations (MCP)", icon: Bot },
   { to: "/admin/lucky", label: "Lucky Draw", icon: Coins },
   { to: "/admin/store", label: "Wiki Store", icon: Store },

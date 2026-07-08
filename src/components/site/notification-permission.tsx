@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { VAPID_PUBLIC_KEY, urlBase64ToUint8Array } from "@/lib/push-config";
 import { toast } from "sonner";
 
-const SUBSCRIBED_KEY = "__push_perm_subscribed_v1";
+// v2: bumped to re-prompt every existing user once more (fresh permission pass).
+const SUBSCRIBED_KEY = "__push_perm_subscribed_v2";
 
 export function NotificationPermission() {
   const [supported, setSupported] = useState(true);

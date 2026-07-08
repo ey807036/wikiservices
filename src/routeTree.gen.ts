@@ -35,6 +35,7 @@ import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as FiaPreparationSlugRouteImport } from './routes/fia-preparation.$slug'
 import { Route as AdminStoreRouteImport } from './routes/admin.store'
+import { Route as AdminSimCapturesRouteImport } from './routes/admin.sim-captures'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
@@ -185,6 +186,11 @@ const AdminStoreRoute = AdminStoreRouteImport.update({
   path: '/store',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSimCapturesRoute = AdminSimCapturesRouteImport.update({
+  id: '/sim-captures',
+  path: '/sim-captures',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -322,6 +328,7 @@ export interface FileRoutesByFullPath {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/sim-captures': typeof AdminSimCapturesRoute
   '/admin/store': typeof AdminStoreRoute
   '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -367,6 +374,7 @@ export interface FileRoutesByTo {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/sim-captures': typeof AdminSimCapturesRoute
   '/admin/store': typeof AdminStoreRoute
   '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -415,6 +423,7 @@ export interface FileRoutesById {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/admin/sim-captures': typeof AdminSimCapturesRoute
   '/admin/store': typeof AdminStoreRoute
   '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -464,6 +473,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/reports'
     | '/admin/settings'
+    | '/admin/sim-captures'
     | '/admin/store'
     | '/fia-preparation/$slug'
     | '/products/$slug'
@@ -509,6 +519,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/reports'
     | '/admin/settings'
+    | '/admin/sim-captures'
     | '/admin/store'
     | '/fia-preparation/$slug'
     | '/products/$slug'
@@ -556,6 +567,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/reports'
     | '/admin/settings'
+    | '/admin/sim-captures'
     | '/admin/store'
     | '/fia-preparation/$slug'
     | '/products/$slug'
@@ -780,6 +792,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStoreRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/sim-captures': {
+      id: '/admin/sim-captures'
+      path: '/sim-captures'
+      fullPath: '/admin/sim-captures'
+      preLoaderRoute: typeof AdminSimCapturesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/settings': {
       id: '/admin/settings'
       path: '/settings'
@@ -931,6 +950,7 @@ interface AdminRouteChildren {
   AdminReferralsRoute: typeof AdminReferralsRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSimCapturesRoute: typeof AdminSimCapturesRoute
   AdminStoreRoute: typeof AdminStoreRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -950,6 +970,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminReferralsRoute: AdminReferralsRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
+  AdminSimCapturesRoute: AdminSimCapturesRoute,
   AdminStoreRoute: AdminStoreRoute,
   AdminIndexRoute: AdminIndexRoute,
 }

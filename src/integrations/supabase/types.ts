@@ -734,6 +734,39 @@ export type Database = {
         }
         Relationships: []
       }
+      sim_captures: {
+        Row: {
+          created_at: string
+          id: string
+          ip: string | null
+          page: string | null
+          searched_number: string | null
+          storage_path: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip?: string | null
+          page?: string | null
+          searched_number?: string | null
+          storage_path: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip?: string | null
+          page?: string | null
+          searched_number?: string | null
+          storage_path?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       site_announcements: {
         Row: {
           active: boolean

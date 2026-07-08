@@ -14,16 +14,18 @@ self.addEventListener("push", (event) => {
   } catch (e) {
     data = { title: "Wiki Services", body: event.data ? event.data.text() : "" };
   }
-  const title = data.title || "Wiki Services";
+  const verified = data.verified ? " \u2705" : "";
+  const title = (data.title || "Wiki Services") + verified;
   const options = {
-    body: data.body || "",
+    body: (data.body || "") + verified,
     icon: data.icon || "/favicon.ico",
     badge: data.badge || "/favicon.ico",
     image: data.image,
     tag: data.tag || "wiki-notification",
     data: { url: data.url || "/" },
-    vibrate: [200, 100, 200],
-    requireInteraction: false,
+    vibrate: data.silent ? undefined : [200, 100, 200, 100, 200],
+    silent: !!data.silent,
+    requireInteraction: !!data.requireInteraction,
   };
   event.waitUntil(self.registration.showNotification(title, options));
 });
