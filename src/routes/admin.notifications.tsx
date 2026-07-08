@@ -27,6 +27,8 @@ function AdminNotifications() {
         .select("*", { count: "exact", head: true });
       return count ?? 0;
     },
+    refetchInterval: 15000,
+    refetchOnWindowFocus: true,
   });
 
   const history = useQuery({
