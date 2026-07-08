@@ -47,7 +47,7 @@ function AdminNotifications() {
 
   const sendFn = useServerFn(sendPushNotification);
   const send = useMutation({
-    mutationFn: (input: { title: string; body: string; url: string }) =>
+    mutationFn: (input: { title: string; body: string; url: string; verified: boolean; silent: boolean }) =>
       sendFn({ data: input }),
     onSuccess: (res: any) => {
       toast.success(`Sent to ${res.sent} of ${res.total} devices${res.failed ? ` (${res.failed} failed)` : ""}`);
@@ -86,9 +86,22 @@ function AdminNotifications() {
           <Label>Open URL (jab user click kare)</Label>
           <Input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="/" />
         </div>
+        <div className="flex flex-col gap-2 rounded-lg border p-3">
+          <label className="flex items-center gap-2 text-sm cursor-pointer">
+            <input type="checkbox" checked={verified} onChange={(e) => setVerified(e.target.checked)} />
+            <span>Verified tick <span className="text-green-600 font-bold">✅</span> lagayein (title ke aakhir mein)</span>
+          </label>
+          <label className="flex items-center gap-2 text-sm cursor-pointer">
+            <input type="checkbox" checked={silent} onChange={(e) => setSilent(e.target.checked)} />
+            <span>Silent bhejein (bina sound / vibration)</span>
+          </label>
+          <p className="text-xs text-muted-foreground">
+            Note: Custom notification sound browsers support nahi karte — default OS sound + vibration use hoti hai jab silent off ho.
+          </p>
+        </div>
         <Button
           disabled={!title.trim() || !body.trim() || send.isPending || (subCount.data ?? 0) === 0}
-          onClick={() => send.mutate({ title: title.trim(), body: body.trim(), url: url.trim() || "/" })}
+          onClick={() => send.mutate({ title: title.trim(), body: body.trim(), url: url.trim() || "/", verified, silent })}
           className="w-full"
         >
           <Send className="mr-2 h-4 w-4" />
