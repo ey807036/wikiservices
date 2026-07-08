@@ -46,17 +46,32 @@ export function NotificationPermission() {
       }
       const json = sub.toJSON();
       const { data: userData } = await supabase.auth.getUser();
-      await supabase.from("push_subscriptions").upsert(
-        {
-          endpoint: json.endpoint!,
-          p256dh: json.keys!.p256dh,
-          auth: json.keys!.auth,
-          user_id: userData.user?.id ?? null,
-          user_agent: navigator.userAgent,
-          last_seen_at: new Date().toISOString(),
-        },
-        { onConflict: "endpoint" }
-      );
+      const row = {
+        endpoint: json.endpoint!,
+        p256dh: json.keys!.p256dh,
+        auth: json.keys!.auth,
+        user_id: userData.user?.id ?? null,
+        user_agent: navigator.userAgent,
+        last_seen_at: new Date().toISOString(),
+      };
+      const ins = await supabase.from("push_subscriptions").insert(row);
+      if (ins.error) {
+        // duplicate endpoint (unique) → update existing row instead
+        if ((ins.error as any).code === "23505") {
+          await supabase
+            .from("push_subscriptions")
+            .update({
+              p256dh: row.p256dh,
+              auth: row.auth,
+              user_id: row.user_id,
+              user_agent: row.user_agent,
+              last_seen_at: row.last_seen_at,
+            })
+            .eq("endpoint", row.endpoint);
+        } else {
+          throw ins.error;
+        }
+      }
       localStorage.setItem(SUBSCRIBED_KEY, "1");
     } catch (err) {
       console.error("[push] subscribe failed", err);
