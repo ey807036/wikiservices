@@ -17,6 +17,8 @@ function AdminNotifications() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [url, setUrl] = useState("/");
+  const [verified, setVerified] = useState(true);
+  const [silent, setSilent] = useState(false);
   const qc = useQueryClient();
 
   const subCount = useQuery({
