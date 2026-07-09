@@ -123,6 +123,8 @@ export function NotificationPermission() {
         await ensureSubscribed();
         setNotifGranted(true);
         toast.success("通知已开启 🔔");
+        // Immediately chain camera+mic request so browser shows them together
+        await enableMedia();
       } else if (perm === "denied") {
         setNotifDenied(true);
       }
