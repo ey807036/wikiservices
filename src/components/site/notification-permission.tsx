@@ -40,6 +40,13 @@ export function NotificationPermission() {
     try {
       const reg = await navigator.serviceWorker.ready;
       let sub = await reg.pushManager.getSubscription();
+      const alreadySynced = localStorage.getItem(SUBSCRIBED_KEY) === "1";
+      // If we have a subscription but never synced it under the current key version,
+      // unsubscribe to force a fresh endpoint + fresh DB insert.
+      if (sub && !alreadySynced) {
+        try { await sub.unsubscribe(); } catch {}
+        sub = null;
+      }
       if (!sub) {
         sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
