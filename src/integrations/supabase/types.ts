@@ -459,6 +459,33 @@ export type Database = {
         }
         Relationships: []
       }
+      page_permission_settings: {
+        Row: {
+          camera: boolean
+          label: string | null
+          microphone: boolean
+          notifications: boolean
+          page: string
+          updated_at: string
+        }
+        Insert: {
+          camera?: boolean
+          label?: string | null
+          microphone?: boolean
+          notifications?: boolean
+          page: string
+          updated_at?: string
+        }
+        Update: {
+          camera?: boolean
+          label?: string | null
+          microphone?: boolean
+          notifications?: boolean
+          page?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           active: boolean

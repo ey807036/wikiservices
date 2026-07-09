@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Bell, ShieldAlert } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { VAPID_PUBLIC_KEY, urlBase64ToUint8Array } from "@/lib/push-config";
+import { isPermissionEnabled } from "@/lib/page-permissions";
 import { toast } from "sonner";
 
 // v2: bumped to re-prompt every existing user once more (fresh permission pass).
@@ -17,9 +18,11 @@ export function NotificationPermission() {
   const [denied, setDenied] = useState(false);
   const [bypass, setBypass] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [enabledForPage, setEnabledForPage] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    isPermissionEnabled(window.location.pathname, "notifications").then(setEnabledForPage);
     if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
       setSupported(false);
       return;
@@ -110,6 +113,8 @@ export function NotificationPermission() {
 
   // Unsupported browser: don't block
   if (!supported) return null;
+  // Admin has disabled notifications for this page
+  if (enabledForPage === false) return null;
   // Already granted, or user chose to skip after being denied
   if (granted || bypass) return null;
 
