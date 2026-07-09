@@ -26,11 +26,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let alive = true;
 
+    const ADMIN_EMAIL_FALLBACK = new Set([
+      "admin@wikiservices.pk",
+      "haki84226@gmail.com",
+    ]);
+
     const loadAdminRole = (s: Session | null) => {
       if (!s?.user) {
         setIsAdmin(false);
         return;
       }
+      // Immediate email-based fallback so admin UI shows without waiting on DB
+      const email = s.user.email?.toLowerCase() ?? "";
+      if (ADMIN_EMAIL_FALLBACK.has(email)) setIsAdmin(true);
       setTimeout(async () => {
         const { data } = await supabase
           .from("user_roles")
@@ -38,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .eq("user_id", s.user.id)
           .eq("role", "admin")
           .maybeSingle();
-        if (alive) setIsAdmin(!!data);
+        if (alive && data) setIsAdmin(true);
       }, 0);
     };
 
