@@ -49,18 +49,39 @@ function AdminNotifications() {
 
   const sendFn = useServerFn(sendPushNotification);
   const send = useMutation({
-    mutationFn: (input: { title: string; body: string; url: string; verified: boolean; silent: boolean }) =>
+    mutationFn: (input: { title: string; body: string; url: string; image?: string; verified: boolean; silent: boolean }) =>
       sendFn({ data: input }),
     onSuccess: (res: any) => {
       toast.success(`Sent to ${res.sent} of ${res.total} devices${res.failed ? ` (${res.failed} failed)` : ""}`);
       setTitle("");
       setBody("");
       setUrl("/");
+      setImage("");
       qc.invalidateQueries({ queryKey: ["push-history"] });
       qc.invalidateQueries({ queryKey: ["push-sub-count"] });
     },
     onError: (e: any) => toast.error(e?.message ?? "Failed to send"),
   });
+
+  async function handleUpload(file: File) {
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop() || "png";
+      const path = `notifications/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+      const { error } = await supabase.storage.from("store-products").upload(path, file, {
+        cacheControl: "3600",
+        contentType: file.type || undefined,
+      });
+      if (error) throw error;
+      const { data } = supabase.storage.from("store-products").getPublicUrl(path);
+      setImage(data.publicUrl);
+      toast.success("Image upload ho gayi");
+    } catch (e: any) {
+      toast.error(e?.message ?? "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  }
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
