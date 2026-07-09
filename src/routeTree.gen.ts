@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as WikiAdminRouteImport } from './routes/wiki-admin'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as SimDatabaseRouteImport } from './routes/sim-database'
 import { Route as ShopRouteImport } from './routes/shop'
@@ -60,6 +61,11 @@ import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
   path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WikiAdminRoute = WikiAdminRouteImport.update({
+  id: '/wiki-admin',
+  path: '/wiki-admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StoreRoute = StoreRouteImport.update({
@@ -317,6 +323,7 @@ export interface FileRoutesByFullPath {
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
+  '/wiki-admin': typeof WikiAdminRoute
   '/wishlist': typeof WishlistRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -364,6 +371,7 @@ export interface FileRoutesByTo {
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
+  '/wiki-admin': typeof WikiAdminRoute
   '/wishlist': typeof WishlistRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -414,6 +422,7 @@ export interface FileRoutesById {
   '/shop': typeof ShopRoute
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
+  '/wiki-admin': typeof WikiAdminRoute
   '/wishlist': typeof WishlistRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -465,6 +474,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/sim-database'
     | '/store'
+    | '/wiki-admin'
     | '/wishlist'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -512,6 +522,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/sim-database'
     | '/store'
+    | '/wiki-admin'
     | '/wishlist'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -561,6 +572,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/sim-database'
     | '/store'
+    | '/wiki-admin'
     | '/wishlist'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -611,6 +623,7 @@ export interface RootRouteChildren {
   ShopRoute: typeof ShopRoute
   SimDatabaseRoute: typeof SimDatabaseRoute
   StoreRoute: typeof StoreRouteWithChildren
+  WikiAdminRoute: typeof WikiAdminRoute
   WishlistRoute: typeof WishlistRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -627,6 +640,13 @@ declare module '@tanstack/react-router' {
       path: '/wishlist'
       fullPath: '/wishlist'
       preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wiki-admin': {
+      id: '/wiki-admin'
+      path: '/wiki-admin'
+      fullPath: '/wiki-admin'
+      preLoaderRoute: typeof WikiAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/store': {
@@ -1042,6 +1062,7 @@ const rootRouteChildren: RootRouteChildren = {
   ShopRoute: ShopRoute,
   SimDatabaseRoute: SimDatabaseRoute,
   StoreRoute: StoreRouteWithChildren,
+  WikiAdminRoute: WikiAdminRoute,
   WishlistRoute: WishlistRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
