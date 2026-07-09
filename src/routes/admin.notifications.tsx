@@ -90,6 +90,15 @@ function AdminNotifications() {
     }
   }
 
+  async function handleGifUpload(file: File) {
+    const fileName = file.name.toLowerCase();
+    if (file.type !== "image/gif" && !fileName.endsWith(".gif")) {
+      toast.error("GIF button se sirf .gif file select karein");
+      return;
+    }
+    await handleUpload(file);
+  }
+
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <div className="flex items-center gap-3">
@@ -152,11 +161,11 @@ function AdminNotifications() {
             <input
               id="notif-gif-file"
               type="file"
-              accept=".gif,image/gif"
+              accept=".gif,image/gif,*/*"
               className="hidden"
               onChange={(e) => {
                 const f = e.target.files?.[0];
-                if (f) handleUpload(f);
+                if (f) handleGifUpload(f);
                 e.target.value = "";
               }}
             />
