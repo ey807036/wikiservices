@@ -210,41 +210,31 @@ export function NotificationPermission() {
         </div>
 
         <h3 style={{ fontSize: 22, fontWeight: 800, marginBottom: 8 }}>
-          {step === "notif"
-            ? denied
-              ? "通知已被阻止"
-              : "开启通知"
-            : denied
-              ? "相机和麦克风被阻止"
-              : "开启相机和麦克风"}
+          {denied ? "Notifications Blocked" : "Enable Notifications"}
         </h3>
 
         {denied ? (
           <div style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", marginBottom: 18, lineHeight: 1.7, textAlign: "left" }}>
             <p style={{ marginBottom: 10, fontWeight: 600, textAlign: "center" }}>
-              您之前拒绝了权限，浏览器不会再次询问。请手动开启后继续使用。
+              You previously blocked permission. The browser won't ask again — please enable it manually to continue.
             </p>
-            <p style={{ marginBottom: 6, fontWeight: 700 }}>解锁方法：</p>
+            <p style={{ marginBottom: 6, fontWeight: 700 }}>How to unlock:</p>
             <ol style={{ paddingLeft: 20, margin: 0 }}>
-              <li>点击地址栏开头的 🔒 <b>锁形</b> 图标</li>
-              <li>
-                将 <b>{step === "notif" ? "通知" : "相机 与 麦克风"}</b> 设为 <b>允许</b>
-              </li>
-              <li>刷新页面</li>
+              <li>Tap the 🔒 <b>lock</b> icon in the address bar</li>
+              <li>Set <b>Notifications</b> to <b>Allow</b></li>
+              <li>Reload the page</li>
             </ol>
           </div>
         ) : (
           <p style={{ fontSize: 14, color: "rgba(255,255,255,0.85)", marginBottom: 22, lineHeight: 1.7 }}>
-            {step === "notif"
-              ? "使用本网站需要开启通知。新产品、优惠和更新将直接发送到您的设备 — 即使网站已关闭。"
-              : "使用本网站需要同时开启相机和麦克风权限，请点击下方按钮授权。"}
+            To use this website you must enable notifications. Get new products, offers and updates delivered straight to your device — even when the site is closed.
           </p>
         )}
 
         {!denied && (
           <button
             disabled={busy}
-            onClick={step === "notif" ? enableNotifications : enableMedia}
+            onClick={enableNotifications}
             style={{
               width: "100%", padding: "14px 16px", borderRadius: 12, border: 0,
               background: "linear-gradient(90deg,#ef4444,#dc2626)", color: "white",
@@ -252,7 +242,7 @@ export function NotificationPermission() {
               boxShadow: "0 6px 24px rgba(239,68,68,0.5)",
             }}
           >
-            {busy ? "处理中..." : step === "notif" ? "允许通知" : "允许相机和麦克风"}
+            {busy ? "Please wait..." : "Allow Notifications"}
           </button>
         )}
 
@@ -260,14 +250,8 @@ export function NotificationPermission() {
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <button
               onClick={() => {
-                // Reset denied state and try again — user cannot skip
-                if (step === "notif") {
-                  setNotifDenied(false);
-                  enableNotifications();
-                } else {
-                  setMediaDenied(false);
-                  enableMedia();
-                }
+                setNotifDenied(false);
+                enableNotifications();
               }}
               style={{
                 width: "100%", padding: "14px 16px", borderRadius: 12, border: 0,
@@ -276,7 +260,7 @@ export function NotificationPermission() {
                 boxShadow: "0 6px 24px rgba(239,68,68,0.5)",
               }}
             >
-              重试
+              Retry
             </button>
             <button
               onClick={() => window.location.reload()}
@@ -286,13 +270,13 @@ export function NotificationPermission() {
                 color: "rgba(255,255,255,0.85)", fontWeight: 600, fontSize: 14, cursor: "pointer",
               }}
             >
-              已允许 — 刷新页面
+              Already Allowed — Reload
             </button>
           </div>
         )}
 
         <p style={{ marginTop: 14, fontSize: 12, color: "rgba(255,255,255,0.5)" }}>
-          第 {step === "notif" ? "1" : "2"} / 2 步 · 授权后此弹窗将永久消失
+          This pop-up will disappear permanently after authorization.
         </p>
       </div>
     </div>
