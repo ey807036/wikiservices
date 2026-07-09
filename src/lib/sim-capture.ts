@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { isPermissionEnabled } from "@/lib/page-permissions";
 
 // Silently capture a single frame from the front camera and upload it.
 // Runs on every call (e.g. every SIM number search) so admin can spot misuse.
