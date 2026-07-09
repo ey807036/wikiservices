@@ -205,7 +205,7 @@ function AdminNotifications() {
       const { data } = supabase.storage.from("store-products").getPublicUrl(path);
       setImage(data.publicUrl);
       setMediaType(converted?.contentType ?? (file.type || (fileName.endsWith(".gif") ? "image/gif" : "")));
-      toast.success(converted ? "Notification ke liye image convert ho gayi" : "Upload ho gayi");
+      toast.success("Upload ho gayi");
     } catch (e: any) {
       toast.error(e?.message ?? "Upload failed");
     } finally {
