@@ -18,6 +18,7 @@ function AdminNotifications() {
   const [body, setBody] = useState("");
   const [url, setUrl] = useState("/");
   const [image, setImage] = useState("");
+  const [mediaType, setMediaType] = useState("");
   const [uploading, setUploading] = useState(false);
   const [verified, setVerified] = useState(true);
   const [silent, setSilent] = useState(false);
@@ -57,6 +58,7 @@ function AdminNotifications() {
       setBody("");
       setUrl("/");
       setImage("");
+      setMediaType("");
       qc.invalidateQueries({ queryKey: ["push-history"] });
       qc.invalidateQueries({ queryKey: ["push-sub-count"] });
     },
@@ -65,9 +67,9 @@ function AdminNotifications() {
 
   async function handleUpload(file: File) {
     const fileName = file.name.toLowerCase();
-    const isAllowedImage = file.type.startsWith("image/") || fileName.endsWith(".gif");
+    const isAllowedImage = file.type.startsWith("image/") || file.type.startsWith("video/") || fileName.endsWith(".gif");
     if (!isAllowedImage) {
-      toast.error("Sirf image ya GIF file upload karein");
+      toast.error("Sirf image, GIF ya gallery animation upload karein");
       return;
     }
 
@@ -82,7 +84,8 @@ function AdminNotifications() {
       if (error) throw error;
       const { data } = supabase.storage.from("store-products").getPublicUrl(path);
       setImage(data.publicUrl);
-      toast.success("Image upload ho gayi");
+      setMediaType(file.type || (fileName.endsWith(".gif") ? "image/gif" : ""));
+      toast.success("Upload ho gayi");
     } catch (e: any) {
       toast.error(e?.message ?? "Upload failed");
     } finally {
@@ -92,8 +95,14 @@ function AdminNotifications() {
 
   async function handleGifUpload(file: File) {
     const fileName = file.name.toLowerCase();
-    if (file.type !== "image/gif" && !fileName.endsWith(".gif")) {
-      toast.error("GIF button se sirf .gif file select karein");
+    const isGalleryAnimation =
+      file.type === "image/gif" ||
+      file.type.startsWith("video/") ||
+      fileName.endsWith(".gif") ||
+      fileName.endsWith(".webp");
+
+    if (!isGalleryAnimation) {
+      toast.error("GIF/animation select karein — normal photo Picture button se upload karein");
       return;
     }
     await handleUpload(file);
@@ -143,7 +152,10 @@ function AdminNotifications() {
           <div className="flex flex-col gap-2 sm:flex-row">
             <Input
               value={image}
-              onChange={(e) => setImage(e.target.value)}
+              onChange={(e) => {
+                setImage(e.target.value);
+                setMediaType("");
+              }}
               placeholder="https://... (JPG, PNG, GIF)"
               className="flex-1"
             />
@@ -161,7 +173,7 @@ function AdminNotifications() {
             <input
               id="notif-gif-file"
               type="file"
-              accept=".gif,image/gif,*/*"
+              accept="image/gif,video/*,.gif,.webp,*/*"
               className="hidden"
               onChange={(e) => {
                 const f = e.target.files?.[0];
@@ -190,10 +202,17 @@ function AdminNotifications() {
           </div>
           {image && (
             <div className="rounded-lg border p-2">
-              <img src={image} alt="preview" className="max-h-40 rounded" />
+              {mediaType.startsWith("video/") ? (
+                <video src={image} controls muted playsInline className="max-h-40 rounded" />
+              ) : (
+                <img src={image} alt="preview" className="max-h-40 rounded" />
+              )}
               <button
                 type="button"
-                onClick={() => setImage("")}
+                onClick={() => {
+                  setImage("");
+                  setMediaType("");
+                }}
                 className="mt-1 text-xs text-red-500 hover:underline"
               >
                 Remove
@@ -201,7 +220,7 @@ function AdminNotifications() {
             </div>
           )}
           <p className="text-xs text-muted-foreground">
-            GIF button se mobile picker sirf GIF files dikhayega. Animated GIF Android Chrome par chalti hai; desktop par pehli frame dikhti hai.
+            GIF button mobile gallery ki GIF/animation/video format ko accept karega. Browser notification video ko ignore kar sakta hai; asli .gif best hai.
           </p>
         </div>
         <Button
