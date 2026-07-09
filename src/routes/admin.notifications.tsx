@@ -134,7 +134,7 @@ function AdminNotifications() {
             <input
               id="notif-image-file"
               type="file"
-              accept="image/png,image/jpeg,image/gif,image/webp"
+              accept="image/*,.gif"
               className="hidden"
               onChange={(e) => {
                 const f = e.target.files?.[0];
