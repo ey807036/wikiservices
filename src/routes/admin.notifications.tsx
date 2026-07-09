@@ -11,6 +11,104 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
+const MAX_NOTIFICATION_IMAGE_WIDTH = 1200;
+const MAX_NOTIFICATION_IMAGE_HEIGHT = 800;
+
+function getNotificationImageSize(width: number, height: number) {
+  const scale = Math.min(1, MAX_NOTIFICATION_IMAGE_WIDTH / width, MAX_NOTIFICATION_IMAGE_HEIGHT / height);
+  return {
+    width: Math.max(1, Math.round(width * scale)),
+    height: Math.max(1, Math.round(height * scale)),
+  };
+}
+
+function canvasToJpegBlob(canvas: HTMLCanvasElement) {
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (blob) resolve(blob);
+        else reject(new Error("Image convert nahi ho saki"));
+      },
+      "image/jpeg",
+      0.9
+    );
+  });
+}
+
+async function convertImageFileToNotificationJpeg(file: File) {
+  const localUrl = URL.createObjectURL(file);
+  try {
+    const img = new Image();
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error("GIF/image read nahi ho saki"));
+      img.src = localUrl;
+    });
+
+    const size = getNotificationImageSize(img.naturalWidth || img.width, img.naturalHeight || img.height);
+    const canvas = document.createElement("canvas");
+    canvas.width = size.width;
+    canvas.height = size.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Image convert nahi ho saki");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, size.width, size.height);
+    ctx.drawImage(img, 0, 0, size.width, size.height);
+    return canvasToJpegBlob(canvas);
+  } finally {
+    URL.revokeObjectURL(localUrl);
+  }
+}
+
+async function convertVideoFileToNotificationJpeg(file: File) {
+  const localUrl = URL.createObjectURL(file);
+  try {
+    const video = document.createElement("video");
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+    await new Promise<void>((resolve, reject) => {
+      video.onloadeddata = () => resolve();
+      video.onerror = () => reject(new Error("Animation/video read nahi ho saki"));
+      video.src = localUrl;
+      video.load();
+    });
+
+    const size = getNotificationImageSize(video.videoWidth, video.videoHeight);
+    const canvas = document.createElement("canvas");
+    canvas.width = size.width;
+    canvas.height = size.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Video convert nahi ho saki");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, size.width, size.height);
+    ctx.drawImage(video, 0, 0, size.width, size.height);
+    return canvasToJpegBlob(canvas);
+  } finally {
+    URL.revokeObjectURL(localUrl);
+  }
+}
+
+function shouldConvertForNotification(file: File) {
+  const fileName = file.name.toLowerCase();
+  return (
+    file.type === "image/gif" ||
+    file.type === "image/webp" ||
+    file.type.startsWith("video/") ||
+    fileName.endsWith(".gif") ||
+    fileName.endsWith(".webp")
+  );
+}
+
+async function convertForNotificationIfNeeded(file: File, forceConvert = false) {
+  const mustConvert = forceConvert || shouldConvertForNotification(file);
+  if (!mustConvert) return null;
+  const blob = file.type.startsWith("video/")
+    ? await convertVideoFileToNotificationJpeg(file)
+    : await convertImageFileToNotificationJpeg(file);
+  return { blob, ext: "jpg", contentType: "image/jpeg" };
+}
+
 export const Route = createFileRoute("/admin/notifications")({ component: AdminNotifications });
 
 function AdminNotifications() {
@@ -65,7 +163,7 @@ function AdminNotifications() {
     onError: (e: any) => toast.error(e?.message ?? "Failed to send"),
   });
 
-  async function handleUpload(file: File) {
+  async function handleUpload(file: File, options: { forceConvert?: boolean } = {}) {
     const fileName = file.name.toLowerCase();
     const isAllowedImage = file.type.startsWith("image/") || file.type.startsWith("video/") || fileName.endsWith(".gif");
     if (!isAllowedImage) {
@@ -75,17 +173,19 @@ function AdminNotifications() {
 
     setUploading(true);
     try {
-      const ext = file.name.split(".").pop()?.toLowerCase() || "png";
+      const converted = await convertForNotificationIfNeeded(file, options.forceConvert);
+      const uploadFile = converted?.blob ?? file;
+      const ext = converted?.ext ?? (file.name.split(".").pop()?.toLowerCase() ?? "png");
       const path = `notifications/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-      const { error } = await supabase.storage.from("store-products").upload(path, file, {
+      const { error } = await supabase.storage.from("store-products").upload(path, uploadFile, {
         cacheControl: "3600",
-        contentType: file.type || undefined,
+        contentType: converted?.contentType ?? (file.type || undefined),
       });
       if (error) throw error;
       const { data } = supabase.storage.from("store-products").getPublicUrl(path);
       setImage(data.publicUrl);
-      setMediaType(file.type || (fileName.endsWith(".gif") ? "image/gif" : ""));
-      toast.success("Upload ho gayi");
+      setMediaType(converted?.contentType ?? (file.type || (fileName.endsWith(".gif") ? "image/gif" : "")));
+      toast.success(converted ? "Notification ke liye image convert ho gayi" : "Upload ho gayi");
     } catch (e: any) {
       toast.error(e?.message ?? "Upload failed");
     } finally {
@@ -105,7 +205,7 @@ function AdminNotifications() {
       toast.error("GIF/animation select karein — normal photo Picture button se upload karein");
       return;
     }
-    await handleUpload(file);
+    await handleUpload(file, { forceConvert: true });
   }
 
   return (
@@ -220,7 +320,7 @@ function AdminNotifications() {
             </div>
           )}
           <p className="text-xs text-muted-foreground">
-            GIF button mobile gallery ki GIF/animation/video format ko accept karega. Browser notification video ko ignore kar sakta hai; asli .gif best hai.
+            GIF/animation ko app notification ke liye auto JPEG image mein convert karegi, taa ke notification mein picture show ho.
           </p>
         </div>
         <Button
