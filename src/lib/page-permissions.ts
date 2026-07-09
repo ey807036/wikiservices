@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export type PermKind = "camera" | "microphone" | "notifications";
+export type PermKind = "camera" | "microphone" | "notifications" | "location";
 
 export type PagePermRow = {
   page: string;
@@ -8,6 +8,7 @@ export type PagePermRow = {
   camera: boolean;
   microphone: boolean;
   notifications: boolean;
+  location: boolean;
   updated_at?: string;
 };
 
