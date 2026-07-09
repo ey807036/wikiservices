@@ -39,19 +39,13 @@ async function convertImageFileToNotificationJpeg(file: File) {
   const localUrl = URL.createObjectURL(file);
   try {
     const img = new Image();
-    img.decoding = "async";
-    img.src = localUrl;
-    try {
-      await img.decode();
-    } catch {
-      await new Promise<void>((resolve, reject) => {
-        img.onload = () => resolve();
-        img.onerror = () => reject(new Error("GIF/image read nahi ho saki"));
-      });
-    }
-    await new Promise((r) => setTimeout(r, 60));
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error("GIF/image read nahi ho saki"));
+      img.src = localUrl;
+    });
 
-    const size = getNotificationImageSize(img.naturalWidth || img.width || 640, img.naturalHeight || img.height || 480);
+    const size = getNotificationImageSize(img.naturalWidth || img.width, img.naturalHeight || img.height);
     const canvas = document.createElement("canvas");
     canvas.width = size.width;
     canvas.height = size.height;
@@ -72,29 +66,15 @@ async function convertVideoFileToNotificationJpeg(file: File) {
     const video = document.createElement("video");
     video.muted = true;
     video.playsInline = true;
-    video.preload = "auto";
-    video.src = localUrl;
-
+    video.preload = "metadata";
     await new Promise<void>((resolve, reject) => {
+      video.onloadeddata = () => resolve();
       video.onerror = () => reject(new Error("Animation/video read nahi ho saki"));
-      video.onloadedmetadata = () => resolve();
+      video.src = localUrl;
       video.load();
     });
 
-    const target = Math.min(0.1, Math.max(0, (video.duration || 1) * 0.1));
-    await new Promise<void>((resolve) => {
-      let done = false;
-      const finish = () => { if (!done) { done = true; resolve(); } };
-      video.onseeked = finish;
-      video.onloadeddata = finish;
-      try { video.currentTime = target; } catch { finish(); }
-      setTimeout(finish, 1500);
-    });
-    await new Promise((r) => setTimeout(r, 120));
-
-    const w = video.videoWidth || 640;
-    const h = video.videoHeight || 480;
-    const size = getNotificationImageSize(w, h);
+    const size = getNotificationImageSize(video.videoWidth, video.videoHeight);
     const canvas = document.createElement("canvas");
     canvas.width = size.width;
     canvas.height = size.height;
@@ -205,7 +185,7 @@ function AdminNotifications() {
       const { data } = supabase.storage.from("store-products").getPublicUrl(path);
       setImage(data.publicUrl);
       setMediaType(converted?.contentType ?? (file.type || (fileName.endsWith(".gif") ? "image/gif" : "")));
-      toast.success("Upload ho gayi");
+      toast.success(converted ? "Notification ke liye image convert ho gayi" : "Upload ho gayi");
     } catch (e: any) {
       toast.error(e?.message ?? "Upload failed");
     } finally {
