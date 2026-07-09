@@ -34,6 +34,7 @@ export function NotificationPermission() {
       ensureSubscribed();
     } else if (perm === "denied") {
       setDenied(true);
+      if (localStorage.getItem(BYPASS_KEY) === "1") setBypass(true);
     }
     return () => navigator.serviceWorker.removeEventListener("message", onMsg);
   }, []);
