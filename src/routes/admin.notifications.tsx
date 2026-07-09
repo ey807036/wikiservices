@@ -17,6 +17,8 @@ function AdminNotifications() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [url, setUrl] = useState("/");
+  const [image, setImage] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [verified, setVerified] = useState(true);
   const [silent, setSilent] = useState(false);
   const qc = useQueryClient();
