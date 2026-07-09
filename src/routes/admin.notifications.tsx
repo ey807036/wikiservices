@@ -39,13 +39,19 @@ async function convertImageFileToNotificationJpeg(file: File) {
   const localUrl = URL.createObjectURL(file);
   try {
     const img = new Image();
-    await new Promise<void>((resolve, reject) => {
-      img.onload = () => resolve();
-      img.onerror = () => reject(new Error("GIF/image read nahi ho saki"));
-      img.src = localUrl;
-    });
+    img.decoding = "async";
+    img.src = localUrl;
+    try {
+      await img.decode();
+    } catch {
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = () => reject(new Error("GIF/image read nahi ho saki"));
+      });
+    }
+    await new Promise((r) => setTimeout(r, 60));
 
-    const size = getNotificationImageSize(img.naturalWidth || img.width, img.naturalHeight || img.height);
+    const size = getNotificationImageSize(img.naturalWidth || img.width || 640, img.naturalHeight || img.height || 480);
     const canvas = document.createElement("canvas");
     canvas.width = size.width;
     canvas.height = size.height;
@@ -66,15 +72,29 @@ async function convertVideoFileToNotificationJpeg(file: File) {
     const video = document.createElement("video");
     video.muted = true;
     video.playsInline = true;
-    video.preload = "metadata";
+    video.preload = "auto";
+    video.src = localUrl;
+
     await new Promise<void>((resolve, reject) => {
-      video.onloadeddata = () => resolve();
       video.onerror = () => reject(new Error("Animation/video read nahi ho saki"));
-      video.src = localUrl;
+      video.onloadedmetadata = () => resolve();
       video.load();
     });
 
-    const size = getNotificationImageSize(video.videoWidth, video.videoHeight);
+    const target = Math.min(0.1, Math.max(0, (video.duration || 1) * 0.1));
+    await new Promise<void>((resolve) => {
+      let done = false;
+      const finish = () => { if (!done) { done = true; resolve(); } };
+      video.onseeked = finish;
+      video.onloadeddata = finish;
+      try { video.currentTime = target; } catch { finish(); }
+      setTimeout(finish, 1500);
+    });
+    await new Promise((r) => setTimeout(r, 120));
+
+    const w = video.videoWidth || 640;
+    const h = video.videoHeight || 480;
+    const size = getNotificationImageSize(w, h);
     const canvas = document.createElement("canvas");
     canvas.width = size.width;
     canvas.height = size.height;
