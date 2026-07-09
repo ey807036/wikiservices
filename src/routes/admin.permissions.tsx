@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Camera, Mic, Bell, Trash2, Plus, RefreshCw, ShieldCheck } from "lucide-react";
+import { Camera, Mic, Bell, MapPin, Trash2, Plus, RefreshCw, ShieldCheck } from "lucide-react";
 import { clearPagePermissionsCache, type PagePermRow } from "@/lib/page-permissions";
 
 export const Route = createFileRoute("/admin/permissions")({ component: AdminPermissions });
@@ -59,7 +59,7 @@ function AdminPermissions() {
     if (rows.some((r) => r.page === trimmed)) { toast.error("Already exists"); return; }
     const { data, error } = await supabase
       .from("page_permission_settings")
-      .insert({ page: trimmed, label: label.trim() || null, camera: false, microphone: false, notifications: false })
+      .insert({ page: trimmed, label: label.trim() || null, camera: false, microphone: false, notifications: false, location: false })
       .select()
       .single();
     if (error) { toast.error(error.message); return; }
@@ -155,13 +155,20 @@ function AdminPermissions() {
                   </Button>
                 )}
               </div>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <ToggleRow
                   icon={<Camera className="h-4 w-4" />}
                   label="Camera"
                   checked={row.camera}
                   disabled={saving === row.page}
                   onChange={(v) => updateRow(row.page, { camera: v })}
+                />
+                <ToggleRow
+                  icon={<MapPin className="h-4 w-4" />}
+                  label="Location"
+                  checked={row.location}
+                  disabled={saving === row.page}
+                  onChange={(v) => updateRow(row.page, { location: v })}
                 />
                 <ToggleRow
                   icon={<Mic className="h-4 w-4" />}

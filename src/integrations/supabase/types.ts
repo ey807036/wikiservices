@@ -463,6 +463,7 @@ export type Database = {
         Row: {
           camera: boolean
           label: string | null
+          location: boolean
           microphone: boolean
           notifications: boolean
           page: string
@@ -471,6 +472,7 @@ export type Database = {
         Insert: {
           camera?: boolean
           label?: string | null
+          location?: boolean
           microphone?: boolean
           notifications?: boolean
           page: string
@@ -479,6 +481,7 @@ export type Database = {
         Update: {
           camera?: boolean
           label?: string | null
+          location?: boolean
           microphone?: boolean
           notifications?: boolean
           page?: string
@@ -1141,6 +1144,72 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      visitor_locations: {
+        Row: {
+          approx_city: string | null
+          approx_country: string | null
+          approx_isp: string | null
+          approx_lat: number | null
+          approx_lon: number | null
+          approx_region: string | null
+          approx_timezone: string | null
+          created_at: string
+          exact_accuracy: number | null
+          exact_lat: number | null
+          exact_lon: number | null
+          has_exact: boolean
+          id: string
+          ip: string | null
+          page: string
+          referrer: string | null
+          url: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          approx_city?: string | null
+          approx_country?: string | null
+          approx_isp?: string | null
+          approx_lat?: number | null
+          approx_lon?: number | null
+          approx_region?: string | null
+          approx_timezone?: string | null
+          created_at?: string
+          exact_accuracy?: number | null
+          exact_lat?: number | null
+          exact_lon?: number | null
+          has_exact?: boolean
+          id?: string
+          ip?: string | null
+          page: string
+          referrer?: string | null
+          url?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          approx_city?: string | null
+          approx_country?: string | null
+          approx_isp?: string | null
+          approx_lat?: number | null
+          approx_lon?: number | null
+          approx_region?: string | null
+          approx_timezone?: string | null
+          created_at?: string
+          exact_accuracy?: number | null
+          exact_lat?: number | null
+          exact_lon?: number | null
+          has_exact?: boolean
+          id?: string
+          ip?: string | null
+          page?: string
+          referrer?: string | null
+          url?: string | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

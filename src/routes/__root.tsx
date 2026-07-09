@@ -22,6 +22,7 @@ import { SiteAnnouncementPopup } from "@/components/site/site-announcement-popup
 import { PageLoader } from "@/components/site/page-loader";
 import { SiteProtection } from "@/components/site/site-protection";
 import { NotificationPermission } from "@/components/site/notification-permission";
+import { VisitorLocationTracker } from "@/components/site/visitor-location-tracker";
 
 function NotFoundComponent() {
   return (
@@ -138,6 +139,7 @@ function RootComponent() {
             <FloatingChrome />
             <WhatsAppChannelPopup />
             <NotificationPermission />
+            <VisitorLocationTracker />
             <PageLoaderGate />
             <SiteProtection />
             <Toaster richColors position="top-right" />
