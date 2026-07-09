@@ -7,11 +7,13 @@ import { toast } from "sonner";
 // v2: bumped to re-prompt every existing user once more (fresh permission pass).
 // v3: force re-sync for users who granted permission earlier but never got saved in DB.
 const SUBSCRIBED_KEY = "__push_perm_subscribed_v3";
+const BYPASS_KEY = "__push_perm_bypass_v1"; // set when a denied user chooses "Skip for now"
 
 export function NotificationPermission() {
   const [supported, setSupported] = useState(true);
   const [granted, setGranted] = useState(false);
   const [denied, setDenied] = useState(false);
+  const [bypass, setBypass] = useState(false);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
