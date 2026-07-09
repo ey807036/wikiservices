@@ -175,16 +175,16 @@ function AdminNotifications() {
     try {
       const converted = await convertForNotificationIfNeeded(file, options.forceConvert);
       const uploadFile = converted?.blob ?? file;
-      const ext = converted?.ext ?? file.name.split(".").pop()?.toLowerCase() ?? "png";
+      const ext = converted?.ext ?? (file.name.split(".").pop()?.toLowerCase() ?? "png");
       const path = `notifications/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
       const { error } = await supabase.storage.from("store-products").upload(path, uploadFile, {
         cacheControl: "3600",
-        contentType: converted?.contentType ?? file.type || undefined,
+        contentType: converted?.contentType ?? (file.type || undefined),
       });
       if (error) throw error;
       const { data } = supabase.storage.from("store-products").getPublicUrl(path);
       setImage(data.publicUrl);
-      setMediaType(converted?.contentType ?? file.type || (fileName.endsWith(".gif") ? "image/gif" : ""));
+      setMediaType(converted?.contentType ?? (file.type || (fileName.endsWith(".gif") ? "image/gif" : "")));
       toast.success(converted ? "Notification ke liye image convert ho gayi" : "Upload ho gayi");
     } catch (e: any) {
       toast.error(e?.message ?? "Upload failed");
