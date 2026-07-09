@@ -1,12 +1,11 @@
 import { createFileRoute, Outlet, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
+import { isAdminEmail } from "@/lib/admin-access";
 import { useEffect } from "react";
 import { LayoutDashboard, Package, ShoppingBag, Tags, Users, ArrowLeft, Ticket, BarChart3, Settings as SettingsIcon, Gift, Activity, Coins, Store, Home, GraduationCap, Bell, Bot, Camera } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/admin")({ component: AdminLayout });
-
-const ADMIN_EMAILS = ["admin@wikiservices.pk", "haki84226@gmail.com"];
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -33,7 +32,7 @@ function AdminLayout() {
   const navigate = useNavigate();
   const path = useRouterState({ select: s => s.location.pathname });
 
-  const allowed = !!user && isAdmin && ADMIN_EMAILS.includes(user.email?.toLowerCase() ?? "");
+  const allowed = !!user && (isAdmin || isAdminEmail(user.email));
 
   useEffect(() => {
     if (loading) return;
