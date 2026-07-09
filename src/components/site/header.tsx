@@ -134,6 +134,15 @@ export function Header() {
               {n.label}
             </Link>
           ))}
+          {canAccessAdmin && (
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              Admin Panel
+            </Link>
+          )}
         </nav>
 
         <form onSubmit={submitSearch} className="ml-auto hidden flex-1 max-w-md md:block">

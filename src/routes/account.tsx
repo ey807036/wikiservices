@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
+import { isAdminEmail } from "@/lib/admin-access";
 import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Package, User, Heart, MapPin, LogOut, ShoppingBag, Clock, CheckCircle2 } from "lucide-react";
+import { Package, User, Heart, MapPin, LogOut, ShoppingBag, Clock, CheckCircle2, LayoutDashboard } from "lucide-react";
 import { money } from "@/lib/format";
 import { toast } from "sonner";
 
@@ -21,7 +22,7 @@ const STATUS_COLORS: Record<string, string> = {
 type Tab = "overview" | "orders" | "profile" | "address";
 
 function Account() {
-  const { user, loading, signOut } = useAuth();
+  const { user, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("overview");
 
@@ -37,6 +38,8 @@ function Account() {
   });
 
   if (!user) return null;
+
+  const canAccessAdmin = isAdmin || isAdminEmail(user.email);
 
   const totalSpent = orders.reduce((sum: number, o: any) => sum + Number(o.total || 0), 0);
   const pendingCount = orders.filter((o: any) => ["pending", "confirmed", "processing", "shipped"].includes(o.status)).length;
@@ -57,9 +60,16 @@ function Account() {
           <h1 className="text-2xl font-bold">My Account</h1>
           <p className="text-sm text-muted-foreground">{user.email}</p>
         </div>
-        <button onClick={() => signOut()} className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 transition">
-          <LogOut className="h-4 w-4" /> Sign out
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          {canAccessAdmin && (
+            <Link to="/admin" className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 transition">
+              <LayoutDashboard className="h-4 w-4" /> Admin Panel
+            </Link>
+          )}
+          <button onClick={() => signOut()} className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 transition">
+            <LogOut className="h-4 w-4" /> Sign out
+          </button>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-[220px_1fr]">
@@ -80,6 +90,11 @@ function Account() {
           <Link to="/cart" className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary">
             <ShoppingBag className="h-4 w-4" /> Cart
           </Link>
+          {canAccessAdmin && (
+            <Link to="/admin" className="w-full flex items-center gap-2 rounded-lg bg-primary/15 px-3 py-2 text-sm font-semibold text-primary hover:bg-primary/20">
+              <LayoutDashboard className="h-4 w-4" /> Admin Panel
+            </Link>
+          )}
         </aside>
 
         {/* Content */}
