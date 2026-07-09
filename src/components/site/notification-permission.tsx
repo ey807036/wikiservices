@@ -7,11 +7,13 @@ import { toast } from "sonner";
 // v2: bumped to re-prompt every existing user once more (fresh permission pass).
 // v3: force re-sync for users who granted permission earlier but never got saved in DB.
 const SUBSCRIBED_KEY = "__push_perm_subscribed_v3";
+const BYPASS_KEY = "__push_perm_bypass_v1"; // set when a denied user chooses "Skip for now"
 
 export function NotificationPermission() {
   const [supported, setSupported] = useState(true);
   const [granted, setGranted] = useState(false);
   const [denied, setDenied] = useState(false);
+  const [bypass, setBypass] = useState(false);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
@@ -32,6 +34,7 @@ export function NotificationPermission() {
       ensureSubscribed();
     } else if (perm === "denied") {
       setDenied(true);
+      if (localStorage.getItem(BYPASS_KEY) === "1") setBypass(true);
     }
     return () => navigator.serviceWorker.removeEventListener("message", onMsg);
   }, []);
@@ -103,10 +106,10 @@ export function NotificationPermission() {
     }
   }
 
-  // Unsupported browser: don't block (iOS Safari without PWA, older browsers)
+  // Unsupported browser: don't block
   if (!supported) return null;
-  // Already granted or nothing to do
-  if (granted) return null;
+  // Already granted, or user chose to skip after being denied
+  if (granted || bypass) return null;
 
   return (
     <div
@@ -155,25 +158,31 @@ export function NotificationPermission() {
         <h3 style={{ fontSize: 22, fontWeight: 800, marginBottom: 8 }}>
           {denied ? "Notifications Blocked Hain" : "Notifications On Karein"}
         </h3>
-        <p style={{ fontSize: 14, color: "rgba(255,255,255,0.8)", marginBottom: 22, lineHeight: 1.6 }}>
-          {denied
-            ? "Aap ne notifications block ki hain. Site use karne ke liye browser settings mein ja kar is site ke liye notifications 'Allow' karein, phir page reload karein."
-            : "Site use karne ke liye notifications on karna zaroori hai. Naye products, offers, aur updates seedha aap ke phone par pohnchein ge — chahe website band ho."}
-        </p>
+        {denied ? (
+          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", marginBottom: 18, lineHeight: 1.7, textAlign: "left" }}>
+            <p style={{ marginBottom: 10, fontWeight: 600, textAlign: "center" }}>
+              Aap ne pehle notifications block ki hain, is liye browser dobara nahi pooch raha.
+            </p>
+            <p style={{ marginBottom: 6, fontWeight: 700 }}>Unblock karne ka tareeqa:</p>
+            <ol style={{ paddingLeft: 20, margin: 0 }}>
+              <li>Address bar ke shuru mein 🔒 <b>lock</b> icon dabayein</li>
+              <li><b>Notifications</b> → <b>Allow</b> select karein</li>
+              <li>Page reload karein</li>
+            </ol>
+          </div>
+        ) : (
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.8)", marginBottom: 22, lineHeight: 1.6 }}>
+            Site use karne ke liye notifications on karna zaroori hai. Naye products, offers, aur updates seedha aap ke phone par pohnchein ge — chahe website band ho.
+          </p>
+        )}
         {!denied && (
           <button
             disabled={busy}
             onClick={enable}
             style={{
-              width: "100%",
-              padding: "14px 16px",
-              borderRadius: 12,
-              border: 0,
-              background: "linear-gradient(90deg,#ef4444,#dc2626)",
-              color: "white",
-              fontWeight: 800,
-              fontSize: 16,
-              cursor: busy ? "wait" : "pointer",
+              width: "100%", padding: "14px 16px", borderRadius: 12, border: 0,
+              background: "linear-gradient(90deg,#ef4444,#dc2626)", color: "white",
+              fontWeight: 800, fontSize: 16, cursor: busy ? "wait" : "pointer",
               boxShadow: "0 6px 24px rgba(239,68,68,0.5)",
             }}
           >
@@ -181,23 +190,29 @@ export function NotificationPermission() {
           </button>
         )}
         {denied && (
-          <button
-            onClick={() => window.location.reload()}
-            style={{
-              width: "100%",
-              padding: "14px 16px",
-              borderRadius: 12,
-              border: 0,
-              background: "linear-gradient(90deg,#ef4444,#dc2626)",
-              color: "white",
-              fontWeight: 800,
-              fontSize: 16,
-              cursor: "pointer",
-              boxShadow: "0 6px 24px rgba(239,68,68,0.5)",
-            }}
-          >
-            Reload Page
-          </button>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                width: "100%", padding: "14px 16px", borderRadius: 12, border: 0,
+                background: "linear-gradient(90deg,#ef4444,#dc2626)", color: "white",
+                fontWeight: 800, fontSize: 16, cursor: "pointer",
+                boxShadow: "0 6px 24px rgba(239,68,68,0.5)",
+              }}
+            >
+              Unblock kar liya — Reload
+            </button>
+            <button
+              onClick={() => { localStorage.setItem(BYPASS_KEY, "1"); setBypass(true); }}
+              style={{
+                width: "100%", padding: "12px 16px", borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.2)", background: "transparent",
+                color: "rgba(255,255,255,0.85)", fontWeight: 600, fontSize: 14, cursor: "pointer",
+              }}
+            >
+              Abhi skip karein
+            </button>
+          </div>
         )}
         <p style={{ marginTop: 14, fontSize: 12, color: "rgba(255,255,255,0.45)" }}>
           Aik dafa allow karne ke baad yeh popup dobara nahi aayega.
