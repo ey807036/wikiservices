@@ -47,6 +47,7 @@ export const sendPushNotification = createServerFn({ method: "POST" })
       body: data.body,
       url: data.url,
       icon: data.icon,
+      image: data.image,
       verified: data.verified,
       silent: data.silent,
     });
