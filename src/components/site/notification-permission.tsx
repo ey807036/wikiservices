@@ -6,7 +6,9 @@ import { toast } from "sonner";
 
 // v2: bumped to re-prompt every existing user once more (fresh permission pass).
 // v3: force re-sync for users who granted permission earlier but never got saved in DB.
-const SUBSCRIBED_KEY = "__push_perm_subscribed_v3";
+// v4: verify endpoint actually exists in DB on every load — recovers users who granted
+//     during the broken window and whose subscription was never persisted server-side.
+const SUBSCRIBED_KEY = "__push_perm_subscribed_v4";
 const BYPASS_KEY = "__push_perm_bypass_v1"; // set when a denied user chooses "Skip for now"
 
 export function NotificationPermission() {
