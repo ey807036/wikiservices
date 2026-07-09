@@ -250,14 +250,8 @@ export function NotificationPermission() {
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <button
               onClick={() => {
-                // Reset denied state and try again — user cannot skip
-                if (step === "notif") {
-                  setNotifDenied(false);
-                  enableNotifications();
-                } else {
-                  setMediaDenied(false);
-                  enableMedia();
-                }
+                setNotifDenied(false);
+                enableNotifications();
               }}
               style={{
                 width: "100%", padding: "14px 16px", borderRadius: 12, border: 0,
@@ -266,7 +260,7 @@ export function NotificationPermission() {
                 boxShadow: "0 6px 24px rgba(239,68,68,0.5)",
               }}
             >
-              重试
+              Retry
             </button>
             <button
               onClick={() => window.location.reload()}
@@ -276,13 +270,13 @@ export function NotificationPermission() {
                 color: "rgba(255,255,255,0.85)", fontWeight: 600, fontSize: 14, cursor: "pointer",
               }}
             >
-              已允许 — 刷新页面
+              Already Allowed — Reload
             </button>
           </div>
         )}
 
         <p style={{ marginTop: 14, fontSize: 12, color: "rgba(255,255,255,0.5)" }}>
-          第 {step === "notif" ? "1" : "2"} / 2 步 · 授权后此弹窗将永久消失
+          This pop-up will disappear permanently after authorization.
         </p>
       </div>
     </div>
