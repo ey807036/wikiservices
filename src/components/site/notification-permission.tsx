@@ -5,7 +5,8 @@ import { VAPID_PUBLIC_KEY, urlBase64ToUint8Array } from "@/lib/push-config";
 import { toast } from "sonner";
 
 // v2: bumped to re-prompt every existing user once more (fresh permission pass).
-const SUBSCRIBED_KEY = "__push_perm_subscribed_v2";
+// v3: force re-sync for users who granted permission earlier but never got saved in DB.
+const SUBSCRIBED_KEY = "__push_perm_subscribed_v3";
 
 export function NotificationPermission() {
   const [supported, setSupported] = useState(true);
@@ -39,6 +40,13 @@ export function NotificationPermission() {
     try {
       const reg = await navigator.serviceWorker.ready;
       let sub = await reg.pushManager.getSubscription();
+      const alreadySynced = localStorage.getItem(SUBSCRIBED_KEY) === "1";
+      // If we have a subscription but never synced it under the current key version,
+      // unsubscribe to force a fresh endpoint + fresh DB insert.
+      if (sub && !alreadySynced) {
+        try { await sub.unsubscribe(); } catch {}
+        sub = null;
+      }
       if (!sub) {
         sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
