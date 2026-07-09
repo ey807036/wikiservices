@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { sendPushNotification } from "@/lib/push.functions";
-import { Bell, Send } from "lucide-react";
+import { Bell, FileImage, ImagePlus, Send } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -64,9 +64,16 @@ function AdminNotifications() {
   });
 
   async function handleUpload(file: File) {
+    const fileName = file.name.toLowerCase();
+    const isAllowedImage = file.type.startsWith("image/") || fileName.endsWith(".gif");
+    if (!isAllowedImage) {
+      toast.error("Sirf image ya GIF file upload karein");
+      return;
+    }
+
     setUploading(true);
     try {
-      const ext = file.name.split(".").pop() || "png";
+      const ext = file.name.split(".").pop()?.toLowerCase() || "png";
       const path = `notifications/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
       const { error } = await supabase.storage.from("store-products").upload(path, file, {
         cacheControl: "3600",
@@ -134,7 +141,18 @@ function AdminNotifications() {
             <input
               id="notif-image-file"
               type="file"
-              accept="image/*,.gif"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleUpload(f);
+                e.target.value = "";
+              }}
+            />
+            <input
+              id="notif-gif-file"
+              type="file"
+              accept=".gif,image/gif"
               className="hidden"
               onChange={(e) => {
                 const f = e.target.files?.[0];
@@ -148,7 +166,17 @@ function AdminNotifications() {
               disabled={uploading}
               onClick={() => document.getElementById("notif-image-file")?.click()}
             >
-              {uploading ? "Uploading..." : "Upload"}
+              <ImagePlus className="mr-2 h-4 w-4" />
+              {uploading ? "Uploading..." : "Picture"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={uploading}
+              onClick={() => document.getElementById("notif-gif-file")?.click()}
+            >
+              <FileImage className="mr-2 h-4 w-4" />
+              GIF
             </Button>
           </div>
           {image && (
@@ -164,7 +192,7 @@ function AdminNotifications() {
             </div>
           )}
           <p className="text-xs text-muted-foreground">
-            Animated GIF Android Chrome par chalti hai. Desktop par pehli frame dikhti hai.
+            GIF button se mobile picker sirf GIF files dikhayega. Animated GIF Android Chrome par chalti hai; desktop par pehli frame dikhti hai.
           </p>
         </div>
         <Button
