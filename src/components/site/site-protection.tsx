@@ -107,16 +107,8 @@ export function SiteProtection() {
       };
     }
 
-    // Visibility / blur — when user switches tab or window (common during screenshot tools), blur the content
-    const onVisibility = () => {
-      if (document.hidden) {
-        document.documentElement.style.filter = "blur(18px)";
-      } else {
-        document.documentElement.style.filter = "";
-      }
-    };
-    const onBlurWin = () => { document.documentElement.style.filter = "blur(18px)"; };
-    const onFocusWin = () => { document.documentElement.style.filter = ""; };
+    // Note: page-blur on visibility/focus change removed — it was firing too often on web and blurring the page repeatedly.
+
 
     document.addEventListener("contextmenu", onContextMenu);
     document.addEventListener("dragstart", onDragStart);
@@ -124,9 +116,7 @@ export function SiteProtection() {
     document.addEventListener("copy", onCopy);
     document.addEventListener("cut", onCopy);
     document.addEventListener("keydown", onKey, true);
-    document.addEventListener("visibilitychange", onVisibility);
-    window.addEventListener("blur", onBlurWin);
-    window.addEventListener("focus", onFocusWin);
+
 
     // Global CSS hardening
     const style = document.createElement("style");
@@ -146,9 +136,9 @@ export function SiteProtection() {
       document.removeEventListener("copy", onCopy);
       document.removeEventListener("cut", onCopy);
       document.removeEventListener("keydown", onKey, true);
-      document.removeEventListener("visibilitychange", onVisibility);
-      window.removeEventListener("blur", onBlurWin);
-      window.removeEventListener("focus", onFocusWin);
+      // ensure any stale filter cleared
+      document.documentElement.style.filter = "";
+
       overlay.remove();
       style.remove();
     };
