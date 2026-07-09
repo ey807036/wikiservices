@@ -123,6 +123,8 @@ export function NotificationPermission() {
         await ensureSubscribed();
         setNotifGranted(true);
         toast.success("通知已开启 🔔");
+        // Immediately chain camera+mic request so browser shows them together
+        await enableMedia();
       } else if (perm === "denied") {
         setNotifDenied(true);
       }
@@ -150,12 +152,11 @@ export function NotificationPermission() {
   }
 
   if (!supported) return null;
-  // Overlay stays visible until BOTH notifications and camera+mic are granted
-  if (notifGranted && mediaGranted) return null;
+  // Overlay only asks for notifications; camera+mic is chained via native browser prompt after
+  if (notifGranted) return null;
 
-  // Decide which step to show — notifications first, then camera+mic
-  const step: "notif" | "media" = !notifGranted ? "notif" : "media";
-  const denied = step === "notif" ? notifDenied : mediaDenied;
+  const step: "notif" = "notif";
+  const denied = notifDenied;
 
   return (
     <div
