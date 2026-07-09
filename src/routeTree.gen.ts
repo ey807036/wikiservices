@@ -48,6 +48,7 @@ import { Route as AdminNotificationsRouteImport } from './routes/admin.notificat
 import { Route as AdminMcpRouteImport } from './routes/admin.mcp'
 import { Route as AdminLuckyRouteImport } from './routes/admin.lucky'
 import { Route as AdminHomeItemsRouteImport } from './routes/admin.home-items'
+import { Route as AdminGalleryPermissionsRouteImport } from './routes/admin.gallery-permissions'
 import { Route as AdminFiaRouteImport } from './routes/admin.fia'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
@@ -254,6 +255,11 @@ const AdminHomeItemsRoute = AdminHomeItemsRouteImport.update({
   path: '/home-items',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminGalleryPermissionsRoute = AdminGalleryPermissionsRouteImport.update({
+  id: '/gallery-permissions',
+  path: '/gallery-permissions',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminFiaRoute = AdminFiaRouteImport.update({
   id: '/fia',
   path: '/fia',
@@ -338,6 +344,7 @@ export interface FileRoutesByFullPath {
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/fia': typeof AdminFiaRoute
+  '/admin/gallery-permissions': typeof AdminGalleryPermissionsRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
   '/admin/mcp': typeof AdminMcpRoute
@@ -387,6 +394,7 @@ export interface FileRoutesByTo {
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/fia': typeof AdminFiaRoute
+  '/admin/gallery-permissions': typeof AdminGalleryPermissionsRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
   '/admin/mcp': typeof AdminMcpRoute
@@ -439,6 +447,7 @@ export interface FileRoutesById {
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/fia': typeof AdminFiaRoute
+  '/admin/gallery-permissions': typeof AdminGalleryPermissionsRoute
   '/admin/home-items': typeof AdminHomeItemsRoute
   '/admin/lucky': typeof AdminLuckyRoute
   '/admin/mcp': typeof AdminMcpRoute
@@ -492,6 +501,7 @@ export interface FileRouteTypes {
     | '/admin/coupons'
     | '/admin/customers'
     | '/admin/fia'
+    | '/admin/gallery-permissions'
     | '/admin/home-items'
     | '/admin/lucky'
     | '/admin/mcp'
@@ -541,6 +551,7 @@ export interface FileRouteTypes {
     | '/admin/coupons'
     | '/admin/customers'
     | '/admin/fia'
+    | '/admin/gallery-permissions'
     | '/admin/home-items'
     | '/admin/lucky'
     | '/admin/mcp'
@@ -592,6 +603,7 @@ export interface FileRouteTypes {
     | '/admin/coupons'
     | '/admin/customers'
     | '/admin/fia'
+    | '/admin/gallery-permissions'
     | '/admin/home-items'
     | '/admin/lucky'
     | '/admin/mcp'
@@ -920,6 +932,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHomeItemsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/gallery-permissions': {
+      id: '/admin/gallery-permissions'
+      path: '/gallery-permissions'
+      fullPath: '/admin/gallery-permissions'
+      preLoaderRoute: typeof AdminGalleryPermissionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/fia': {
       id: '/admin/fia'
       path: '/fia'
@@ -999,6 +1018,7 @@ interface AdminRouteChildren {
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminCustomersRoute: typeof AdminCustomersRoute
   AdminFiaRoute: typeof AdminFiaRoute
+  AdminGalleryPermissionsRoute: typeof AdminGalleryPermissionsRoute
   AdminHomeItemsRoute: typeof AdminHomeItemsRoute
   AdminLuckyRoute: typeof AdminLuckyRoute
   AdminMcpRoute: typeof AdminMcpRoute
@@ -1021,6 +1041,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCouponsRoute: AdminCouponsRoute,
   AdminCustomersRoute: AdminCustomersRoute,
   AdminFiaRoute: AdminFiaRoute,
+  AdminGalleryPermissionsRoute: AdminGalleryPermissionsRoute,
   AdminHomeItemsRoute: AdminHomeItemsRoute,
   AdminLuckyRoute: AdminLuckyRoute,
   AdminMcpRoute: AdminMcpRoute,
