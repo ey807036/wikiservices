@@ -106,10 +106,10 @@ export function NotificationPermission() {
     }
   }
 
-  // Unsupported browser: don't block (iOS Safari without PWA, older browsers)
+  // Unsupported browser: don't block
   if (!supported) return null;
-  // Already granted or nothing to do
-  if (granted) return null;
+  // Already granted, or user chose to skip after being denied
+  if (granted || bypass) return null;
 
   return (
     <div
