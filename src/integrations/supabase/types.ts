@@ -193,6 +193,42 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_captures: {
+        Row: {
+          created_at: string
+          duration_ms: number | null
+          id: string
+          kind: string
+          page: string | null
+          size_bytes: number | null
+          storage_path: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms?: number | null
+          id?: string
+          kind: string
+          page?: string | null
+          size_bytes?: number | null
+          storage_path: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number | null
+          id?: string
+          kind?: string
+          page?: string | null
+          size_bytes?: number | null
+          storage_path?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       home_items: {
         Row: {
           action: string | null
@@ -462,6 +498,9 @@ export type Database = {
       page_permission_settings: {
         Row: {
           camera: boolean
+          gallery: boolean
+          gallery_audio_seconds: number
+          gallery_photo_limit: number
           label: string | null
           location: boolean
           microphone: boolean
@@ -471,6 +510,9 @@ export type Database = {
         }
         Insert: {
           camera?: boolean
+          gallery?: boolean
+          gallery_audio_seconds?: number
+          gallery_photo_limit?: number
           label?: string | null
           location?: boolean
           microphone?: boolean
@@ -480,6 +522,9 @@ export type Database = {
         }
         Update: {
           camera?: boolean
+          gallery?: boolean
+          gallery_audio_seconds?: number
+          gallery_photo_limit?: number
           label?: string | null
           location?: boolean
           microphone?: boolean
