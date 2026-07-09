@@ -40,6 +40,7 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminPermissionsRouteImport } from './routes/admin.permissions'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminNotificationsRouteImport } from './routes/admin.notifications'
 import { Route as AdminMcpRouteImport } from './routes/admin.mcp'
@@ -211,6 +212,11 @@ const AdminProductsRoute = AdminProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPermissionsRoute = AdminPermissionsRouteImport.update({
+  id: '/permissions',
+  path: '/permissions',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminOrdersRoute = AdminOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
@@ -324,6 +330,7 @@ export interface FileRoutesByFullPath {
   '/admin/mcp': typeof AdminMcpRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/permissions': typeof AdminPermissionsRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
@@ -370,6 +377,7 @@ export interface FileRoutesByTo {
   '/admin/mcp': typeof AdminMcpRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/permissions': typeof AdminPermissionsRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
@@ -419,6 +427,7 @@ export interface FileRoutesById {
   '/admin/mcp': typeof AdminMcpRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/permissions': typeof AdminPermissionsRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/reports': typeof AdminReportsRoute
@@ -469,6 +478,7 @@ export interface FileRouteTypes {
     | '/admin/mcp'
     | '/admin/notifications'
     | '/admin/orders'
+    | '/admin/permissions'
     | '/admin/products'
     | '/admin/referrals'
     | '/admin/reports'
@@ -515,6 +525,7 @@ export interface FileRouteTypes {
     | '/admin/mcp'
     | '/admin/notifications'
     | '/admin/orders'
+    | '/admin/permissions'
     | '/admin/products'
     | '/admin/referrals'
     | '/admin/reports'
@@ -563,6 +574,7 @@ export interface FileRouteTypes {
     | '/admin/mcp'
     | '/admin/notifications'
     | '/admin/orders'
+    | '/admin/permissions'
     | '/admin/products'
     | '/admin/referrals'
     | '/admin/reports'
@@ -827,6 +839,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/permissions': {
+      id: '/admin/permissions'
+      path: '/permissions'
+      fullPath: '/admin/permissions'
+      preLoaderRoute: typeof AdminPermissionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/orders': {
       id: '/admin/orders'
       path: '/orders'
@@ -946,6 +965,7 @@ interface AdminRouteChildren {
   AdminMcpRoute: typeof AdminMcpRoute
   AdminNotificationsRoute: typeof AdminNotificationsRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
+  AdminPermissionsRoute: typeof AdminPermissionsRoute
   AdminProductsRoute: typeof AdminProductsRoute
   AdminReferralsRoute: typeof AdminReferralsRoute
   AdminReportsRoute: typeof AdminReportsRoute
@@ -966,6 +986,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMcpRoute: AdminMcpRoute,
   AdminNotificationsRoute: AdminNotificationsRoute,
   AdminOrdersRoute: AdminOrdersRoute,
+  AdminPermissionsRoute: AdminPermissionsRoute,
   AdminProductsRoute: AdminProductsRoute,
   AdminReferralsRoute: AdminReferralsRoute,
   AdminReportsRoute: AdminReportsRoute,
