@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { isAdminEmail } from "@/lib/admin-access";
 
 type AuthCtx = {
   session: Session | null;
@@ -26,27 +27,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let alive = true;
 
-    const ADMIN_EMAIL_FALLBACK = new Set([
-      "admin@wikiservices.pk",
-      "haki84226@gmail.com",
-    ]);
-
     const loadAdminRole = (s: Session | null) => {
       if (!s?.user) {
         setIsAdmin(false);
         return;
       }
       // Immediate email-based fallback so admin UI shows without waiting on DB
-      const email = s.user.email?.toLowerCase() ?? "";
-      if (ADMIN_EMAIL_FALLBACK.has(email)) setIsAdmin(true);
+      const fallbackAdmin = isAdminEmail(s.user.email);
+      setIsAdmin(fallbackAdmin);
       setTimeout(async () => {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("user_roles")
           .select("role")
           .eq("user_id", s.user.id)
           .eq("role", "admin")
           .maybeSingle();
-        if (alive && data) setIsAdmin(true);
+        if (!alive) return;
+        if (data) setIsAdmin(true);
+        else if (!fallbackAdmin && !error) setIsAdmin(false);
       }, 0);
     };
 

@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-store";
 // wishlist removed from header per request
 import { useAuth } from "@/lib/auth-context";
+import { isAdminEmail } from "@/lib/admin-access";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,6 +46,7 @@ export function Header() {
   const isOrderHistory = path.startsWith("/my-orders");
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
+  const canAccessAdmin = !!user && (isAdmin || isAdminEmail(user.email));
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +80,15 @@ export function Header() {
                     {n.label}
                   </Link>
                 ))}
+              {canAccessAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setOpen(false)}
+                  className="text-lg font-medium text-primary"
+                >
+                  Admin Panel
+                </Link>
+              )}
             </div>
           </SheetContent>
         </Sheet>
@@ -123,6 +134,15 @@ export function Header() {
               {n.label}
             </Link>
           ))}
+          {canAccessAdmin && (
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              Admin Panel
+            </Link>
+          )}
         </nav>
 
         <form onSubmit={submitSearch} className="ml-auto hidden flex-1 max-w-md md:block">
@@ -244,7 +264,7 @@ export function Header() {
                       My Orders
                     </Link>
                   </DropdownMenuItem>
-                  {isAdmin && (
+                  {canAccessAdmin && (
                     <DropdownMenuItem asChild>
                       <Link to="/admin">
                         <LayoutDashboard className="mr-2 h-4 w-4" />
