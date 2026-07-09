@@ -122,9 +122,54 @@ function AdminNotifications() {
             Note: Custom notification sound browsers support nahi karte — default OS sound + vibration use hoti hai jab silent off ho.
           </p>
         </div>
+        <div className="space-y-2">
+          <Label>Picture / GIF (optional)</Label>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Input
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              placeholder="https://... (JPG, PNG, GIF)"
+              className="flex-1"
+            />
+            <input
+              id="notif-image-file"
+              type="file"
+              accept="image/png,image/jpeg,image/gif,image/webp"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleUpload(f);
+                e.target.value = "";
+              }}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              disabled={uploading}
+              onClick={() => document.getElementById("notif-image-file")?.click()}
+            >
+              {uploading ? "Uploading..." : "Upload"}
+            </Button>
+          </div>
+          {image && (
+            <div className="rounded-lg border p-2">
+              <img src={image} alt="preview" className="max-h-40 rounded" />
+              <button
+                type="button"
+                onClick={() => setImage("")}
+                className="mt-1 text-xs text-red-500 hover:underline"
+              >
+                Remove
+              </button>
+            </div>
+          )}
+          <p className="text-xs text-muted-foreground">
+            Animated GIF Android Chrome par chalti hai. Desktop par pehli frame dikhti hai.
+          </p>
+        </div>
         <Button
           disabled={!title.trim() || !body.trim() || send.isPending || (subCount.data ?? 0) === 0}
-          onClick={() => send.mutate({ title: title.trim(), body: body.trim(), url: url.trim() || "/", verified, silent })}
+          onClick={() => send.mutate({ title: title.trim(), body: body.trim(), url: url.trim() || "/", image: image.trim() || undefined, verified, silent })}
           className="w-full"
         >
           <Send className="mr-2 h-4 w-4" />
