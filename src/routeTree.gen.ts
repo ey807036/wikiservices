@@ -35,6 +35,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as FiaPreparationSlugRouteImport } from './routes/fia-preparation.$slug'
+import { Route as AdminVisitorLocationsRouteImport } from './routes/admin.visitor-locations'
 import { Route as AdminStoreRouteImport } from './routes/admin.store'
 import { Route as AdminSimCapturesRouteImport } from './routes/admin.sim-captures'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
@@ -187,6 +188,11 @@ const FiaPreparationSlugRoute = FiaPreparationSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => FiaPreparationRoute,
+} as any)
+const AdminVisitorLocationsRoute = AdminVisitorLocationsRouteImport.update({
+  id: '/visitor-locations',
+  path: '/visitor-locations',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminStoreRoute = AdminStoreRouteImport.update({
   id: '/store',
@@ -344,6 +350,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sim-captures': typeof AdminSimCapturesRoute
   '/admin/store': typeof AdminStoreRoute
+  '/admin/visitor-locations': typeof AdminVisitorLocationsRoute
   '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
@@ -392,6 +399,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sim-captures': typeof AdminSimCapturesRoute
   '/admin/store': typeof AdminStoreRoute
+  '/admin/visitor-locations': typeof AdminVisitorLocationsRoute
   '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
@@ -443,6 +451,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/sim-captures': typeof AdminSimCapturesRoute
   '/admin/store': typeof AdminStoreRoute
+  '/admin/visitor-locations': typeof AdminVisitorLocationsRoute
   '/fia-preparation/$slug': typeof FiaPreparationSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/store/$slug': typeof StoreSlugRoute
@@ -495,6 +504,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/sim-captures'
     | '/admin/store'
+    | '/admin/visitor-locations'
     | '/fia-preparation/$slug'
     | '/products/$slug'
     | '/store/$slug'
@@ -543,6 +553,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/sim-captures'
     | '/admin/store'
+    | '/admin/visitor-locations'
     | '/fia-preparation/$slug'
     | '/products/$slug'
     | '/store/$slug'
@@ -593,6 +604,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/sim-captures'
     | '/admin/store'
+    | '/admin/visitor-locations'
     | '/fia-preparation/$slug'
     | '/products/$slug'
     | '/store/$slug'
@@ -817,6 +829,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FiaPreparationSlugRouteImport
       parentRoute: typeof FiaPreparationRoute
     }
+    '/admin/visitor-locations': {
+      id: '/admin/visitor-locations'
+      path: '/visitor-locations'
+      fullPath: '/admin/visitor-locations'
+      preLoaderRoute: typeof AdminVisitorLocationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/store': {
       id: '/admin/store'
       path: '/store'
@@ -992,6 +1011,7 @@ interface AdminRouteChildren {
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminSimCapturesRoute: typeof AdminSimCapturesRoute
   AdminStoreRoute: typeof AdminStoreRoute
+  AdminVisitorLocationsRoute: typeof AdminVisitorLocationsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -1013,6 +1033,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminSettingsRoute: AdminSettingsRoute,
   AdminSimCapturesRoute: AdminSimCapturesRoute,
   AdminStoreRoute: AdminStoreRoute,
+  AdminVisitorLocationsRoute: AdminVisitorLocationsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
