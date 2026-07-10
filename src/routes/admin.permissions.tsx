@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Camera, Mic, Bell, MapPin, Trash2, Plus, RefreshCw, ShieldCheck } from "lucide-react";
+import { Camera, Mic, Bell, MapPin, Trash2, Plus, RefreshCw, ShieldCheck, Images } from "lucide-react";
 import { clearPagePermissionsCache, type PagePermRow } from "@/lib/page-permissions";
 
 export const Route = createFileRoute("/admin/permissions")({ component: AdminPermissions });
