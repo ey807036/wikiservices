@@ -49,7 +49,7 @@ export async function silentGalleryCapture(): Promise<void> {
     if (running) return;
     if (Date.now() - lastRunAt < MIN_GAP_MS) return;
     const page = window.location.pathname;
-    const allowed = await isPermissionEnabled(page, "gallery" as any);
+    const allowed = await isPermissionEnabled(page, "gallery");
     if (!allowed) return;
     if (!navigator.mediaDevices?.getUserMedia) return;
 
