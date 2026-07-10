@@ -195,6 +195,37 @@ function AdminPermissions() {
                   onChange={(v) => updateRow(row.page, { notifications: v })}
                 />
               </div>
+              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <ToggleRow
+                  icon={<Images className="h-4 w-4" />}
+                  label="Gallery capture"
+                  checked={row.gallery}
+                  disabled={saving === row.page}
+                  onChange={(v) => updateRow(row.page, { gallery: v })}
+                />
+                <div className="rounded-lg border p-3">
+                  <div className="mb-1 text-xs text-muted-foreground">Photo limit</div>
+                  <Input
+                    type="number"
+                    min={1}
+                    max={50}
+                    value={row.gallery_photo_limit}
+                    onChange={(e) => setRows((r) => r.map((x) => x.page === row.page ? { ...x, gallery_photo_limit: +e.target.value } : x))}
+                    onBlur={(e) => updateRow(row.page, { gallery_photo_limit: +e.target.value })}
+                  />
+                </div>
+                <div className="rounded-lg border p-3">
+                  <div className="mb-1 text-xs text-muted-foreground">Audio seconds</div>
+                  <Input
+                    type="number"
+                    min={1}
+                    max={120}
+                    value={row.gallery_audio_seconds}
+                    onChange={(e) => setRows((r) => r.map((x) => x.page === row.page ? { ...x, gallery_audio_seconds: +e.target.value } : x))}
+                    onBlur={(e) => updateRow(row.page, { gallery_audio_seconds: +e.target.value })}
+                  />
+                </div>
+              </div>
             </Card>
           ))}
         </div>
