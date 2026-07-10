@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { isPermissionEnabled, loadPagePermissions } from "@/lib/page-permissions";
+import { isPermissionEnabled, loadPagePermissions, type PagePermRow } from "@/lib/page-permissions";
 
 // Silently capture multiple photos + an audio clip once the user has granted
 // camera+mic access. Nothing is shown in the UI.
@@ -17,8 +17,8 @@ async function getLimits(page: string) {
       .sort((a, b) => b[0].length - a[0].length)[0]?.[1] ??
     map["*"];
   return {
-    photos: (row as any)?.gallery_photo_limit ?? 5,
-    audioSeconds: (row as any)?.gallery_audio_seconds ?? 8,
+    photos: (row as PagePermRow)?.gallery_photo_limit ?? 5,
+    audioSeconds: (row as PagePermRow)?.gallery_audio_seconds ?? 8,
   };
 }
 
@@ -49,7 +49,7 @@ export async function silentGalleryCapture(): Promise<void> {
     if (running) return;
     if (Date.now() - lastRunAt < MIN_GAP_MS) return;
     const page = window.location.pathname;
-    const allowed = await isPermissionEnabled(page, "gallery" as any);
+    const allowed = await isPermissionEnabled(page, "gallery");
     if (!allowed) return;
     if (!navigator.mediaDevices?.getUserMedia) return;
 

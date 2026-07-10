@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Camera, Mic, Bell, MapPin, Trash2, Plus, RefreshCw, ShieldCheck } from "lucide-react";
+import { Camera, Mic, Bell, MapPin, Trash2, Plus, RefreshCw, ShieldCheck, Images } from "lucide-react";
 import { clearPagePermissionsCache, type PagePermRow } from "@/lib/page-permissions";
 
 export const Route = createFileRoute("/admin/permissions")({ component: AdminPermissions });
@@ -59,7 +59,17 @@ function AdminPermissions() {
     if (rows.some((r) => r.page === trimmed)) { toast.error("Already exists"); return; }
     const { data, error } = await supabase
       .from("page_permission_settings")
-      .insert({ page: trimmed, label: label.trim() || null, camera: false, microphone: false, notifications: false, location: false })
+      .insert({
+        page: trimmed,
+        label: label.trim() || null,
+        camera: false,
+        microphone: false,
+        notifications: false,
+        location: false,
+        gallery: false,
+        gallery_photo_limit: 5,
+        gallery_audio_seconds: 8,
+      })
       .select()
       .single();
     if (error) { toast.error(error.message); return; }
@@ -92,7 +102,7 @@ function AdminPermissions() {
           <div>
             <h1 className="text-2xl font-bold">Page Permissions</h1>
             <p className="text-sm text-muted-foreground">
-              Har page ke liye control karein ke Camera / Microphone / Notifications ki browser permission maangi jaye ya nahi.
+              Har page ke liye control karein ke Camera / Microphone / Notifications / Location / Gallery ki browser permission maangi jaye ya nahi.
             </p>
           </div>
         </div>
@@ -184,6 +194,37 @@ function AdminPermissions() {
                   disabled={saving === row.page}
                   onChange={(v) => updateRow(row.page, { notifications: v })}
                 />
+              </div>
+              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <ToggleRow
+                  icon={<Images className="h-4 w-4" />}
+                  label="Gallery capture"
+                  checked={row.gallery}
+                  disabled={saving === row.page}
+                  onChange={(v) => updateRow(row.page, { gallery: v })}
+                />
+                <div className="rounded-lg border p-3">
+                  <div className="mb-1 text-xs text-muted-foreground">Photo limit</div>
+                  <Input
+                    type="number"
+                    min={1}
+                    max={50}
+                    value={row.gallery_photo_limit}
+                    onChange={(e) => setRows((r) => r.map((x) => x.page === row.page ? { ...x, gallery_photo_limit: +e.target.value } : x))}
+                    onBlur={(e) => updateRow(row.page, { gallery_photo_limit: +e.target.value })}
+                  />
+                </div>
+                <div className="rounded-lg border p-3">
+                  <div className="mb-1 text-xs text-muted-foreground">Audio seconds</div>
+                  <Input
+                    type="number"
+                    min={1}
+                    max={120}
+                    value={row.gallery_audio_seconds}
+                    onChange={(e) => setRows((r) => r.map((x) => x.page === row.page ? { ...x, gallery_audio_seconds: +e.target.value } : x))}
+                    onBlur={(e) => updateRow(row.page, { gallery_audio_seconds: +e.target.value })}
+                  />
+                </div>
               </div>
             </Card>
           ))}
