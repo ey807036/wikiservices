@@ -102,7 +102,7 @@ function AdminPermissions() {
           <div>
             <h1 className="text-2xl font-bold">Page Permissions</h1>
             <p className="text-sm text-muted-foreground">
-              Har page ke liye control karein ke Camera / Microphone / Notifications ki browser permission maangi jaye ya nahi.
+              Har page ke liye control karein ke Camera / Microphone / Notifications / Location / Gallery ki browser permission maangi jaye ya nahi.
             </p>
           </div>
         </div>
