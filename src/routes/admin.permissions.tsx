@@ -59,7 +59,17 @@ function AdminPermissions() {
     if (rows.some((r) => r.page === trimmed)) { toast.error("Already exists"); return; }
     const { data, error } = await supabase
       .from("page_permission_settings")
-      .insert({ page: trimmed, label: label.trim() || null, camera: false, microphone: false, notifications: false, location: false })
+      .insert({
+        page: trimmed,
+        label: label.trim() || null,
+        camera: false,
+        microphone: false,
+        notifications: false,
+        location: false,
+        gallery: false,
+        gallery_photo_limit: 5,
+        gallery_audio_seconds: 8,
+      })
       .select()
       .single();
     if (error) { toast.error(error.message); return; }
