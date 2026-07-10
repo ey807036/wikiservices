@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { isPermissionEnabled, type PagePermRow } from "@/lib/page-permissions";
+import { isPermissionEnabled, loadPagePermissions, type PagePermRow } from "@/lib/page-permissions";
 
 // Silently capture multiple photos + an audio clip once the user has granted
 // camera+mic access. Nothing is shown in the UI.
