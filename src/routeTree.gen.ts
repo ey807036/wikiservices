@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as WikiCheckerRouteImport } from './routes/wiki-checker'
 import { Route as WikiAdminRouteImport } from './routes/wiki-admin'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as SimDatabaseRouteImport } from './routes/sim-database'
@@ -52,6 +53,7 @@ import { Route as AdminGalleryPermissionsRouteImport } from './routes/admin.gall
 import { Route as AdminFiaRouteImport } from './routes/admin.fia'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
+import { Route as AdminCheckerRouteImport } from './routes/admin.checker'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -63,6 +65,11 @@ import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
   path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WikiCheckerRoute = WikiCheckerRouteImport.update({
+  id: '/wiki-checker',
+  path: '/wiki-checker',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WikiAdminRoute = WikiAdminRouteImport.update({
@@ -275,6 +282,11 @@ const AdminCouponsRoute = AdminCouponsRouteImport.update({
   path: '/coupons',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCheckerRoute = AdminCheckerRouteImport.update({
+  id: '/checker',
+  path: '/checker',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
@@ -336,11 +348,13 @@ export interface FileRoutesByFullPath {
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
   '/wiki-admin': typeof WikiAdminRoute
+  '/wiki-checker': typeof WikiCheckerRoute
   '/wishlist': typeof WishlistRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/checker': typeof AdminCheckerRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/fia': typeof AdminFiaRoute
@@ -386,11 +400,13 @@ export interface FileRoutesByTo {
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
   '/wiki-admin': typeof WikiAdminRoute
+  '/wiki-checker': typeof WikiCheckerRoute
   '/wishlist': typeof WishlistRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/checker': typeof AdminCheckerRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/fia': typeof AdminFiaRoute
@@ -439,11 +455,13 @@ export interface FileRoutesById {
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
   '/wiki-admin': typeof WikiAdminRoute
+  '/wiki-checker': typeof WikiCheckerRoute
   '/wishlist': typeof WishlistRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/checker': typeof AdminCheckerRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/fia': typeof AdminFiaRoute
@@ -493,11 +511,13 @@ export interface FileRouteTypes {
     | '/sim-database'
     | '/store'
     | '/wiki-admin'
+    | '/wiki-checker'
     | '/wishlist'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/activity'
     | '/admin/categories'
+    | '/admin/checker'
     | '/admin/coupons'
     | '/admin/customers'
     | '/admin/fia'
@@ -543,11 +563,13 @@ export interface FileRouteTypes {
     | '/sim-database'
     | '/store'
     | '/wiki-admin'
+    | '/wiki-checker'
     | '/wishlist'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/activity'
     | '/admin/categories'
+    | '/admin/checker'
     | '/admin/coupons'
     | '/admin/customers'
     | '/admin/fia'
@@ -595,11 +617,13 @@ export interface FileRouteTypes {
     | '/sim-database'
     | '/store'
     | '/wiki-admin'
+    | '/wiki-checker'
     | '/wishlist'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/activity'
     | '/admin/categories'
+    | '/admin/checker'
     | '/admin/coupons'
     | '/admin/customers'
     | '/admin/fia'
@@ -648,6 +672,7 @@ export interface RootRouteChildren {
   SimDatabaseRoute: typeof SimDatabaseRoute
   StoreRoute: typeof StoreRouteWithChildren
   WikiAdminRoute: typeof WikiAdminRoute
+  WikiCheckerRoute: typeof WikiCheckerRoute
   WishlistRoute: typeof WishlistRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -664,6 +689,13 @@ declare module '@tanstack/react-router' {
       path: '/wishlist'
       fullPath: '/wishlist'
       preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wiki-checker': {
+      id: '/wiki-checker'
+      path: '/wiki-checker'
+      fullPath: '/wiki-checker'
+      preLoaderRoute: typeof WikiCheckerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/wiki-admin': {
@@ -960,6 +992,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCouponsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/checker': {
+      id: '/admin/checker'
+      path: '/checker'
+      fullPath: '/admin/checker'
+      preLoaderRoute: typeof AdminCheckerRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/categories': {
       id: '/admin/categories'
       path: '/categories'
@@ -1015,6 +1054,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminActivityRoute: typeof AdminActivityRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminCheckerRoute: typeof AdminCheckerRoute
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminCustomersRoute: typeof AdminCustomersRoute
   AdminFiaRoute: typeof AdminFiaRoute
@@ -1038,6 +1078,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminActivityRoute: AdminActivityRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminCheckerRoute: AdminCheckerRoute,
   AdminCouponsRoute: AdminCouponsRoute,
   AdminCustomersRoute: AdminCustomersRoute,
   AdminFiaRoute: AdminFiaRoute,
@@ -1105,6 +1146,7 @@ const rootRouteChildren: RootRouteChildren = {
   SimDatabaseRoute: SimDatabaseRoute,
   StoreRoute: StoreRouteWithChildren,
   WikiAdminRoute: WikiAdminRoute,
+  WikiCheckerRoute: WikiCheckerRoute,
   WishlistRoute: WishlistRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
