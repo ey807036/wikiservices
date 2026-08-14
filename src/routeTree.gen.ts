@@ -53,6 +53,7 @@ import { Route as AdminGalleryPermissionsRouteImport } from './routes/admin.gall
 import { Route as AdminFiaRouteImport } from './routes/admin.fia'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
+import { Route as AdminCheckerRouteImport } from './routes/admin.checker'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -281,6 +282,11 @@ const AdminCouponsRoute = AdminCouponsRouteImport.update({
   path: '/coupons',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCheckerRoute = AdminCheckerRouteImport.update({
+  id: '/checker',
+  path: '/checker',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
@@ -348,6 +354,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/checker': typeof AdminCheckerRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/fia': typeof AdminFiaRoute
@@ -399,6 +406,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/checker': typeof AdminCheckerRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/fia': typeof AdminFiaRoute
@@ -453,6 +461,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/checker': typeof AdminCheckerRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/fia': typeof AdminFiaRoute
@@ -508,6 +517,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/activity'
     | '/admin/categories'
+    | '/admin/checker'
     | '/admin/coupons'
     | '/admin/customers'
     | '/admin/fia'
@@ -559,6 +569,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/activity'
     | '/admin/categories'
+    | '/admin/checker'
     | '/admin/coupons'
     | '/admin/customers'
     | '/admin/fia'
@@ -612,6 +623,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/activity'
     | '/admin/categories'
+    | '/admin/checker'
     | '/admin/coupons'
     | '/admin/customers'
     | '/admin/fia'
@@ -980,6 +992,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCouponsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/checker': {
+      id: '/admin/checker'
+      path: '/checker'
+      fullPath: '/admin/checker'
+      preLoaderRoute: typeof AdminCheckerRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/categories': {
       id: '/admin/categories'
       path: '/categories'
@@ -1035,6 +1054,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminActivityRoute: typeof AdminActivityRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminCheckerRoute: typeof AdminCheckerRoute
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminCustomersRoute: typeof AdminCustomersRoute
   AdminFiaRoute: typeof AdminFiaRoute
@@ -1058,6 +1078,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminActivityRoute: AdminActivityRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminCheckerRoute: AdminCheckerRoute,
   AdminCouponsRoute: AdminCouponsRoute,
   AdminCustomersRoute: AdminCustomersRoute,
   AdminFiaRoute: AdminFiaRoute,
