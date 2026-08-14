@@ -44,6 +44,45 @@ export type Database = {
         }
         Relationships: []
       }
+      checker_settings: {
+        Row: {
+          base_url: string
+          delay_ms: number
+          enabled: boolean
+          hero_image_url: string | null
+          id: number
+          logo_url: string | null
+          subtitle: string
+          timeout_ms: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          base_url?: string
+          delay_ms?: number
+          enabled?: boolean
+          hero_image_url?: string | null
+          id?: number
+          logo_url?: string | null
+          subtitle?: string
+          timeout_ms?: number
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          base_url?: string
+          delay_ms?: number
+          enabled?: boolean
+          hero_image_url?: string | null
+          id?: number
+          logo_url?: string | null
+          subtitle?: string
+          timeout_ms?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       coupons: {
         Row: {
           active: boolean
