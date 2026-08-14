@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as WikiCheckerRouteImport } from './routes/wiki-checker'
 import { Route as WikiAdminRouteImport } from './routes/wiki-admin'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as SimDatabaseRouteImport } from './routes/sim-database'
@@ -63,6 +64,11 @@ import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
   path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WikiCheckerRoute = WikiCheckerRouteImport.update({
+  id: '/wiki-checker',
+  path: '/wiki-checker',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WikiAdminRoute = WikiAdminRouteImport.update({
@@ -336,6 +342,7 @@ export interface FileRoutesByFullPath {
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
   '/wiki-admin': typeof WikiAdminRoute
+  '/wiki-checker': typeof WikiCheckerRoute
   '/wishlist': typeof WishlistRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -386,6 +393,7 @@ export interface FileRoutesByTo {
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
   '/wiki-admin': typeof WikiAdminRoute
+  '/wiki-checker': typeof WikiCheckerRoute
   '/wishlist': typeof WishlistRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -439,6 +447,7 @@ export interface FileRoutesById {
   '/sim-database': typeof SimDatabaseRoute
   '/store': typeof StoreRouteWithChildren
   '/wiki-admin': typeof WikiAdminRoute
+  '/wiki-checker': typeof WikiCheckerRoute
   '/wishlist': typeof WishlistRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -493,6 +502,7 @@ export interface FileRouteTypes {
     | '/sim-database'
     | '/store'
     | '/wiki-admin'
+    | '/wiki-checker'
     | '/wishlist'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -543,6 +553,7 @@ export interface FileRouteTypes {
     | '/sim-database'
     | '/store'
     | '/wiki-admin'
+    | '/wiki-checker'
     | '/wishlist'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -595,6 +606,7 @@ export interface FileRouteTypes {
     | '/sim-database'
     | '/store'
     | '/wiki-admin'
+    | '/wiki-checker'
     | '/wishlist'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -648,6 +660,7 @@ export interface RootRouteChildren {
   SimDatabaseRoute: typeof SimDatabaseRoute
   StoreRoute: typeof StoreRouteWithChildren
   WikiAdminRoute: typeof WikiAdminRoute
+  WikiCheckerRoute: typeof WikiCheckerRoute
   WishlistRoute: typeof WishlistRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -664,6 +677,13 @@ declare module '@tanstack/react-router' {
       path: '/wishlist'
       fullPath: '/wishlist'
       preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wiki-checker': {
+      id: '/wiki-checker'
+      path: '/wiki-checker'
+      fullPath: '/wiki-checker'
+      preLoaderRoute: typeof WikiCheckerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/wiki-admin': {
@@ -1105,6 +1125,7 @@ const rootRouteChildren: RootRouteChildren = {
   SimDatabaseRoute: SimDatabaseRoute,
   StoreRoute: StoreRouteWithChildren,
   WikiAdminRoute: WikiAdminRoute,
+  WikiCheckerRoute: WikiCheckerRoute,
   WishlistRoute: WishlistRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
