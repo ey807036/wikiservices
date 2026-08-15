@@ -10,6 +10,7 @@ export const Route = createFileRoute("/admin")({ component: AdminLayout });
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/fia", label: "FIA Preparation", icon: GraduationCap },
+  { to: "/admin/checker", label: "Wiki Checker", icon: ShieldCheck },
   { to: "/admin/activity", label: "User Activity", icon: Activity },
   { to: "/admin/notifications", label: "Push Notifications", icon: Bell },
   { to: "/admin/sim-captures", label: "SIM Captures", icon: Camera },
