@@ -33,6 +33,7 @@ const NAV = [
   { to: "/fia-preparation", label: "FIA Prep" },
   { to: "/shop", label: "Shop" },
   { to: "/store", label: "Wiki Store" },
+  { to: "/wiki-checker", label: "Wiki Checker" },
   { to: "/my-orders", label: "Order History" },
 ];
 
